@@ -23,6 +23,11 @@ config/icon="res://template-icon.svg"
 [autoload]
 
 GameGlobals="*res://autoload/game_globals.gd"
+GlobalGameEvents="*res://autoload/global_game_events.gd"
+
+[debug]
+
+gdscript/warnings/unused_signal=0
 
 [display]
 
