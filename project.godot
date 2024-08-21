@@ -22,8 +22,8 @@ config/icon="res://template-icon.svg"
 
 [autoload]
 
-GameGlobals="*res://autoload/game_globals.gd"
-GlobalGameEvents="*res://autoload/global_game_events.gd"
+GameGlobals="*res://autoload/general/game_globals.gd"
+GlobalGameEvents="*res://autoload/general/global_game_events.gd"
 
 [debug]
 
@@ -44,6 +44,10 @@ folder_colors={
 "res://components/": "red",
 "res://shaders/": "purple"
 }
+
+[global_group]
+
+translation="the nodes that contains translations to change them in runtime"
 
 [input]
 
