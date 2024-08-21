@@ -10,45 +10,7 @@ const ASCII_PUNCTUATION =  "!\"#$%&'()*+, -./:;<=>?@[\\]^_`{|}~"
 
 static var random_number_generator := RandomNumberGenerator.new()
 
-"""
-Formats a time value into a string representation of minutes, seconds, and optionally milliseconds.
 
-Args:
-	time (float): The time value to format, in seconds.
-	use_milliseconds (bool, optional): Whether to include milliseconds in the formatted string. Defaults to false.
-
-Returns:
-	str: A string representation of the formatted time in the format "MM:SS" or "MM:SS:mm", depending on the value of use_milliseconds.
-
-Example:
-	# Format 123.456 seconds without milliseconds
-	var formatted_time = format_seconds(123.456)
-	# Result: "02:03"
-
-	# Format 123.456 seconds with milliseconds
-	var formatted_time_with_ms = format_seconds(123.456, true)
-	# Result: "02:03:45"
-"""
-static func format_seconds(time: float, use_milliseconds: bool = false) -> String:
-	var minutes := floori(time / 60)
-	var seconds := fmod(time, 60)
-	
-	if(not use_milliseconds):
-		return "%02d:%02d" % [minutes, seconds]
-		
-	var milliseconds := fmod(time, 1) * 100
-	
-	return "%02d:%02d:%02d" % [minutes, seconds, milliseconds]
-
-
-static func is_valid_url(url: String) -> bool:
-	var regex = RegEx.new()
-	var url_pattern = "/(https:\\/\\/www\\.|http:\\/\\/www\\.|https:\\/\\/|http:\\/\\/)?[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})(\\.[a-zA-Z]{2,})?\\/[a-zA-Z0-9]{2,}|((https:\\/\\/www\\.|http:\\/\\/www\\.|https:\\/\\/|http:\\/\\/)?[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})(\\.[a-zA-Z]{2,})?)|(https:\\/\\/www\\.|http:\\/\\/www\\.|https:\\/\\/|http:\\/\\/)?[a-zA-Z0-9]{2,}\\.[a-zA-Z0-9]{2,}\\.[a-zA-Z0-9]{2,}(\\.[a-zA-Z0-9]{2,})?/g"
-	regex.compile(url_pattern)
-	
-	return regex.search(url) != null
-	
-	
 static func generate_random_string(length: int = 25, characters: String = ASCII_ALPHANUMERIC) -> String:
 	var result := ""
 	
@@ -171,3 +133,8 @@ static func strip_filepaths(source: String) -> String:
 	regex.compile("res://([^ ])+")
 	
 	return regex.sub(source, "", true)
+
+
+static func case_insensitive_comparison(one: String, two: String) -> bool:
+	return one.strip_edges().to_lower() == two.strip_edges().to_lower()
+	
