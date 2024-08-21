@@ -7,7 +7,7 @@ signal focused(interactor)
 signal unfocused(interactor)
 signal interaction_limit_reached(interactable: Interactable3D)
 
-## The number of times this interactable can be interacted, 0 means no limit.
+## The number of times this interactable can be interacted with, 0 means no limit.
 @export var number_of_times_can_be_interacted := 0
 @export var change_cursor := true
 @export var change_screen_pointer := true
