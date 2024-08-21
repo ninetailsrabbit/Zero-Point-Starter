@@ -24,6 +24,8 @@ config/icon="res://template-icon.svg"
 
 GameGlobals="*res://autoload/general/game_globals.gd"
 GlobalGameEvents="*res://autoload/general/global_game_events.gd"
+WindowManager="*res://autoload/viewport/window_manager.gd"
+GlobalEffects="*res://autoload/effects/global_effects.tscn"
 
 [debug]
 
