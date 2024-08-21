@@ -14,6 +14,8 @@ signal interaction_limit_reached(interactable: Interactable3D)
 @export_group("Information")
 @export var title: String = ""
 @export var description: String = ""
+@export var title_translation_key: String = ""
+@export var description_translation_key: String = ""
 @export_group("Pointers and cursors")
 @export var focus_screen_pointer: CompressedTexture2D
 @export var interact_screen_pointer: CompressedTexture2D

@@ -26,6 +26,10 @@ GameGlobals="*res://autoload/general/game_globals.gd"
 GlobalGameEvents="*res://autoload/general/global_game_events.gd"
 WindowManager="*res://autoload/viewport/window_manager.gd"
 GlobalEffects="*res://autoload/effects/global_effects.tscn"
+AudioManager="*res://autoload/audio/audio_manager.gd"
+MusicManager="*res://autoload/audio/music_manager.gd"
+SoundPool="*res://autoload/audio/sound_pool.gd"
+SceneTransitionManager="*res://autoload/scenes/scene_transition_manager.tscn"
 
 [debug]
 
