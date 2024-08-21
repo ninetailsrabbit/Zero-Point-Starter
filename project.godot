@@ -1,0 +1,64 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Zero-Point-Starter"
+config/name_localized={
+"es": "Arranque punto cero"
+}
+config/description="Making games is easy when you have the boring part done."
+config/version="1.0.0"
+run/main_scene="res://scenes/entry-point/game-entry_point.tscn"
+config/features=PackedStringArray("4.3", "Forward Plus")
+config/icon="res://template-icon.svg"
+
+[autoload]
+
+GameGlobals="*res://autoload/game_globals.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1280
+window/size/window_height_override=720
+
+[file_customization]
+
+folder_colors={
+"res://assets/": "pink",
+"res://autoload/": "yellow",
+"res://components/": "red",
+"res://shaders/": "purple"
+}
+
+[layer_names]
+
+2d_render/layer_1="World"
+3d_render/layer_1="World"
+2d_render/layer_2="Water"
+3d_render/layer_2="Water"
+2d_physics/layer_1="World"
+3d_physics/layer_1="World"
+2d_physics/layer_2="Player"
+3d_physics/layer_2="Player"
+2d_physics/layer_3="Enemies"
+3d_physics/layer_3="Enemies"
+2d_physics/layer_4="Interactables"
+3d_physics/layer_4="Interactables"
+2d_physics/layer_5="Throwables"
+3d_physics/layer_5="Throwables"
+2d_physics/layer_6="Hitboxes"
+3d_physics/layer_6="Hitboxes"
+
+[physics]
+
+common/physics_ticks_per_second=120
