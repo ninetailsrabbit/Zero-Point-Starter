@@ -117,7 +117,7 @@ cancel_interaction={
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://localization/translations/en.po")
+locale/translations=PackedStringArray("res://localization/translations/en.po", "res://localization/translations/de.po", "res://localization/translations/es.po", "res://localization/translations/fr.po", "res://localization/translations/it.po", "res://localization/translations/nl.po", "res://localization/translations/pl.po", "res://localization/translations/pt.po", "res://localization/translations/ru.po")
 
 [layer_names]
 

@@ -1,5 +1,7 @@
 import os, re, subprocess
 
+## Install gettext before run https://mlocati.github.io/articles/gettext-iconv-windows.html
+
 def create_template_pot_file(translation_keys: dict):
      with open(os.path.join(CURRENT_DIR, translation_template_name), 'w+', encoding="utf8") as file:
         file.write('''# GodotExtensionatorStarter - Translation template:
@@ -33,8 +35,7 @@ def create_or_update_translation_files(selected_locales = []):
 
     for locale in selected_locales:
         current_po_translation_path = os.path.join(CURRENT_DIR, f"{locale}.po").lstrip().replace("\\", "/")
-        
-        print(os.path.exists(current_po_translation_path), current_po_translation_path)
+       
         if os.path.exists(current_po_translation_path):
             subprocess.run(['msgmerge', '--update', '--backup=none', current_po_translation_path, translation_template_path], check=True, capture_output=True, text=True)
         else:
@@ -52,8 +53,8 @@ def included_files_filter(file: str) -> bool:
 
 
 def _contains_godot_prefixes(filename: str) -> bool:
-    godot_prefixes_to_exclude = ["EASE_", "TRANS_", "MOUSE_", "TYPE_", "THREAD_", "AUTOWRAP_", "ERROR_", "ERR_", "BYTE_"]
-    print(filename)
+    godot_prefixes_to_exclude = ["KEY_", "EASE_", "TRANS_", "MOUSE_", "TYPE_", "THREAD_", "AUTOWRAP_", "ERROR_", "ERR_", "BYTE_"]
+
     for prefix in godot_prefixes_to_exclude:
         if filename.startswith(prefix):
             return True

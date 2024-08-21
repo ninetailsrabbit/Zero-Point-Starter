@@ -1,0 +1,122 @@
+# GodotExtensionatorStarter - Translation template:
+#
+# Automatically generated, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: GodotExtensionatorStarter\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: C:/Users/there/Desktop/GameDevelopment/Plugins/Zero-Point-Starter/"
+"localization/translations/es\n"
+
+#: autoload/audio/audio_manager.gd
+msgid "MASTER_BUS_INDEX"
+msgstr "MASTER_BUS_INDEX"
+
+#: autoload/audio/audio_manager.gd
+msgid "LOOP_DISABLED"
+msgstr "LOOP_DISABLED"
+
+#: localization/translation_keys.gd
+msgid "GENERAL_NO"
+msgstr "GENERAL_NO"
+
+#: localization/translation_keys.gd
+msgid "GENERAL_YES"
+msgstr "GENERAL_YES"
+
+#: localization/translation_keys.gd
+msgid "AUDIO_TAB"
+msgstr "AUDIO_TAB"
+
+#: localization/translation_keys.gd
+msgid "SCREEN_TAB"
+msgstr "SCREEN_TAB"
+
+#: localization/translation_keys.gd
+msgid "GRAPHICS_TAB"
+msgstr "GRAPHICS_TAB"
+
+#: localization/translation_keys.gd
+msgid "GENERAL_TAB"
+msgstr "GENERAL_TAB"
+
+#: localization/translation_keys.gd
+msgid "DALTONISM_DEUTERANOPIA"
+msgstr "DALTONISM_DEUTERANOPIA"
+
+#: localization/translation_keys.gd
+msgid "DALTONISM_PROTANOPIA"
+msgstr "DALTONISM_PROTANOPIA"
+
+#: localization/translation_keys.gd
+msgid "DALTONISM_TRITANOPIA"
+msgstr "DALTONISM_TRITANOPIA"
+
+#: localization/translation_keys.gd
+msgid "DALTONISM_ACHROMATOPSIA"
+msgstr "DALTONISM_ACHROMATOPSIA"
+
+#: localization/translation_keys.gd
+msgid "GRAPHICS_QUALITY"
+msgstr "GRAPHICS_QUALITY"
+
+#: localization/translation_keys.gd
+msgid "QUALITY_LOW"
+msgstr "QUALITY_LOW"
+
+#: localization/translation_keys.gd
+msgid "QUALITY_MEDIUM"
+msgstr "QUALITY_MEDIUM"
+
+#: localization/translation_keys.gd
+msgid "QUALITY_HIGH"
+msgstr "QUALITY_HIGH"
+
+#: localization/translation_keys.gd
+msgid "QUALITY_ULTRA"
+msgstr "QUALITY_ULTRA"
+
+#: ui/content_warning/advisors/content_warning_photosensitive.tres
+msgid "PHOTOSENSITIVE_TITLE"
+msgstr "PHOTOSENSITIVE_TITLE"
+
+#: ui/content_warning/advisors/content_warning_photosensitive.tres
+msgid "PHOTOSENSITIVE_SUBTITLE"
+msgstr "PHOTOSENSITIVE_SUBTITLE"
+
+#: ui/content_warning/advisors/content_warning_photosensitive.tres
+msgid "PHOTOSENSITIVE_CONTENT"
+msgstr "PHOTOSENSITIVE_CONTENT"
+
+#: ui/content_warning/advisors/content_warning_photosensitive.tres
+msgid "PHOTOSENSITIVE_CONTENT_2"
+msgstr "PHOTOSENSITIVE_CONTENT_2"
+
+#: ui/content_warning/advisors/content_warning_mature_content.tres
+msgid "WARNING_VIEWER_DISCRETION"
+msgstr "WARNING_VIEWER_DISCRETION"
+
+#: ui/content_warning/advisors/content_warning_horror_elements.tres
+msgid "WARNING_HORROR_ELEMENTS"
+msgstr "WARNING_HORROR_ELEMENTS"
+
+#: ui/content_warning/advisors/content_warning_mature_content.tres
+msgid "MATURE_CONTENT_TITLE"
+msgstr "MATURE_CONTENT_TITLE"
+
+#: ui/content_warning/advisors/content_warning_mature_content.tres
+msgid "MATURE_CONTENT_DESCRIPTION"
+msgstr "MATURE_CONTENT_DESCRIPTION"
+
+#: ui/content_warning/advisors/content_warning_resemblance.tres
+msgid "WARNING_RESEMBLANCE_CONTENT"
+msgstr "WARNING_RESEMBLANCE_CONTENT"
+
+#: utilities/input/input_helper.gd
+msgid "KEY_NONE"
+msgstr "KEY_NONE"
