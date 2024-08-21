@@ -4,6 +4,6 @@ class_name Preloader
 
 
 #region Narrative sounds
-const TYPE_DIALOG_RETRO_5: AudioStreamWAV = preload("res://assets/sounds/dialog-text/retro_v5.wav")
-const TYPE_DIALOG_RETRO_6: AudioStreamWAV = preload("res://assets/sounds/dialog-text/retro_v6.wav")
+const TypeDialogRetro5: AudioStreamWAV = preload("res://assets/sounds/dialog-text/retro_v5.wav")
+const TypeDialogRetro6: AudioStreamWAV = preload("res://assets/sounds/dialog-text/retro_v6.wav")
 #endregion

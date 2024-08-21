@@ -1,43 +1,42 @@
 class_name MathHelper
 
-const COMMON_EPSILON = 0.000001 ## 1.0e-6
-const PRECISE_EPSILON = 0.00000001 ## 1.0e-8
+const CommonEpsilon = 0.000001  # 1.0e-6
+const PreciseEpsilon = 0.00000001  # 1.0e-8
 
 const E = 2.71828182845904523536028747135266249775724709369995
 const δ = 4.6692016091 # FEIGENBAUM CONSTANT, period-doubling bifurcation. This bifurcation describes the behavior of a system that exhibits a doubling of its periodic cycle when a certain parameter is gradually changed
-const FEIGENBAUM_ALPHA = 2.5029078750 # FEIGENBAUM ALPHA, another bifurcation constant
-const APERY_CONSTANT = 1.2020569031 # APERY'S CONSTANT, related to zeta function
-const GOLDEN_RATIO = 1.6180339887 # GOLDEN RATIO, (1 + sqrt(5)) / 2
-const EULER_MASCHERONI_CONSTANT = 0.5772156649 # EULER-MASCHERONI CONSTANT, gamma minus harmonic series
-const KHINCHINS_CONSTANT = 2.6854520010 # KHINCHIN'S CONSTANT, optimal embedding dimension
-const GAUSS_KUZMIN_WIRSING_CONSTANT = 0.3036630028 # GAUSS-KUZMIN-WIRSING CONSTANT, sphere packing
-const BERNSTEINS_CONSTANT = 0.2801694990 # BERNSTEIN'S CONSTANT, derivative of Dirichlet eta function
-const HAFNER_SARNAK_MCCURLEY_CONSTANT = 0.3532363718 # HAFNER-SARNAK-MCCURLEY CONSTANT, number theory
-const MEISSEL_MERTENS_CONSTANT = 0.2614972128 # MEISSEL-MERTENS CONSTANT, prime number distribution
-const GLAISHER_KINKELIN_CONSTANT = 1.2824271291 # GLAISHER-KINKELIN CONSTANT, zeta function
-const OMEGA = 0.5671432904 # OMEGA CONSTANT, alternating harmonic series
-const GOLOMB_DICKMAN_CONSTANT = 0.6243299885 # GOLOMB-DICKMAN CONSTANT, prime number distribution
-const CAHENS_CONSTANT = 0.6434105462 # CAHEN'S CONSTANT, Diophantine approximation
-const TWIN_PRIME = 0.6601618158 # TWIN PRIME CONSTANT, probability of twin prime
-const LAPLACE_LIMIT = 0.6627434193 # LAPLACE LIMIT, cosmic microwave background radiation
-const LANDAU_RAMANUJAN_CONSTANT = 0.7642236535 # LANDAU-RAMANUJAN CONSTANT, constant in quantum field theory
-const CATALANS_CONSTANT = 0.9159655941 # CATALAN'S CONSTANT, sum of reciprocals of squares
-const VISWANATHS_CONSTANT = 1.13198824 # VISWANATH'S CONSTANT, number theory
-const CONWAYS_CONSTANT = 1.3035772690 # CONWAY'S CONSTANT, sphere packing
-const MILLS_CONSTANT = 1.3063778838 # MILLS' CONSTANT, normal number
-const PLASTIC_CONSTANT = 1.3247179572 # PLASTIC CONSTANT, golden raio analogue
-const RAMANUJAN_SOLDNER_CONSTANT = 1.4513692348 # RAMANUJAN-SOLDNE CONSTANT, elliptic integrals
-const BACKHOUSE_CONSTANT = 1.4560749485 # BACKHOUSE'S CONSTANT, gamma function
-const PORTERS_CONSTANT = 1.4670780794 # PORTER'S CONSTANT, geometry
-const LIEBS_SQUARE_ICE_CONSTANT = 1.5396007178 # LIEB'S SQUARE ICE CONSTANT, statistical mechanics
-const ERDOS_BORWEIN_CONSTANT = 1.6066951524 # ERDOS-BORWEIN CONSTANT, normal number
-const NIVENS_CONSTANT = 1.7052111401 # NIVENS' CONSTANT, number theory
-const UNIVERSAL_PARABOLIC_CONSTANT = 2.2955871493 # UNIVERSAL PARABOLIC CONSTANT, reflection coefficient
-const SIERPINSKIS_CONSTANT = 2.5849817595 # SIERPINSKI'S CONSTANT, Sierpinski triangle fractal
+const FeigenbaumAlpha = 2.5029078750  # FEIGENBAUM ALPHA, another bifurcation constant
+const AperyConstant = 1.2020569031  # APERY'S CONSTANT, related to zeta function
+const GoldenRatio = 1.6180339887  # GOLDEN RATIO, (1 + sqrt(5)) / 2
+const EulerMascheroniConstant = 0.5772156649  # EULER-MASCHERONI CONSTANT, gamma minus harmonic series
+const KhinchinsConstant = 2.6854520010  # KHINCHIN'S CONSTANT, optimal embedding dimension
+const GaussKuzminWirsingConstant = 0.3036630028  # GAUSS-KUZMIN-WIRSING CONSTANT, sphere packing
+const BernstensConstant = 0.2801694990  # BERNSTEIN'S CONSTANT, derivative of Dirichlet eta function
+const HafnerSarnakMcCurleyConstant = 0.3532363718  # HAFNER-SARNAK-MCCURLEY CONSTANT, number theory
+const MeisselMertensConstant = 0.2614972128  # MEISSEL-MERTENS CONSTANT, prime number distribution
+const GlaisherKinkelinConstant = 1.2824271291  # GLAISHER-KINKELIN CONSTANT, zeta function
+const Omega = 0.5671432904  # OMEGA CONSTANT, alternating harmonic series
+const GolombDickmanConstant = 0.6243299885  # GOLOMB-DICKMAN CONSTANT, prime number distribution
+const CahensConstant = 0.6434105462  # CAHEN'S CONSTANT, Diophantine approximation
+const TwinPrime = 0.6601618158  # TWIN PRIME CONSTANT, probability of twin prime
+const LaplaceLimit = 0.6627434193  # LAPLACE LIMIT, cosmic microwave background radiation
+const LandauRamanujanConstant = 0.7642236535  # LANDAU-RAMANUJAN CONSTANT, constant in quantum field theory
+const CatalansConstant = 0.9159655941  # CATALAN'S CONSTANT, sum of reciprocals of squares
+const ViswanathsConstant = 1.13198824  # VISWANATH'S CONSTANT, number theory
+const ConwaysConstant = 1.3035772690  # CONWAY'S CONSTANT, sphere packing
+const MillsConstant = 1.3063778838  # MILLS' CONSTANT, normal number
+const PlasticConstant = 1.3247179572  # PLASTIC CONSTANT, golden raio analogue
+const RamanujanSoldnerConstant = 1.4513692348  # RAMANUJAN-SOLDNE CONSTANT, elliptic integrals
+const BackhouseConstant = 1.4560749485  # BACKHOUSE'S CONSTANT, gamma function
+const PortersConstant = 1.4670780794  # PORTER'S CONSTANT, geometry
+const LiebsSquareIceConstant = 1.5396007178  # LIEB'S SQUARE ICE CONSTANT, statistical mechanics
+const ErdosBorweinConstant = 1.6066951524  # ERDOS-BORWEIN CONSTANT, normal number
+const NivensConstant = 1.7052111401  # NIVENS' CONSTANT, number theory
+const UniversalParabolicConstant = 2.2955871493  # UNIVERSAL PARABOLIC CONSTANT, reflection coefficient
+const SierpinskisConstant = 2.5849817595  # SIERPINSKI'S CONSTANT, Sierpinski triangle fractal
 
-const FRANSEN_ROBINSON_CONSTANT = 2.807770
-
-const HEX_CHARACTERS = "0123456789ABCDEF"
+const FransenRobinsonConstant = 2.807770
+const HexCharacters = "0123456789ABCDEF"
 
 ## "x": This is the input value between 0 and 1 that you want to apply the bias to. 
 ## It could represent a probability, a random number between 0 and 1, or any other value in that range.
@@ -70,7 +69,7 @@ static func factorials_from(number) -> Array[float]:
 	var result: Array[float] = []
 	
 	for i in range(number + 1):
-		result.append(MathWizard.factorial(i))
+		result.append(MathHelper.factorial(i))
 		
 	return result
 
@@ -86,7 +85,7 @@ static func quaternion_to_axis_angle(quaternion : Quaternion) -> Quaternion:
 
 	axis_angle.w = sqrt(1 - quaternion.w * quaternion.w)
 
-	if axis_angle.w < COMMON_EPSILON:
+	if axis_angle.w < CommonEpsilon:
 		axis_angle.x = quaternion.x
 		axis_angle.y = quaternion.y
 		axis_angle.z = quaternion.z
@@ -142,7 +141,7 @@ static func hexadecimal_to_decimal(hex: String) -> int:
 	var val := 0.0
 	
 	for character in hex.strip_edges().reverse():
-		val = HEX_CHARACTERS.find(character.to_upper())  # Find decimal value of uppercase char
+		val = HexCharacters.find(character.to_upper())  # Find decimal value of uppercase char
 		
 		if val == -1:
 			return -1  
@@ -159,7 +158,7 @@ static func decimal_to_hexadecimal(decimal: int) -> String:
 
 	while remaining > 0:
 		var remainder_hex = remaining % 16
-		hex_string = HEX_CHARACTERS[remainder_hex] + hex_string
+		hex_string = HexCharacters[remainder_hex] + hex_string
 		remaining /= 16  # Integer division to discard remainder
 
 	return hex_string

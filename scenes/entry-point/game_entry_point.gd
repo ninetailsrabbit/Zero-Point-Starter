@@ -1,10 +1,13 @@
 extends Node
 
+@export_file(".tscn") var next_scene: String = ""
+
+@onready var content_warnings: ContentWarnings = $ContentWarnings
 
 func _ready() -> void:
-	GlobalEffects.fade_in()
+	content_warnings.all_content_warnings_displayed.connect(on_all_content_warnings_displayed)
 	
-	await GlobalEffects.fade_finished
-	
-	GlobalEffects.fade_out()
-	
+
+func on_all_content_warnings_displayed() -> void:
+	if !next_scene.is_empty():
+		SceneTransitionManager.transition_to_scene(next_scene)

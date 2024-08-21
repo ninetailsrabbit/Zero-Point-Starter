@@ -1,5 +1,5 @@
 @icon("res://ui/content_warning/content_warning.svg")
-extends Control
+class_name ContentWarnings extends Control
 
 
 signal content_warning_displayed(content_warning: ContentWarning)

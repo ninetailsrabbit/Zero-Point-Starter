@@ -6,7 +6,7 @@ signal changed_stream(from: AudioStream, to: AudioStream)
 signal started_stream(audio_stream_player: AudioStreamPlayer, new_stream: AudioStream)
 signal finished_stream(audio_stream_player: AudioStreamPlayer, old_stream: AudioStream)
 
-const VOLUME_DB_INAUDIBLE := -80.0
+const VolumeDBInaudible := -80.0
 
 ## Dictionary<string, AudioStream>
 var music_bank := {}
@@ -31,14 +31,14 @@ func play_music(stream_name: String, crossfade: bool = true, crossfading_time: f
 				
 			if crossfade:
 				var next_audio_stream_player := secondary_audio_stream_player if current_audio_stream_player.name == "MainAudioStreamPlayer" else main_audio_stream_player
-				next_audio_stream_player.volume_db = VOLUME_DB_INAUDIBLE
+				next_audio_stream_player.volume_db = VolumeDBInaudible
 				play_stream(next_audio_stream_player, stream)
 				
 				var volume := linear_to_db(AudioManager.get_actual_volume_db_from_bus_name(next_audio_stream_player.bus))
 				
 				var crossfade_tween = create_tween()
 				crossfade_tween.set_parallel(true)
-				crossfade_tween.tween_property(current_audio_stream_player, "volume_db", VOLUME_DB_INAUDIBLE, crossfading_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
+				crossfade_tween.tween_property(current_audio_stream_player, "volume_db", VolumeDBInaudible, crossfading_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
 				crossfade_tween.tween_property(next_audio_stream_player, "volume_db", volume, crossfading_time).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_LINEAR)
 				crossfade_tween.chain().tween_callback(func(): current_audio_stream_player = next_audio_stream_player)
 

@@ -1,17 +1,17 @@
 class_name StringHelper
 
-const ASCII_ALPHANUMERIC = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-const ASCII_LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-const ASCII_LOWERCASE = "abcdefghijklmnopqrstuvwxyz"
-const ASCII_UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-const ASCII_DIGITS = "0123456789"
-const ASCII_HEXDIGITS = "0123456789ABCDEF"
-const ASCII_PUNCTUATION =  "!\"#$%&'()*+, -./:;<=>?@[\\]^_`{|}~"
+const AsciiAlphanumeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+const AsciiLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const AsciiLowercase = "abcdefghijklmnopqrstuvwxyz"
+const AsciiUppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const AsciiDigits = "0123456789"
+const AsciiHexdigits = "0123456789ABCDEF"
+const AsciiPunctuation =  "!\"#$%&'()*+, -./:;<=>?@[\\]^_`{|}~"
 
 static var random_number_generator := RandomNumberGenerator.new()
 
 
-static func generate_random_string(length: int = 25, characters: String = ASCII_ALPHANUMERIC) -> String:
+static func generate_random_string(length: int = 25, characters: String = AsciiAlphanumeric) -> String:
 	var result := ""
 	
 	if(not characters.is_empty() && length > 0):
