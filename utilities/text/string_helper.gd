@@ -135,6 +135,27 @@ static func strip_filepaths(source: String) -> String:
 	return regex.sub(source, "", true)
 
 
+static func str_replace(target: String, regex: RegEx, cb: Callable) -> String:
+	var result = ""
+	var last_position = 0
+	
+	for regex_match in regex.search_all(target):
+		var start := regex_match.get_start()
+		result += target.substr(last_position, start - last_position)
+		result += str(cb.call(regex_match.get_string()))
+		last_position = regex_match.get_end()
+		
+	result += target.substr(last_position)
+	
+	return result
+	
+
 static func case_insensitive_comparison(one: String, two: String) -> bool:
 	return one.strip_edges().to_lower() == two.strip_edges().to_lower()
 	
+	
+static func remove_whitespaces(text: String) -> String:
+	var whitespace_regex: RegEx = RegEx.new()
+	whitespace_regex.compile(r"\s+")
+	
+	return StringHelper.str_replace(text, whitespace_regex, func(_text: String): return "")

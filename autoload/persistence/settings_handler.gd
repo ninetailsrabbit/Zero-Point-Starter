@@ -40,6 +40,10 @@ func load_settings(path: String = settings_file_path) -> void:
 func create_settings(path: String = settings_file_path) -> void:
 	create_audio_section()
 	create_graphics_section()
+	create_accessibility_section()
+	create_localization_section()
+	create_analytics_section()
+	create_keybindings_section()
 	
 	save_settings(path)
 	
@@ -70,6 +74,78 @@ func create_accessibility_section() -> void:
 	update_accessibility_section("photosensitive", false);
 	update_accessibility_section("screenshake", true);
 	update_accessibility_section("daltonism", ViewportHelper.DaltonismTypes.No);
+
+
+func create_localization_section() -> void:
+	update_localization_section("current_language", Localization.english().iso_code)
+	update_localization_section("voices_language", Localization.english().iso_code)
+	update_localization_section("subtitles", false)
+	update_localization_section("subtitles_language", Localization.english().iso_code)
+
+
+func create_analytics_section() -> void:
+	update_analytics_section("allow_telemetry", false)
+
+func create_keybindings_section() -> void:
+	var keybindings: Dictionary = {}
+	var whitespace_regex = RegEx.new()
+	whitespace_regex.compile(r"\s+")
+	
+	for action: StringName in _get_input_map_actions():
+		var keybindings_events: Array[String] = []
+		
+		for input_event: InputEvent in InputHelper.get_all_inputs_for_action(action):
+			
+			if input_event is InputEventKey:
+				keybindings_events.append("InputEventKey:%s" %  StringHelper.remove_whitespaces(InputHelper.readable_key(input_event)))
+				
+			if input_event is InputEventMouseButton:
+				var mouse_button_text: String = ""
+				
+				match(input_event.button_index):
+					MOUSE_BUTTON_LEFT:
+						mouse_button_text = "LMB"
+					MOUSE_BUTTON_RIGHT:
+						mouse_button_text = "RMB"
+					MOUSE_BUTTON_MIDDLE:
+						mouse_button_text = "MMB"
+					MOUSE_BUTTON_WHEEL_DOWN:
+						mouse_button_text = "WheelDown"
+					MOUSE_BUTTON_WHEEL_UP:
+						mouse_button_text = "WheelUp"
+					MOUSE_BUTTON_WHEEL_RIGHT:
+						mouse_button_text = "WheelRight"
+					MOUSE_BUTTON_WHEEL_LEFT:
+						mouse_button_text = "WheelLeft"
+						
+				keybindings_events.append("InputEventMouseButton%s%d%s%s" % [InputEventSeparator, input_event.button_index, InputEventSeparator, mouse_button_text])
+			
+			if input_event is InputEventJoypadMotion:
+				var joypadAxis: String = ""
+				
+				match(input_event.axis):
+					JOY_AXIS_LEFT_X:
+						joypadAxis = "Left Stick %s" % "Left" if input_event.axis_value < 0 else "Right"
+					JOY_AXIS_LEFT_Y:
+						joypadAxis = "Left Stick %s" % "Up" if input_event.axis_value < 0 else "Down"
+					JOY_AXIS_RIGHT_X:
+						joypadAxis = "Right Stick %s" % "Left" if input_event.axis_value < 0 else "Right"
+					JOY_AXIS_RIGHT_Y:
+						joypadAxis = "Right Stick %s" % "Up" if input_event.axis_value < 0 else "Down"
+					JOY_AXIS_TRIGGER_LEFT:
+						joypadAxis = "Left Trigger"
+					JOY_AXIS_TRIGGER_RIGHT:
+						joypadAxis = "Right trigger"
+				
+				keybindings_events.append("InputEventJoypadMotion%s%d%s%d%s%s" % [InputEventSeparator, input_event.axis, InputEventSeparator, input_event.axis_value, InputEventSeparator, joypadAxis])
+				
+			if input_event is InputEventJoypadButton:
+				var joypadButton: String = ""
+				
+				
+		keybindings[action] = KeybindingSeparator.join(keybindings_events)
+		update_keybindings_section(action, keybindings[action])
+		
 #endregion
 
 func save_settings(path: String = settings_file_path) -> void:
