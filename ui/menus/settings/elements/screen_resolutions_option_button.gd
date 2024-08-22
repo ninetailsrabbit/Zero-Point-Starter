@@ -1,5 +1,7 @@
 class_name ScreenResolutionsOptionButton extends OptionButton
 
+## Make available only the resolutions that the user computer can handle
+@export var use_computer_screen_resolution_limit = true
 @export var display4_3: bool = false
 @export var display16_9: bool = true
 @export var display16_10: bool = false
@@ -26,7 +28,9 @@ func _fill_available_resolutions() -> void:
 		if _resolution_is_included(display_resolution):
 			add_separator(display_resolution)
 			
-			for screen_size: Vector2i in ViewportHelper.resolutions[display_resolution]:
+			var allowed_resolutions =  ViewportHelper.resolutions[display_resolution].filter(func(screen_size): return screen_size <= HardwareDetector.computer_screen_size) if use_computer_screen_resolution_limit else ViewportHelper.resolutions[display_resolution] 
+			
+			for screen_size: Vector2i in allowed_resolutions:
 				add_item("%dx%d" % [screen_size.x, screen_size.y])
 				
 				if current_window_size == screen_size:

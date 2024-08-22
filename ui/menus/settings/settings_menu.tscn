@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://dxapajbsngnmj"]
+[gd_scene load_steps=8 format=3 uid="uid://dxapajbsngnmj"]
 
 [ext_resource type="Script" path="res://ui/menus/settings/elements/audio_slider.gd" id="1_1bu1f"]
 [ext_resource type="Script" path="res://ui/menus/settings/settings_menu.gd" id="1_7arbm"]
 [ext_resource type="Script" path="res://ui/menus/settings/elements/screen_resolutions_option_button.gd" id="3_33hi5"]
 [ext_resource type="Script" path="res://ui/menus/settings/elements/screen_mode_option_button.gd" id="3_g4qml"]
+[ext_resource type="Script" path="res://ui/menus/settings/elements/vsync_checkbox.gd" id="5_yqy4c"]
+[ext_resource type="Script" path="res://ui/menus/settings/elements/photosensitive_checkbox.gd" id="6_eqr7d"]
+[ext_resource type="Script" path="res://ui/menus/settings/elements/screen_shake_checkbox.gd" id="7_kcacm"]
 
 [node name="GameSettingsUI" type="Control"]
 layout_mode = 3
@@ -205,9 +208,6 @@ text = "SETTINGS_RESOLUTION"
 [node name="ScreenResolutionsOptionButton" type="OptionButton" parent="MarginContainer/TabContainer/Screen/MarginContainer/VBoxContainer"]
 layout_mode = 2
 script = ExtResource("3_33hi5")
-display4_3 = true
-display16_10 = true
-display21_9 = true
 
 [node name="FPSLimitLabel" type="Label" parent="MarginContainer/TabContainer/Screen/MarginContainer/VBoxContainer"]
 visible = false
@@ -231,6 +231,7 @@ autowrap_mode = 3
 [node name="VsyncCheckbox" type="CheckBox" parent="MarginContainer/TabContainer/Screen/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "SETTINGS_VSYNC"
+script = ExtResource("5_yqy4c")
 
 [node name="HSeparator2" type="HSeparator" parent="MarginContainer/TabContainer/Screen/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -241,6 +242,7 @@ layout_mode = 2
 [node name="PhotosensitiveCheckBox" type="CheckBox" parent="MarginContainer/TabContainer/Screen/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "SETTINGS_PHOTOSENSITIVE"
+script = ExtResource("6_eqr7d")
 
 [node name="VSeparator" type="VSeparator" parent="MarginContainer/TabContainer/Screen/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -248,6 +250,7 @@ layout_mode = 2
 [node name="ScreenshakeCheckBox" type="CheckBox" parent="MarginContainer/TabContainer/Screen/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "SETTINGS_SCREENSHAKE"
+script = ExtResource("7_kcacm")
 
 [node name="Graphics" type="TabBar" parent="MarginContainer/TabContainer"]
 unique_name_in_owner = true

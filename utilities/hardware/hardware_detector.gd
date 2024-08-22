@@ -35,7 +35,7 @@ static var distribution_name := OS.get_distribution_name()
 static var video_adapter_name := RenderingServer.get_video_adapter_name()
 static var processor_name := OS.get_processor_name()
 static var processor_count := OS.get_processor_count()
-
+static var computer_screen_size := DisplayServer.screen_get_size()
 
 static func is_steam_deck() -> bool:
 	return StringHelper.case_insensitive_comparison(distribution_name, "SteamOS") \

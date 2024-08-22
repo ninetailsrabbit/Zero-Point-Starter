@@ -55,17 +55,32 @@ enum DaltonismTypes {
 }
 
 #region Resolution getters
-static func get_4_3_resolutions() -> Array[Vector2i]:
+static func get_4_3_resolutions(use_computer_screen_limit: bool = false) -> Array[Vector2i]:
+	if use_computer_screen_limit:
+		return resolutions[Resolution4_3].filter(_filter_by_screen_size_limit)
+		
 	return resolutions[Resolution4_3]
 
-static func get_16_9_resolutions() -> Array[Vector2i]:
+static func get_16_9_resolutions(use_computer_screen_limit: bool = false) -> Array[Vector2i]:
+	if use_computer_screen_limit:
+		return resolutions[Resolution16_9].filter(_filter_by_screen_size_limit)
+
 	return resolutions[Resolution16_9]
 
-static func get_16_10_resolutions() -> Array[Vector2i]:
+static func get_16_10_resolutions(use_computer_screen_limit: bool = false) -> Array[Vector2i]:
+	if use_computer_screen_limit:
+		return resolutions[Resolution16_10].filter(_filter_by_screen_size_limit)
+
 	return resolutions[Resolution16_10]
 
-static func get_21_9_resolutions() -> Array[Vector2i]:
+static func get_21_9_resolutions(use_computer_screen_limit: bool = false) -> Array[Vector2i]:
+	if use_computer_screen_limit:
+		return resolutions[Resolution21_9].filter(_filter_by_screen_size_limit)
+
 	return resolutions[Resolution21_9]
+	
+static func _filter_by_screen_size_limit(screen_size: Vector2i):
+	return screen_size <= HardwareDetector.computer_screen_size
 #endregion
 
 
