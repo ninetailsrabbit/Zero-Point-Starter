@@ -13,13 +13,15 @@ func _ready() -> void:
 		display21_9 = false
 		display4_3 = false
 		
-	_fill_available_resolutions()
-	item_selected.connect(on_resolution_selected)
 
+	item_selected.connect(on_resolution_selected)
+	
+	_fill_available_resolutions()
+	
 
 func _fill_available_resolutions() -> void:
-	var current_window_size: Vector2i = DisplayServer.window_get_size()
-		
+	var current_window_size: Vector2i =  DisplayServer.window_get_size() if DisplayServer.window_get_mode() == DisplayServer.WindowMode.WINDOW_MODE_WINDOWED else SettingsHandler.get_graphics_section("resolution")
+	
 	for display_resolution in ViewportHelper.resolutions:
 		if _resolution_is_included(display_resolution):
 			add_separator(display_resolution)
@@ -41,7 +43,9 @@ func _resolution_is_included(resolution: String) -> bool:
 func on_resolution_selected(idx) -> void:
 	## We need to split the text to get the Vector2i as the options cannot be saved as Variants
 	var resolution: PackedStringArray = get_item_text(idx).split("x")
+	var screen_size = Vector2i(int(resolution[0]), int(resolution[1]))
 	
-	DisplayServer.window_set_size(Vector2i(int(resolution[0]), int(resolution[1])))
-	SettingsHandler.update_graphics_section("resolution", DisplayServer.window_get_size())
+	DisplayServer.window_set_size(screen_size)
+	
+	SettingsHandler.update_graphics_section("resolution", screen_size)
 	SettingsHandler.save_settings()

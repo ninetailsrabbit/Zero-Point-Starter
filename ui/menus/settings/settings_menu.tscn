@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dxapajbsngnmj"]
+[gd_scene load_steps=5 format=3 uid="uid://dxapajbsngnmj"]
 
 [ext_resource type="Script" path="res://ui/menus/settings/elements/audio_slider.gd" id="1_1bu1f"]
 [ext_resource type="Script" path="res://ui/menus/settings/settings_menu.gd" id="1_7arbm"]
 [ext_resource type="Script" path="res://ui/menus/settings/elements/screen_resolutions_option_button.gd" id="3_33hi5"]
+[ext_resource type="Script" path="res://ui/menus/settings/elements/screen_mode_option_button.gd" id="3_g4qml"]
 
 [node name="GameSettingsUI" type="Control"]
 layout_mode = 3
@@ -195,6 +196,7 @@ text = "SETTINGS_WINDOW_MODE"
 [node name="ScreenModeOptionButton" type="OptionButton" parent="MarginContainer/TabContainer/Screen/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+script = ExtResource("3_g4qml")
 
 [node name="ResolutionLabel" type="Label" parent="MarginContainer/TabContainer/Screen/MarginContainer/VBoxContainer"]
 layout_mode = 2
