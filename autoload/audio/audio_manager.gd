@@ -4,6 +4,26 @@ extends Node
 
 const MASTER_BUS_INDEX = 0
 
+static var default_audio_volumes := {
+	"master": 0.9,
+	"music": 0.8,
+	"sfx": 0.9,
+	"echosfx": 0.9,
+	"voice": 0.8,
+	"ui": 0.7,
+	"ambient": 0.9
+}
+
+func reset_to_default_volumes() -> void:
+	for bus: String in available_buses:
+		change_volume(bus, default_audio_volumes[bus.to_lower()])
+		
+func get_default_volume_for_bus(bus) -> float:
+	if typeof(bus) == TYPE_INT:
+		bus = AudioServer.get_bus_name(bus)
+		
+	return default_audio_volumes[bus.to_lower()]
+	
 ## Change the volume of selected bus_index if it exists
 ## Can receive the bus parameter as name or index
 func change_volume(bus, volume_value: float) -> void:

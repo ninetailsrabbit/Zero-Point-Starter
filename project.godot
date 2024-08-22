@@ -30,6 +30,7 @@ AudioManager="*res://autoload/audio/audio_manager.gd"
 MusicManager="*res://autoload/audio/music_manager.gd"
 SoundPool="*res://autoload/audio/sound_pool.gd"
 SceneTransitionManager="*res://autoload/scenes/scene_transition_manager.tscn"
+SettingsHandler="*res://autoload/persistence/settings_handler.gd"
 
 [debug]
 
