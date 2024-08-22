@@ -19,9 +19,29 @@ const FileFormat := "ini" #  ini or cfg
 var settings_file_path := OS.get_user_data_dir() + "/settings.%s" % FileFormat
 var config_file_api := ConfigFile.new()
 var include_ui_keybindings := false
+var automatic = true
 
 
 func _ready() -> void:
+	if automatic:
+		prepare_settings()
+
+
+#region Generic
+func save_settings(path: String = settings_file_path) -> void:
+	config_file_api.save(path)
+
+
+func reset_to_factory_settings(path: String = settings_file_path) -> void:
+	if FileAccess.file_exists(path):
+		config_file_api.clear()
+		DirAccess.remove_absolute(path)
+		
+	create_settings(path)
+	# TODO - USE LOAD FUNCTION HERE ALSO
+	reset_to_default_settings.emit()
+
+func prepare_settings() -> void:
 	if(FileAccess.file_exists(settings_file_path)):
 		load_settings()
 	else:
@@ -36,40 +56,13 @@ func load_settings(path: String = settings_file_path) -> void:
 
 	load_audio()
 	load_graphics()
-
+	load_localization()
+	load_keybindings()
+	
 	loaded_settings.emit()
-
-	
-#region Load
-func load_audio() -> void:
-	var muted_buses: bool = get_audio_section("muted")
-	
-	for bus in config_file_api.get_section_keys(AudioSection):
-		if(bus in AudioManager.available_buses):
-			AudioManager.change_volume(bus, get_audio_section(bus))
-			AudioManager.mute_bus(bus, muted_buses)
-
-func load_graphics() -> void:
-	for section_key: String in config_file_api.get_section_keys(GraphicsSection):
-		var config_value = get_graphics_section(section_key)
-		
-		match section_key:
-			"max_fps":
-				Engine.max_fps = config_value
-			"display":
-				DisplayServer.window_set_mode(config_value)
-			"resolution":
-				DisplayServer.window_set_size(config_value)
-			"vsync":
-				DisplayServer.window_set_vsync_mode(config_value)
-			"antialiasing_2d":
-				get_viewport().msaa_2d = config_value
-			"antialiasing_3d":
-				get_viewport().msaa_3d = config_value
-			"quality_preset":
-				GlobalGameEvents.updated_graphic_settings.emit(int(config_value))
-
 #endregion
+
+	
 
 #region Creation
 func create_settings(path: String = settings_file_path) -> void:
@@ -117,14 +110,15 @@ func create_accessibility_section() -> void:
 
 
 func create_localization_section() -> void:
-	update_localization_section("current_language", Localization.english().iso_code)
-	update_localization_section("voices_language", Localization.english().iso_code)
+	update_localization_section("current_language", TranslationServer.get_locale())
+	update_localization_section("voices_language", TranslationServer.get_locale())
 	update_localization_section("subtitles", false)
-	update_localization_section("subtitles_language", Localization.english().iso_code)
+	update_localization_section("subtitles_language", TranslationServer.get_locale())
 
 
 func create_analytics_section() -> void:
 	update_analytics_section("allow_telemetry", false)
+
 
 func create_keybindings_section() -> void:
 	var keybindings: Dictionary = {}
@@ -199,18 +193,63 @@ func create_keybindings_section() -> void:
 		
 #endregion
 
-func save_settings(path: String = settings_file_path) -> void:
-	config_file_api.save(path)
+#region Load
+func load_audio() -> void:
+	var muted_buses: bool = get_audio_section("muted")
+	
+	for bus in config_file_api.get_section_keys(AudioSection):
+		if(bus in AudioManager.available_buses):
+			AudioManager.change_volume(bus, get_audio_section(bus))
+			AudioManager.mute_bus(bus, muted_buses)
 
-
-func reset_to_factory_settings(path: String = settings_file_path) -> void:
-	if FileAccess.file_exists(path):
-		config_file_api.clear()
-		DirAccess.remove_absolute(path)
+func load_graphics() -> void:
+	for section_key: String in config_file_api.get_section_keys(GraphicsSection):
+		var config_value = get_graphics_section(section_key)
 		
-	create_settings(path)
-	# TODO - USE LOAD FUNCTION HERE ALSO
-	reset_to_default_settings.emit()
+		match section_key:
+			"max_fps":
+				Engine.max_fps = config_value
+			"display":
+				DisplayServer.window_set_mode(config_value)
+			"resolution":
+				DisplayServer.window_set_size(config_value)
+			"vsync":
+				DisplayServer.window_set_vsync_mode(config_value)
+			"antialiasing_2d":
+				get_viewport().msaa_2d = config_value
+			"antialiasing_3d":
+				get_viewport().msaa_3d = config_value
+			"quality_preset":
+				GlobalGameEvents.updated_graphic_settings.emit(int(config_value))
+
+func load_localization() -> void:
+	for section_key: String in config_file_api.get_section_keys(LocalizationSection):
+		var config_value = get_localization_section(section_key)
+		
+		match section_key:
+			"current_language":
+				TranslationServer.set_locale(config_value)
+				GlobalGameEvents.changed_language.emit(config_value)
+			"subtitles_language":
+				GlobalGameEvents.changed_subtitles_language.emit(config_value)
+			"voices_language":
+				GlobalGameEvents.changed_voices_language.emit(config_value)
+			"subtitles_enabled":
+				GlobalGameEvents.changed_subtitles_enabled.emit(config_value)
+
+func load_keybindings() -> void:
+	for action: String in config_file_api.get_section_keys(KeybindingsSection):
+		var keybinding: String = get_keybindings_section(action)
+		
+		InputMap.action_erase_events(action)
+		
+		if keybinding.contains(KeybindingSeparator):
+			for value: String in keybinding.split(KeybindingSeparator):
+				_add_keybinding_event(action, value.split(InputEventSeparator))
+		else:
+			_add_keybinding_event(action, keybinding.split(InputEventSeparator))
+	
+#endregion
 
 #region Section Getters
 func get_audio_section(key: String):
@@ -270,5 +309,40 @@ func update_localization_section(key: String, value: Variant) -> void:
 	config_file_api.set_value(LocalizationSection, key, value)
 #endregion
 
+#region Private functions
+func _add_keybinding_event(action: String, keybinding_type: Array[String] = []):
+	var keybinding_modifiers_regex = RegEx.new()
+	keybinding_modifiers_regex.compile(r"\b(Shift|Ctrl|Alt)\+\b")
+	
+	print_rich(keybinding_type)
+	match keybinding_type[0]:
+		"InputEventKey":
+			var input_event_key = InputEventKey.new()
+			input_event_key.keycode = OS.find_keycode_from_string(StringHelper.str_replace(keybinding_type[1].strip_edges(), keybinding_modifiers_regex, func(_text: String): return ""))
+			input_event_key.alt_pressed = not StringHelper.case_insensitive_comparison(keybinding_type[1], "alt") and keybinding_type[1].containsn("alt")
+			input_event_key.ctrl_pressed = not StringHelper.case_insensitive_comparison(keybinding_type[1], "ctrl") and keybinding_type[1].containsn("ctrl")
+			input_event_key.shift_pressed = not StringHelper.case_insensitive_comparison(keybinding_type[1], "shift") and keybinding_type[1].containsn("shift")
+			input_event_key.meta_pressed =  keybinding_type[1].containsn("meta")
+			
+			InputMap.action_add_event(action, input_event_key)
+		"InputEventMouseButton":
+			var input_event_mouse_button = InputEventMouseButton.new()
+			input_event_mouse_button.button_index = int(keybinding_type[1])
+			
+			InputMap.action_add_event(action, input_event_mouse_button)
+		"InputEventJoypadMotion":
+			var input_event_joypad_motion = InputEventJoypadMotion.new()
+			input_event_joypad_motion.axis = int(keybinding_type[1])
+			input_event_joypad_motion.axis_value = float(keybinding_type[2])
+			
+			InputMap.action_add_event(action, input_event_joypad_motion)
+		"InputEventJoypadButton":
+			var input_event_joypad_button = InputEventJoypadButton.new()
+			input_event_joypad_button.button_index = int(keybinding_type[1])
+			
+			InputMap.action_add_event(action, input_event_joypad_button)
+	
+	
 func _get_input_map_actions() -> Array[StringName]:
 	return InputMap.get_actions() if include_ui_keybindings else InputMap.get_actions().filter(func(action): return !action.contains("ui_"))
+#endregion
