@@ -18,3 +18,11 @@ signal controller_disconnected(device: int, controller_name: String)
 signal scene_transition_requested(next_scene_path)
 signal scene_transition_finished(next_scene_path)
 #endregion
+
+#region Settings
+signal changed_language(language: String)
+signal changed_subtitles_language(language: String)
+signal changed_voices_language(language: String)
+signal changed_subtitles_enabled(enabled: bool)
+signal updated_graphic_settings(quality_preset: int) # QualityPreset enum from HardwareDetector
+#endregion

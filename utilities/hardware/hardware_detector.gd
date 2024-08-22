@@ -130,6 +130,7 @@ static var graphics_quality_presets: Dictionary = {
 			"environment/glow_enabled": GraphicQualityDisplay.new("Glow", 0, "Disabled"),
 			"environment/ss_reflections_enabled": GraphicQualityDisplay.new("SS Reflections", 0, "Disabled"),
 			"environment/ssao_enabled": GraphicQualityDisplay.new("SSAO", 0, "Disabled"),
+			"rendering/anti_aliasing/quality/msaa_2d": GraphicQualityDisplay.new("AntiAliasing 2D", Viewport.MSAA_DISABLED, "Disabled"),
 			"rendering/anti_aliasing/quality/msaa_3d": GraphicQualityDisplay.new("AntiAliasing 3D", Viewport.MSAA_DISABLED, "Disabled")
 		}
 	),
@@ -138,6 +139,7 @@ static var graphics_quality_presets: Dictionary = {
 			"environment/glow_enabled": GraphicQualityDisplay.new("Glow", 0, "Disabled"),
 			"environment/ss_reflections_enabled": GraphicQualityDisplay.new("SS Reflections", 0, "Disabled"),
 			"environment/ssao_enabled": GraphicQualityDisplay.new("SSAO", 0, "Disabled"),
+			"rendering/anti_aliasing/quality/msaa_2d": GraphicQualityDisplay.new("AntiAliasing 2D", Viewport.MSAA_2X, "2×"),
 			"rendering/anti_aliasing/quality/msaa_3d": GraphicQualityDisplay.new("AntiAliasing 3D", Viewport.MSAA_2X, "2×")
 		}
 	),
@@ -146,6 +148,7 @@ static var graphics_quality_presets: Dictionary = {
 			"environment/glow_enabled": GraphicQualityDisplay.new("Glow", 1, "Enabled"),
 			"environment/ss_reflections_enabled": GraphicQualityDisplay.new("SS Reflections", 0, "Disabled"),
 			"environment/ssao_enabled": GraphicQualityDisplay.new("SSAO", 1, "Medium-Quality"),
+			"rendering/anti_aliasing/quality/msaa_2d": GraphicQualityDisplay.new("AntiAliasing 2D", Viewport.MSAA_4X, "4×"),
 			"rendering/anti_aliasing/quality/msaa_3d": GraphicQualityDisplay.new("AntiAliasing 3D", Viewport.MSAA_4X, "4×")
 		}
 	),	
@@ -154,6 +157,7 @@ static var graphics_quality_presets: Dictionary = {
 			"environment/glow_enabled": GraphicQualityDisplay.new("Glow", 1, "Enabled"),
 			"environment/ss_reflections_enabled": GraphicQualityDisplay.new("SS Reflections", 1, "Enabled"),
 			"environment/ssao_enabled": GraphicQualityDisplay.new("SSAO", 1, "High-Quality"),
+			"rendering/anti_aliasing/quality/msaa_2d": GraphicQualityDisplay.new("AntiAliasing 2D", Viewport.MSAA_8X, "8×"),
 			"rendering/anti_aliasing/quality/msaa_3d": GraphicQualityDisplay.new("AntiAliasing 3D", Viewport.MSAA_8X, "8×")
 		}
 	),

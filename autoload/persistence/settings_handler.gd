@@ -34,9 +34,44 @@ func load_settings(path: String = settings_file_path) -> void:
 	if error != OK:
 		push_error("SettingsHandler: An error %d ocurred trying to load the settings from path %s " % [error, path])
 
+	load_audio()
+	load_graphics()
+
 	loaded_settings.emit()
+
 	
+#region Load
+func load_audio() -> void:
+	var muted_buses: bool = get_audio_section("muted")
 	
+	for bus in config_file_api.get_section_keys(AudioSection):
+		if(bus in AudioManager.available_buses):
+			AudioManager.change_volume(bus, get_audio_section(bus))
+			AudioManager.mute_bus(bus, muted_buses)
+
+func load_graphics() -> void:
+	for section_key: String in config_file_api.get_section_keys(GraphicsSection):
+		var config_value = get_graphics_section(section_key)
+		
+		match section_key:
+			"max_fps":
+				Engine.max_fps = config_value
+			"display":
+				DisplayServer.window_set_mode(config_value)
+			"resolution":
+				DisplayServer.window_set_size(config_value)
+			"vsync":
+				DisplayServer.window_set_vsync_mode(config_value)
+			"antialiasing_2d":
+				get_viewport().msaa_2d = config_value
+			"antialiasing_3d":
+				get_viewport().msaa_3d = config_value
+			"quality_preset":
+				GlobalGameEvents.updated_graphic_settings.emit(int(config_value))
+
+#endregion
+
+#region Creation
 func create_settings(path: String = settings_file_path) -> void:
 	create_audio_section()
 	create_graphics_section()
@@ -49,22 +84,27 @@ func create_settings(path: String = settings_file_path) -> void:
 	
 	created_settings.emit()
 
-
-#region Creation
 func create_audio_section() -> void:
 	for bus: String in AudioManager.available_buses:
 		update_audio_section(bus, AudioManager.get_default_volume_for_bus(bus))
+		
+	update_audio_section("muted", false)
 
 
 func create_graphics_section() -> void:
+	var quality_preset = HardwareDetector.auto_discover_graphics_quality()
+	var quality_graphics = HardwareDetector.graphics_quality_presets[quality_preset]
+		
 	update_graphics_section("fps_counter", false)
 	update_graphics_section("max_fps", 0)
 	update_graphics_section("display", DisplayServer.window_get_mode())
 	update_graphics_section("resolution", DisplayServer.window_get_size())
 	update_graphics_section("vsync", DisplayServer.window_get_vsync_mode())
-	update_graphics_section("antialiasing_2d", Viewport.MSAA_DISABLED)
-	update_graphics_section("antialiasing_3d", Viewport.MSAA_DISABLED)
-	update_graphics_section("quality_preset", HardwareDetector.auto_discover_graphics_quality())
+	update_graphics_section("antialiasing_2d", quality_graphics.quality["rendering/anti_aliasing/quality/msaa_2d"].enabled)
+	update_graphics_section("antialiasing_3d", quality_graphics.quality["rendering/anti_aliasing/quality/msaa_3d"].enabled)
+	update_graphics_section("quality_preset", quality_preset)
+	
+	GlobalGameEvents.updated_graphic_settings.emit(int(quality_preset))
 
 
 func create_accessibility_section() -> void:
@@ -142,6 +182,17 @@ func create_keybindings_section() -> void:
 			if input_event is InputEventJoypadButton:
 				var joypadButton: String = ""
 				
+				if(GamepadControllerManager.current_controller_is_xbox() or GamepadControllerManager.current_controller_is_generic()):
+					joypadButton = "%s Button" % GamepadControllerManager.XboxButtonLabels[input_event.button_index]
+				
+				elif GamepadControllerManager.current_controller_is_switch() or GamepadControllerManager.current_controller_is_switch_joycon():
+					joypadButton = "%s Button" % GamepadControllerManager.SwitchButtonLabels[input_event.button_index]
+				
+				elif  GamepadControllerManager.current_controller_is_playstation():
+					joypadButton = "%s Button" % GamepadControllerManager.PlaystationButtonLabels[input_event.button_index]
+					
+				keybindings_events.append("InputEventJoypadButton%s%d%s%s" % [InputEventSeparator, input_event.button_index, InputEventSeparator, joypadButton])
+				
 				
 		keybindings[action] = KeybindingSeparator.join(keybindings_events)
 		update_keybindings_section(action, keybindings[action])
@@ -152,6 +203,44 @@ func save_settings(path: String = settings_file_path) -> void:
 	config_file_api.save(path)
 
 
+func reset_to_factory_settings(path: String = settings_file_path) -> void:
+	if FileAccess.file_exists(path):
+		config_file_api.clear()
+		DirAccess.remove_absolute(path)
+		
+	create_settings(path)
+	# TODO - USE LOAD FUNCTION HERE ALSO
+	reset_to_default_settings.emit()
+
+#region Section Getters
+func get_audio_section(key: String):
+	return config_file_api.get_value(AudioSection, key)
+
+
+func get_keybindings_section(key: String):
+	return config_file_api.get_value(KeybindingsSection, key)
+
+
+func get_graphics_section(key: String):
+	return config_file_api.get_value(GraphicsSection, key)
+
+
+func get_accessibility_section(key: String):
+	return config_file_api.get_value(AccessibilitySection, key)
+
+
+func get_controls_section(key: String):
+	return config_file_api.get_value(ControlsSection, key)
+
+
+func get_localization_section(key: String):
+	return config_file_api.get_value(LocalizationSection, key)
+	
+func get_analytics_section(key: String):
+	return config_file_api.get_value(AnalyticsSection, key)
+
+#endregion
+	
 #region Section updaters
 func update_audio_section(key: String, value: Variant) -> void:
 	config_file_api.set_value(AudioSection, key, value)

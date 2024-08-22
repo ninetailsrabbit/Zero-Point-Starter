@@ -31,6 +31,16 @@ func change_volume(bus, volume_value: float) -> void:
 	
 	AudioServer.set_bus_volume_db(bus_index, linear_to_db(volume_value))
 
+
+func get_actual_volume_db_from_bus(bus) -> float:
+	if typeof(bus) == TYPE_INT:
+		return get_actual_volume_db_from_bus_index(bus)
+		
+	if typeof(bus) == TYPE_STRING or typeof(bus) == TYPE_STRING_NAME:
+		return get_actual_volume_db_from_bus_name(bus)
+		
+	return 0
+
 ## Get the actual linear value from the selected bus by name
 func get_actual_volume_db_from_bus_name(bus_name: String) -> float:
 	var bus_index: int = AudioServer.get_bus_index(bus_name)
