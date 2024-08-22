@@ -6,7 +6,7 @@ const Resolution16_10: String = "16:10";
 const Resolution21_9: String = "21:9";
 
 
-var resolutions: Dictionary = {
+static var resolutions: Dictionary = {
 	Resolution4_3: [
 	   	Vector2i(512, 384),
 		Vector2i(768, 576),
@@ -55,16 +55,16 @@ enum DaltonismTypes {
 }
 
 #region Resolution getters
-func get_4_3_resolutions() -> Array[Vector2i]:
+static func get_4_3_resolutions() -> Array[Vector2i]:
 	return resolutions[Resolution4_3]
 
-func get_16_9_resolutions() -> Array[Vector2i]:
+static func get_16_9_resolutions() -> Array[Vector2i]:
 	return resolutions[Resolution16_9]
 
-func get_16_10_resolutions() -> Array[Vector2i]:
+static func get_16_10_resolutions() -> Array[Vector2i]:
 	return resolutions[Resolution16_10]
 
-func get_21_9_resolutions() -> Array[Vector2i]:
+static func get_21_9_resolutions() -> Array[Vector2i]:
 	return resolutions[Resolution21_9]
 #endregion
 

@@ -62,7 +62,6 @@ func load_settings(path: String = settings_file_path) -> void:
 	loaded_settings.emit()
 #endregion
 
-	
 
 #region Creation
 func create_settings(path: String = settings_file_path) -> void:
@@ -314,7 +313,6 @@ func _add_keybinding_event(action: String, keybinding_type: Array[String] = []):
 	var keybinding_modifiers_regex = RegEx.new()
 	keybinding_modifiers_regex.compile(r"\b(Shift|Ctrl|Alt)\+\b")
 	
-	print_rich(keybinding_type)
 	match keybinding_type[0]:
 		"InputEventKey":
 			var input_event_key = InputEventKey.new()
