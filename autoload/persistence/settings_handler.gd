@@ -92,12 +92,8 @@ func create_graphics_section() -> void:
 	update_graphics_section("display", DisplayServer.window_get_mode())
 	update_graphics_section("resolution", DisplayServer.window_get_size())
 	update_graphics_section("vsync", DisplayServer.window_get_vsync_mode())
-	update_graphics_section("antialiasing_2d", quality_graphics.quality["rendering/anti_aliasing/quality/msaa_2d"].enabled)
-	update_graphics_section("antialiasing_3d", quality_graphics.quality["rendering/anti_aliasing/quality/msaa_3d"].enabled)
 	update_graphics_section("quality_preset", quality_preset)
 	
-	GlobalGameEvents.updated_graphic_settings.emit(int(quality_preset))
-
 
 func create_accessibility_section() -> void:
 	update_accessibility_section("mouse_sensitivity", 3.0);
@@ -214,10 +210,6 @@ func load_graphics() -> void:
 				DisplayServer.window_set_size(config_value)
 			"vsync":
 				DisplayServer.window_set_vsync_mode(config_value)
-			"antialiasing_2d":
-				get_viewport().msaa_2d = config_value
-			"antialiasing_3d":
-				get_viewport().msaa_3d = config_value
 			"quality_preset":
 				GlobalGameEvents.updated_graphic_settings.emit(int(config_value))
 
@@ -290,6 +282,9 @@ func update_keybindings_section(key: String, value: Variant) -> void:
 
 func update_graphics_section(key: String, value: Variant) -> void:
 	config_file_api.set_value(GraphicsSection, key, value)
+	
+	if(key == "quality_preset"):
+		GlobalGameEvents.updated_graphic_settings.emit(value)
 
 
 func update_accessibility_section(key: String, value: Variant) -> void:

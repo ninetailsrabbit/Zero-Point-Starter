@@ -7,22 +7,25 @@ enum QualityPreset {
 	Ultra
 }
 
+
 #region Information classes
 class GraphicQualityPreset:
 	var description: String = ""
-	var quality: Dictionary # Dictionary<string, GraphicQualityDisplay> -> {"environment/glow_enabled", GraphicQualityDisplay.new("Glow", 1, "Enabled")} 
+	var quality: Array[GraphicQualityDisplay]
 	
-	func _init(_description:String, _quality: Dictionary) -> void:
+	func _init(_description:String, _quality: Array[GraphicQualityDisplay] = []) -> void:
 		description = _description
 		quality = _quality
 
 
 class GraphicQualityDisplay:
+	var project_setting: String = ""
 	var property_name: String = ""
 	var enabled: int = 0
 	var available_text: String = ""
 	
-	func _init(_property_name: String, _enabled: int, _available_text: String) -> void:
+	func _init(_project_setting:  String, _property_name: String, _enabled: int, _available_text: String) -> void:
+		project_setting = _project_setting
 		property_name = _property_name
 		enabled = _enabled
 		available_text = _available_text
@@ -126,39 +129,40 @@ static var devices_by_quality: Dictionary = {
 # https://github.com/Calinou/godot-sponza/blob/master/scripts/settings_gui.gd
 static var graphics_quality_presets: Dictionary = {
 	QualityPreset.Low: GraphicQualityPreset.new("For low-end PCs with integrated graphics, as well as mobile devices",
-		{
-			"environment/glow_enabled": GraphicQualityDisplay.new("Glow", 0, "Disabled"),
-			"environment/ss_reflections_enabled": GraphicQualityDisplay.new("SS Reflections", 0, "Disabled"),
-			"environment/ssao_enabled": GraphicQualityDisplay.new("SSAO", 0, "Disabled"),
-			"rendering/anti_aliasing/quality/msaa_2d": GraphicQualityDisplay.new("AntiAliasing 2D", Viewport.MSAA_DISABLED, "Disabled"),
-			"rendering/anti_aliasing/quality/msaa_3d": GraphicQualityDisplay.new("AntiAliasing 3D", Viewport.MSAA_DISABLED, "Disabled")
-		}
+		[
+			GraphicQualityDisplay.new("environment/glow_enabled","Glow", 0, "Disabled"),
+			GraphicQualityDisplay.new("environment/ss_reflections_enabled", "SS Reflections", 0, "Disabled"),
+			GraphicQualityDisplay.new("environment/ssao_enabled","SSAO", 0, "Disabled"),
+			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_2d", "AntiAliasing 2D", Viewport.MSAA_DISABLED, "Disabled"),
+			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_3d", "AntiAliasing 3D", Viewport.MSAA_DISABLED, "Disabled")
+		]
 	),
 	QualityPreset.Medium: GraphicQualityPreset.new("For mid-range PCs with slower dedicated graphics",
-		{
-			"environment/glow_enabled": GraphicQualityDisplay.new("Glow", 0, "Disabled"),
-			"environment/ss_reflections_enabled": GraphicQualityDisplay.new("SS Reflections", 0, "Disabled"),
-			"environment/ssao_enabled": GraphicQualityDisplay.new("SSAO", 0, "Disabled"),
-			"rendering/anti_aliasing/quality/msaa_2d": GraphicQualityDisplay.new("AntiAliasing 2D", Viewport.MSAA_2X, "2×"),
-			"rendering/anti_aliasing/quality/msaa_3d": GraphicQualityDisplay.new("AntiAliasing 3D", Viewport.MSAA_2X, "2×")
-		}
+		[
+			GraphicQualityDisplay.new("environment/glow_enabled","Glow", 0, "Disabled"),
+			GraphicQualityDisplay.new("environment/ss_reflections_enabled", "SS Reflections", 0, "Disabled"),
+			GraphicQualityDisplay.new("environment/ssao_enabled","SSAO", 0, "Disabled"),
+			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_2d", "AntiAliasing 2D", Viewport.MSAA_2X, "2×"),
+			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_3d", "AntiAliasing 3D", Viewport.MSAA_2X, "2×")
+		]
 	),
 	QualityPreset.High: GraphicQualityPreset.new("For recent PCs with mid-range dedicated graphics, or older PCs with high-end graphics",
-		{
-			"environment/glow_enabled": GraphicQualityDisplay.new("Glow", 1, "Enabled"),
-			"environment/ss_reflections_enabled": GraphicQualityDisplay.new("SS Reflections", 0, "Disabled"),
-			"environment/ssao_enabled": GraphicQualityDisplay.new("SSAO", 1, "Medium-Quality"),
-			"rendering/anti_aliasing/quality/msaa_2d": GraphicQualityDisplay.new("AntiAliasing 2D", Viewport.MSAA_4X, "4×"),
-			"rendering/anti_aliasing/quality/msaa_3d": GraphicQualityDisplay.new("AntiAliasing 3D", Viewport.MSAA_4X, "4×")
-		}
+		[
+			GraphicQualityDisplay.new("environment/glow_enabled","Glow", 1, "Enabled"),
+			GraphicQualityDisplay.new("environment/ss_reflections_enabled", "SS Reflections", 0, "Disabled"),
+			GraphicQualityDisplay.new("environment/ssao_enabled","SSAO", 1, "Medium-Quality"),
+			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_2d", "AntiAliasing 2D", Viewport.MSAA_4X, "4×"),
+			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_3d", "AntiAliasing 3D", Viewport.MSAA_4X, "4×")
+		]
+
 	),	
 	QualityPreset.Ultra: GraphicQualityPreset.new("For recent PCs with high-end dedicated graphics",
-		{
-			"environment/glow_enabled": GraphicQualityDisplay.new("Glow", 1, "Enabled"),
-			"environment/ss_reflections_enabled": GraphicQualityDisplay.new("SS Reflections", 1, "Enabled"),
-			"environment/ssao_enabled": GraphicQualityDisplay.new("SSAO", 1, "High-Quality"),
-			"rendering/anti_aliasing/quality/msaa_2d": GraphicQualityDisplay.new("AntiAliasing 2D", Viewport.MSAA_8X, "8×"),
-			"rendering/anti_aliasing/quality/msaa_3d": GraphicQualityDisplay.new("AntiAliasing 3D", Viewport.MSAA_8X, "8×")
-		}
+		[
+			GraphicQualityDisplay.new("environment/glow_enabled","Glow", 1, "Enabled"),
+			GraphicQualityDisplay.new("environment/ss_reflections_enabled", "SS Reflections", 1, "Enabled"),
+			GraphicQualityDisplay.new("environment/ssao_enabled","SSAO", 1, "High-Quality"),
+			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_2d", "AntiAliasing 2D", Viewport.MSAA_8X, "8×"),
+			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_3d", "AntiAliasing 3D", Viewport.MSAA_8X, "8×")
+		]
 	),
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dxapajbsngnmj"]
+[gd_scene load_steps=9 format=3 uid="uid://dxapajbsngnmj"]
 
 [ext_resource type="Script" path="res://ui/menus/settings/elements/audio_slider.gd" id="1_1bu1f"]
 [ext_resource type="Script" path="res://ui/menus/settings/settings_menu.gd" id="1_7arbm"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://ui/menus/settings/elements/vsync_checkbox.gd" id="5_yqy4c"]
 [ext_resource type="Script" path="res://ui/menus/settings/elements/photosensitive_checkbox.gd" id="6_eqr7d"]
 [ext_resource type="Script" path="res://ui/menus/settings/elements/screen_shake_checkbox.gd" id="7_kcacm"]
+[ext_resource type="Script" path="res://ui/menus/settings/elements/graphics_quality_settings.gd" id="8_e1lw0"]
 
 [node name="GameSettingsUI" type="Control"]
 layout_mode = 3
@@ -40,7 +41,7 @@ theme_override_constants/margin_bottom = 150
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer"]
 layout_mode = 2
-current_tab = 1
+current_tab = 2
 
 [node name="Audio" type="TabBar" parent="MarginContainer/TabContainer"]
 unique_name_in_owner = true
@@ -172,6 +173,7 @@ text = "MUTE_ACTION"
 
 [node name="Screen" type="TabBar" parent="MarginContainer/TabContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
@@ -254,7 +256,6 @@ script = ExtResource("7_kcacm")
 
 [node name="Graphics" type="TabBar" parent="MarginContainer/TabContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -288,6 +289,7 @@ layout_mode = 2
 
 [node name="GraphicQualitySettings" type="VBoxContainer" parent="MarginContainer/TabContainer/Graphics/MarginContainer/VBoxContainer"]
 layout_mode = 2
+script = ExtResource("8_e1lw0")
 
 [node name="General" type="TabBar" parent="MarginContainer/TabContainer"]
 unique_name_in_owner = true
