@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://csmqt11xygt8r"]
+[gd_scene load_steps=8 format=3 uid="uid://csmqt11xygt8r"]
 
 [ext_resource type="PackedScene" uid="uid://dd0blwa1hawbl" path="res://components/motion/3D/first-person/first_person_controller.tscn" id="1_f82m5"]
 [ext_resource type="Script" path="res://components/world/dynamic_directional_light_3d.gd" id="1_vuxmu"]
 [ext_resource type="Script" path="res://components/world/dynamic_world_environment.gd" id="2_3grr6"]
 [ext_resource type="Environment" uid="uid://ffsjqtttbrij" path="res://scenes/world/new_environment.tres" id="3_db4td"]
+[ext_resource type="PackedScene" uid="uid://ca0723gt87eb7" path="res://ui/hardware_metrics/hardware_information.tscn" id="5_sl61t"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_fv3ym"]
 
@@ -11,6 +12,8 @@
 albedo_color = Color(0.0430392, 0.0430392, 0.0430392, 1)
 
 [node name="Node3D" type="Node3D"]
+
+[node name="HardwareInformation" parent="." instance=ExtResource("5_sl61t")]
 
 [node name="DynamicWorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("3_db4td")

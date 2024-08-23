@@ -174,7 +174,6 @@ func _add_state_to_dictionary(state: MachineState):
 		states[state.name] = get_node(state.get_path())
 		state.FSM = self
 		state.ready()
-		print(state.name)
 
 
 func on_state_changed(from: MachineState, to: MachineState):

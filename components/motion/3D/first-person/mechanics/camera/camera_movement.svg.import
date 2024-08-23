@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d27eirgbxqyk5"
-path="res://.godot/imported/camera_movement.svg-1013ca850514f3b130efd7f40fd7fd0b.ctex"
+path="res://.godot/imported/camera_movement.svg-26019e1d19e77c30b86a2bafc5011d87.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://components/camera/3D/movement/camera_movement.svg"
-dest_files=["res://.godot/imported/camera_movement.svg-1013ca850514f3b130efd7f40fd7fd0b.ctex"]
+source_file="res://components/motion/3D/first-person/mechanics/camera/camera_movement.svg"
+dest_files=["res://.godot/imported/camera_movement.svg-26019e1d19e77c30b86a2bafc5011d87.ctex"]
 
 [params]
 
