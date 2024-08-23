@@ -1,12 +1,30 @@
-[gd_scene load_steps=3 format=3 uid="uid://csmqt11xygt8r"]
+[gd_scene load_steps=7 format=3 uid="uid://csmqt11xygt8r"]
 
-[ext_resource type="Script" path="res://components/design_patterns/finite_state_machine/finite-state-machine.gd" id="1_tg3sw"]
-[ext_resource type="Script" path="res://components/design_patterns/finite_state_machine/machine_state.gd" id="2_l13up"]
+[ext_resource type="PackedScene" uid="uid://dd0blwa1hawbl" path="res://components/motion/3D/first-person/first_person_controller.tscn" id="1_f82m5"]
+[ext_resource type="Script" path="res://components/world/dynamic_directional_light_3d.gd" id="1_vuxmu"]
+[ext_resource type="Script" path="res://components/world/dynamic_world_environment.gd" id="2_3grr6"]
+[ext_resource type="Environment" uid="uid://ffsjqtttbrij" path="res://scenes/world/new_environment.tres" id="3_db4td"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_fv3ym"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ae76o"]
+albedo_color = Color(0.0430392, 0.0430392, 0.0430392, 1)
 
 [node name="Node3D" type="Node3D"]
 
-[node name="FiniteStateMachine" type="Node" parent="."]
-script = ExtResource("1_tg3sw")
+[node name="DynamicWorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("3_db4td")
+camera_attributes = SubResource("CameraAttributesPractical_fv3ym")
+script = ExtResource("2_3grr6")
 
-[node name="MachineState" type="Node" parent="FiniteStateMachine"]
-script = ExtResource("2_l13up")
+[node name="DynamicDirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.893614, 0, -0.448836, 0.291823, 0.759782, 0.581008, 0.341017, -0.650178, 0.678952, 0, 4.93868, 0)
+script = ExtResource("1_vuxmu")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+use_collision = true
+size = Vector3(10, 0.1, 10)
+material = SubResource("StandardMaterial3D_ae76o")
+
+[node name="FirstPersonController" parent="." instance=ExtResource("1_f82m5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.20836, 0)

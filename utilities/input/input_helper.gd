@@ -21,6 +21,8 @@ static func is_mouse_right_button_pressed(event: InputEvent) -> bool:
 static func is_mouse_visible() -> bool:
 	return Input.mouse_mode == Input.MOUSE_MODE_VISIBLE || Input.mouse_mode == Input.MOUSE_MODE_CONFINED
 
+static func is_mouse_captured() -> bool:
+	return Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
 
 static func show_mouse_cursor() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

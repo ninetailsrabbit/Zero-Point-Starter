@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://dd0blwa1hawbl"]
+
+[ext_resource type="Script" path="res://components/motion/3D/first-person/first_person_controller.gd" id="1_siswl"]
+[ext_resource type="Script" path="res://components/camera/3D/movement/camera_movement_3d.gd" id="2_6vhab"]
+[ext_resource type="Script" path="res://components/design_patterns/finite_state_machine/finite-state-machine.gd" id="2_l5dql"]
+[ext_resource type="Script" path="res://components/motion/3D/first-person/states/ground/ground.gd" id="3_mrdp7"]
+[ext_resource type="Script" path="res://components/motion/3D/first-person/states/ground/idle.gd" id="3_rs4o2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vvb10"]
+radius = 0.3
+height = 1.75
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1y566"]
+radius = 0.25
+height = 0.6
+
+[node name="FirstPersonController" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.879968, 0)
+script = ExtResource("1_siswl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_vvb10")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.549982, 0)
+
+[node name="CeilShapeCast" type="ShapeCast3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1284, 0.026655)
+shape = SubResource("CapsuleShape3D_1y566")
+
+[node name="Eyes" type="Node3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.178689)
+
+[node name="Camera3D" type="Camera3D" parent="Head/Eyes"]
+
+[node name="CameraMovement3D" type="Node3D" parent="Head/Eyes" node_paths=PackedStringArray("actor", "head", "camera_pivot_point")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.549982, 0.178689)
+script = ExtResource("2_6vhab")
+actor = NodePath("../../..")
+head = NodePath("../..")
+camera_pivot_point = NodePath("..")
+
+[node name="FiniteStateMachine" type="Node" parent="." node_paths=PackedStringArray("current_state")]
+script = ExtResource("2_l5dql")
+current_state = NodePath("Ground/Idle")
+
+[node name="Ground" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("3_mrdp7")
+
+[node name="Idle" type="Node" parent="FiniteStateMachine/Ground" node_paths=PackedStringArray("actor")]
+script = ExtResource("3_rs4o2")
+actor = NodePath("../../..")
