@@ -133,8 +133,12 @@ static var graphics_quality_presets: Dictionary = {
 			GraphicQualityDisplay.new("environment/glow_enabled","Glow", 0, "Disabled"),
 			GraphicQualityDisplay.new("environment/ss_reflections_enabled", "SS Reflections", 0, "Disabled"),
 			GraphicQualityDisplay.new("environment/ssao_enabled","SSAO", 0, "Disabled"),
+			GraphicQualityDisplay.new("environment/sdfgi_enabled","SDFGI", 0, "Disabled"),
 			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_2d", "AntiAliasing 2D", Viewport.MSAA_DISABLED, "Disabled"),
-			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_3d", "AntiAliasing 3D", Viewport.MSAA_DISABLED, "Disabled")
+			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_3d", "AntiAliasing 3D", Viewport.MSAA_DISABLED, "Disabled"),
+			GraphicQualityDisplay.new("shadow_atlas", "Directional shadow atlas", 2048, "Enabled"),
+			GraphicQualityDisplay.new("shadow_filter", "Shadow quality filter", RenderingServer.SHADOW_QUALITY_SOFT_LOW, "Enabled"),
+			GraphicQualityDisplay.new("mesh_level_of_detail", "Mesh level of detail", 4, "Enabled"),
 		]
 	),
 	QualityPreset.Medium: GraphicQualityPreset.new("For mid-range PCs with slower dedicated graphics",
@@ -142,8 +146,15 @@ static var graphics_quality_presets: Dictionary = {
 			GraphicQualityDisplay.new("environment/glow_enabled","Glow", 0, "Disabled"),
 			GraphicQualityDisplay.new("environment/ss_reflections_enabled", "SS Reflections", 0, "Disabled"),
 			GraphicQualityDisplay.new("environment/ssao_enabled","SSAO", 0, "Disabled"),
+			GraphicQualityDisplay.new("environment/sdfgi_enabled","SDFGI", 0, "Disabled"),
 			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_2d", "AntiAliasing 2D", Viewport.MSAA_2X, "2×"),
-			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_3d", "AntiAliasing 3D", Viewport.MSAA_2X, "2×")
+			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_3d", "AntiAliasing 3D", Viewport.MSAA_2X, "2×"),
+			GraphicQualityDisplay.new("shadow_atlas", "Directional shadow atlas", 4096, "Enabled"),
+			GraphicQualityDisplay.new("shadow_filter", "Shadow quality filter", RenderingServer.SHADOW_QUALITY_SOFT_MEDIUM, "Enabled"),
+			GraphicQualityDisplay.new("mesh_level_of_detail", "Mesh level of detail", 2, "Enabled"),
+			
+			
+			
 		]
 	),
 	QualityPreset.High: GraphicQualityPreset.new("For recent PCs with mid-range dedicated graphics, or older PCs with high-end graphics",
@@ -151,8 +162,13 @@ static var graphics_quality_presets: Dictionary = {
 			GraphicQualityDisplay.new("environment/glow_enabled","Glow", 1, "Enabled"),
 			GraphicQualityDisplay.new("environment/ss_reflections_enabled", "SS Reflections", 0, "Disabled"),
 			GraphicQualityDisplay.new("environment/ssao_enabled","SSAO", 1, "Medium-Quality"),
+			GraphicQualityDisplay.new("environment/sdfgi_enabled","SDFGI", 1, "Medium-Quality"),
 			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_2d", "AntiAliasing 2D", Viewport.MSAA_4X, "4×"),
-			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_3d", "AntiAliasing 3D", Viewport.MSAA_4X, "4×")
+			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_3d", "AntiAliasing 3D", Viewport.MSAA_4X, "4×"),
+			GraphicQualityDisplay.new("shadow_atlas", "Directional shadow atlas", 8192, "Enabled"),
+			GraphicQualityDisplay.new("shadow_filter", "Shadow quality filter", RenderingServer.SHADOW_QUALITY_SOFT_HIGH, "Enabled"),
+			GraphicQualityDisplay.new("mesh_level_of_detail", "Mesh level of detail", 1, "Enabled"),
+			
 		]
 
 	),	
@@ -161,8 +177,12 @@ static var graphics_quality_presets: Dictionary = {
 			GraphicQualityDisplay.new("environment/glow_enabled","Glow", 1, "Enabled"),
 			GraphicQualityDisplay.new("environment/ss_reflections_enabled", "SS Reflections", 1, "Enabled"),
 			GraphicQualityDisplay.new("environment/ssao_enabled","SSAO", 1, "High-Quality"),
+			GraphicQualityDisplay.new("environment/sdfgi_enabled","SDFGI", 1, "High-Quality"),
 			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_2d", "AntiAliasing 2D", Viewport.MSAA_8X, "8×"),
-			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_3d", "AntiAliasing 3D", Viewport.MSAA_8X, "8×")
+			GraphicQualityDisplay.new("rendering/anti_aliasing/quality/msaa_3d", "AntiAliasing 3D", Viewport.MSAA_8X, "8×"),
+			GraphicQualityDisplay.new("shadow_atlas", "Directional shadow atlas", 16384, "Enabled"),
+			GraphicQualityDisplay.new("shadow_filter", "Shadow quality filter", RenderingServer.SHADOW_QUALITY_SOFT_ULTRA, "Enabled"),
+			GraphicQualityDisplay.new("mesh_level_of_detail", "Mesh level of detail (# Always use highest LODs to avoid any form of pop-in.)", 0, "Enabled"),
 		]
 	),
 }
