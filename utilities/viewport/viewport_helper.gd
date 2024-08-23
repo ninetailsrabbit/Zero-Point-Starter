@@ -1,5 +1,6 @@
 class_name ViewportHelper
 
+const Resolution_Mobile: String = "mobile";
 const Resolution4_3: String = "4:3";
 const Resolution16_9: String = "16:9";
 const Resolution16_10: String = "16:10";
@@ -7,13 +8,32 @@ const Resolution21_9: String = "21:9";
 
 
 static var resolutions: Dictionary = {
+	Resolution_Mobile: [
+		Vector2i(320, 480),  # Older smartphones
+		Vector2i(320, 640),
+		Vector2i(375, 667),  # Older smartphones
+		Vector2i(375, 812),
+		Vector2i(390, 844),  # Older smartphones
+		Vector2i(414, 896),  # Some Iphone models
+		Vector2i(480, 800),  # Older smartphones
+		Vector2i(640, 960),  # Some Iphone models
+		Vector2i(640, 1136), # Some Iphone models
+		Vector2i(750, 1334), # Common tablet resolution
+		Vector2i(768, 1024),
+		Vector2i(768, 1334),
+		Vector2i(768, 1280),
+		Vector2i(1080, 1920), # Some Iphone models
+		Vector2i(1242, 2208), # Mid-range tables
+		Vector2i(1536, 2048), # High resolutions in larger tablets and some smartphones
+		
+	],
 	Resolution4_3: [
+	  	Vector2i(320, 180),
 	   	Vector2i(512, 384),
 		Vector2i(768, 576),
 		Vector2i(1024, 768),
 	],
 	Resolution16_9: [
-		Vector2i(320, 180),
 	  	Vector2i(320, 180),
 		Vector2i(400, 224),
 		Vector2i(640, 360),

@@ -1,5 +1,5 @@
 @icon("res://components/camera/3D/movement/camera_movement.svg")
-class_name CameraMovement3D extends Node3D
+class_name FirstPersonCameraRotation3D extends Node3D
 
 @export var actor: FirstPersonController
 @export var head: Node3D
@@ -9,7 +9,6 @@ class_name CameraMovement3D extends Node3D
 @export_range(0, 360, 1, "degrees") var camera_vertical_limit = 89
 ## 0 Means the rotation on the X-axis is not limited
 @export_range(0, 360, 1, "degrees") var camera_horizontal_limit = 0
-
 
 @onready var current_vertical_limit: int:
 	get:
@@ -30,9 +29,10 @@ var locked: bool = false
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and InputHelper.is_mouse_captured():
-		rotate_camera(event.xformed_by(get_tree().root.get_final_transform()))
-		
+		var motion: InputEventMouseMotion = event.xformed_by(get_tree().root.get_final_transform())
+		rotate_camera(motion)
 
+		
 func _ready() -> void:
 	current_horizontal_limit = camera_horizontal_limit
 	current_vertical_limit = camera_vertical_limit
@@ -48,16 +48,18 @@ func rotate_camera(event: InputEventMouseMotion) -> void:
 	var pitchInput = event.relative.y * mouse_sens ## Cabeceo
 	
 	head.rotate_y(-twistInput)
+	camera_pivot_point.rotate_x(-pitchInput)
+	
 	if current_horizontal_limit > 0:
 		head.rotation_degrees.y = clamp(head.rotation_degrees.y, -current_horizontal_limit, current_horizontal_limit)
-	head.orthonormalize()
 	
-	camera_pivot_point.rotate_x(-pitchInput)
 	if current_vertical_limit > 0:
 		camera_pivot_point.rotation_degrees.x = clamp(camera_pivot_point.rotation_degrees.x, -current_vertical_limit, current_vertical_limit)
+	
+	head.orthonormalize()
 	camera_pivot_point.orthonormalize()
-	
-	
+
+
 func lock() -> void:
 	set_process_input(false)
 	locked = true

@@ -46,7 +46,7 @@ static func is_steam_deck() -> bool:
 		or OS.get_processor_name().containsn("amd custom apu 0405")
 
 
-func is_mobile() -> bool:
+static func is_mobile() -> bool:
 	if not OS.has_feature("web"):
 		return false
 	
@@ -55,7 +55,7 @@ func is_mobile() -> bool:
 		or JavaScriptBridge.eval("/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)", true)
 
 
-func is_multithreading_enabled() -> bool:
+static func is_multithreading_enabled() -> bool:
 	return ProjectSettings.get_setting("rendering/driver/threads/thread_model") == 2
 
 

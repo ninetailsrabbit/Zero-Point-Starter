@@ -6,18 +6,13 @@ class_name ScreenResolutionsOptionButton extends OptionButton
 @export var display16_9: bool = true
 @export var display16_10: bool = false
 @export var display21_9: bool = false
+@export var display_mobile: bool = false
 
 
 func _ready() -> void:
-	if (HardwareDetector.is_steam_deck()):
-		display16_10 = true
-		display16_9 = false
-		display21_9 = false
-		display4_3 = false
-		
-
 	item_selected.connect(on_resolution_selected)
 	
+	resolutions_based_on_hardware()
 	_fill_available_resolutions()
 	
 
@@ -36,12 +31,27 @@ func _fill_available_resolutions() -> void:
 				if current_window_size == screen_size:
 					select(item_count - 1)
 			
-	
+
+func resolutions_based_on_hardware() -> void:
+	if (HardwareDetector.is_steam_deck()):
+		display16_10 = true
+		display16_9 = false
+		display21_9 = false
+		display4_3 = false
+	elif HardwareDetector.is_mobile():
+		display16_10 = false
+		display16_9 = false
+		display21_9 = false
+		display4_3 = false
+		display_mobile = true
+		
+
 func _resolution_is_included(resolution: String) -> bool:
 	return resolution == ViewportHelper.Resolution4_3 && display4_3 \
 		or resolution == ViewportHelper.Resolution16_9 && display16_9 \
 		or resolution == ViewportHelper.Resolution16_10 && display16_10 \
-		or resolution == ViewportHelper.Resolution21_9 && display21_9
+		or resolution == ViewportHelper.Resolution21_9 && display21_9 \
+		or resolution == ViewportHelper.Resolution_Mobile && display_mobile
 
 
 func on_resolution_selected(idx) -> void:
