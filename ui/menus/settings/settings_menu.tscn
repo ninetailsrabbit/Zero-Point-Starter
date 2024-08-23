@@ -427,5 +427,3 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "BACK_BUTTON"
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]

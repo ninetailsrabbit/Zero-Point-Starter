@@ -34,7 +34,7 @@ static func get_all_ancestors(from_node: Node) -> Array:
 	
 
 ## Only works for native custom class not for GDScriptNativeClass
-## Example NodeWizard.find_nodes_of_custom_class(self, MachineState)
+## Example NodePositioner.find_nodes_of_custom_class(self, MachineState)
 static func find_nodes_of_custom_class(node: Node, class_to_find: Variant) -> Array:
 	var  result := []
 	
@@ -49,7 +49,7 @@ static func find_nodes_of_custom_class(node: Node, class_to_find: Variant) -> Ar
 	return result
 	
 ## Only works for native nodes like Area2D, Camera2D, etc.
-## Example NodeWizard.find_nodes_of_type(self, Control.new())
+## Example NodePositioner.find_nodes_of_type(self, Control.new())
 static func find_nodes_of_type(node: Node, type_to_find: Node) -> Array:
 	var  result := []
 	
