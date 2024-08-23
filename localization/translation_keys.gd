@@ -6,7 +6,8 @@ static var YesTranslationKey := "GENERAL_YES";
 static var AudioTabTranslationKey := "AUDIO_TAB";
 static var ScreenTabTranslationKey := "SCREEN_TAB";
 static var GraphicsTabTranslationKey := "GRAPHICS_TAB";
-static var GeneralTabTranslationKeyTr := "GENERAL_TAB";
+static var GeneralTabTranslationKey:= "GENERAL_TAB";
+static var ControlsTabTranslationKey := "CONTROLS_TAB";
 
 static var DeuteranopiaTranslationKey := "DALTONISM_DEUTERANOPIA";
 static var ProtanopiaTranslationKey := "DALTONISM_PROTANOPIA";

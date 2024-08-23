@@ -38,7 +38,8 @@ func reset_to_factory_settings(path: String = settings_file_path) -> void:
 		DirAccess.remove_absolute(path)
 		
 	create_settings(path)
-	# TODO - USE LOAD FUNCTION HERE ALSO
+	load_settings(path)
+	
 	reset_to_default_settings.emit()
 
 func prepare_settings() -> void:
@@ -303,6 +304,8 @@ func update_analytics_section(key: String, value: Variant) -> void:
 
 func update_localization_section(key: String, value: Variant) -> void:
 	config_file_api.set_value(LocalizationSection, key, value)
+
+	
 #endregion
 
 #region Private functions

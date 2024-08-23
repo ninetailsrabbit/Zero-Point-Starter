@@ -35,3 +35,5 @@ func on_language_selected(idx) -> void:
 	var selected_language = language_by_option_button_id[get_item_id(idx)]
 	SettingsHandler.update_localization_section(setting_related, selected_language.iso_code)
 	SettingsHandler.save_settings()
+	
+	TranslationServer.set_locale(selected_language.iso_code)
