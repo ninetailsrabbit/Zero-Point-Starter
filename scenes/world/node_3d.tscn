@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://csmqt11xygt8r"]
+
+[ext_resource type="Script" path="res://components/design_patterns/finite_state_machine/finite-state-machine.gd" id="1_tg3sw"]
+[ext_resource type="Script" path="res://components/design_patterns/finite_state_machine/machine_state.gd" id="2_l13up"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="FiniteStateMachine" type="Node" parent="."]
+script = ExtResource("1_tg3sw")
+
+[node name="MachineState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("2_l13up")
