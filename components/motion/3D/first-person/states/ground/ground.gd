@@ -1,11 +1,19 @@
 class_name GroundState extends MachineState
 
 @export var actor: FirstPersonController
+@export_group("Parameters")
 @export var gravity_force: float = 9.8
 @export var speed: float = 3.0
 @export var side_speed: float = 2.5
 @export var acceleration: float = 8.0
 @export var friction: float = 10.0
+@export_group("Input actions")
+@export var run_input_action: String = "run"
+@export var jump_input_action: String = "jump"
+@export var crouch_input_action: String = "crouch"
+@export var crawl_input_action: String = "crawl"
+
+
 
 var current_speed: float = 0
 func physics_update(delta):
@@ -39,3 +47,23 @@ func decelerate(delta: float = get_physics_process_delta_time()) -> void:
 
 func get_speed() -> float:
 	return side_speed if actor.motion_input.input_direction in [Vector2.RIGHT, Vector2.LEFT] else speed
+
+
+func detect_run() -> void:
+	if actor.run and InputMap.has_action(run_input_action) and Input.is_action_pressed(run_input_action):
+		FSM.change_state_to("Run")
+
+
+func detect_crouch() -> void:
+	if actor.crouch and InputMap.has_action(crouch_input_action) and Input.is_action_pressed(crouch_input_action):
+		FSM.change_state_to("Crouch")
+
+
+func detect_crawl() -> void:
+	if actor.crouch and InputMap.has_action(crawl_input_action) and Input.is_action_pressed(crawl_input_action):
+		FSM.change_state_to("Crawl")
+
+
+func detect_jump() -> void:
+	if actor.jump and InputMap.has_action(jump_input_action) and Input.is_action_pressed(jump_input_action):
+		FSM.change_state_to("Jump")

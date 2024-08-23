@@ -9,6 +9,8 @@ class_name FirstPersonCameraRotation3D extends Node3D
 @export_range(0, 360, 1, "degrees") var camera_vertical_limit = 89
 ## 0 Means the rotation on the X-axis is not limited
 @export_range(0, 360, 1, "degrees") var camera_horizontal_limit = 0
+#@export var smooth_camera: bool = false
+#@export var camera_smooth_factor: float = 2.0
 
 @onready var current_vertical_limit: int:
 	get:
@@ -25,7 +27,8 @@ class_name FirstPersonCameraRotation3D extends Node3D
 
 var mouse_sensitivity: float = 3.0
 var locked: bool = false
-
+var yAxis = 0.0
+var xAxis = 0.0
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and InputHelper.is_mouse_captured():
@@ -47,6 +50,9 @@ func rotate_camera(event: InputEventMouseMotion) -> void:
 	var twistInput = event.relative.x * mouse_sens ## Giro
 	var pitchInput = event.relative.y * mouse_sens ## Cabeceo
 	
+	yAxis += twistInput
+	xAxis += pitchInput
+#		
 	head.rotate_y(-twistInput)
 	camera_pivot_point.rotate_x(-pitchInput)
 	

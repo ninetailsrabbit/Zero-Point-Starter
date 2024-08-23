@@ -53,7 +53,7 @@ def included_files_filter(file: str) -> bool:
 
 
 def _contains_godot_prefixes(filename: str) -> bool:
-    godot_prefixes_to_exclude = ["PROCESS", "KEY_", "EASE_", "TRANS_", "MOUSE_", "TYPE_", "THREAD_", "AUTOWRAP_", "WINDOW_", "ERROR_", "ERR_", "BYTE_", "MSAA_"]
+    godot_prefixes_to_exclude = ["TIMER_", "PROCESS_", "KEY_", "EASE_", "TRANS_", "MOUSE_", "TYPE_", "THREAD_", "AUTOWRAP_", "WINDOW_", "ERROR_", "ERR_", "BYTE_", "MSAA_"]
 
     for prefix in godot_prefixes_to_exclude:
         if filename.startswith(prefix):

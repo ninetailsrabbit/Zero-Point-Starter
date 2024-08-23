@@ -2,16 +2,30 @@
 class_name FirstPersonController extends CharacterBody3D
 
 @export var mouse_mode_switch_input_actions: Array[String] = ["ui_cancel"]
+@export_group("Mechanics")
+@export var run: bool = true
+@export var jump: bool = true
+@export var crouch: bool = true
+@export var crawl: bool = false
+@export var slide: bool = true
+@export var wall_run: bool = false
+@export var wall_jump: bool = false
+@export var wall_climb: bool = false
+@export var surf: bool = false
+@export var swim: bool = false
+@export var stairs: bool = true
 
+@onready var debug_ui: CanvasLayer = $DebugUI
 @onready var finite_state_machine: FiniteStateMachine = $FiniteStateMachine
 @onready var head: Node3D = $Head
 @onready var eyes: Node3D = $Head/Eyes
 @onready var camera: Camera3D = $Head/Eyes/Camera3D
-@onready var ceil_shape_cast: ShapeCast3D = $Head/CeilShapeCast
+@onready var ceil_shape_cast: ShapeCast3D = $CeilShapeCast
 
 var was_grounded: bool = false
 var is_grounded: bool = false
 var motion_input: TransformedInput
+
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -20,11 +34,18 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _ready() -> void:
+	debug_ui.visible = OS.is_debug_build()
+	
 	motion_input = TransformedInput.new(self)
 	InputHelper.capture_mouse()
 	
+	finite_state_machine.register_transitions([
+		WalkToRunTransition.new(),
+		RunToWalkTransition.new()
+	])
+	
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	motion_input.update()
 	
 	was_grounded = is_grounded

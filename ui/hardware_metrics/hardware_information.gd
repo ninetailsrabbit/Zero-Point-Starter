@@ -11,7 +11,7 @@ extends Control
 @onready var gpu_label: Label = %GPULabel
 
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	if InputMap.has_action(show_hardware_specs_input_action) and Input.is_action_just_pressed(show_hardware_specs_input_action):
 		visible = !visible
 
@@ -28,7 +28,7 @@ func _ready() -> void:
 	mouse_filter = MouseFilter.MOUSE_FILTER_IGNORE
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	fps_label.text = "FPS: %d" % Engine.get_frames_per_second()
 	memory_label.text = "Memory: %d MiB" % (OS.get_static_memory_usage() / 1048576.0)
 	
