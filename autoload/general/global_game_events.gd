@@ -20,6 +20,7 @@ signal scene_transition_finished(next_scene_path)
 #endregion
 
 #region Settings
+signal mouse_sensitivity_changed(sensitivity: float)
 signal changed_language(language: String)
 signal changed_subtitles_language(language: String)
 signal changed_voices_language(language: String)

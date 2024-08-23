@@ -25,6 +25,7 @@ class_name CameraMovement3D extends Node3D
 		
 
 var mouse_sensitivity: float = 3.0
+var locked: bool = false
 
 
 func _input(event: InputEvent) -> void:
@@ -36,18 +37,20 @@ func _ready() -> void:
 	current_horizontal_limit = camera_horizontal_limit
 	current_vertical_limit = camera_vertical_limit
 	mouse_sensitivity = SettingsHandler.get_accessibility_section("mouse_sensitivity")
+	
+	GlobalGameEvents.mouse_sensitivity_changed.connect(on_mouse_sensitivity_changed)
 
 
 func rotate_camera(event: InputEventMouseMotion) -> void:
-	var mouse_sens = mouse_sensitivity / 1000
+	var mouse_sens = mouse_sensitivity / 1000 # radians/pixel, 3 becomes 0.003
 	
 	var twistInput = event.relative.x * mouse_sens ## Giro
 	var pitchInput = event.relative.y * mouse_sens ## Cabeceo
 	
-	actor.rotate_y(-twistInput)
+	head.rotate_y(-twistInput)
 	if current_horizontal_limit > 0:
-		actor.rotation_degrees.y = clamp(actor.rotation_degrees.y, -current_horizontal_limit, current_horizontal_limit)
-	actor.orthonormalize()
+		head.rotation_degrees.y = clamp(head.rotation_degrees.y, -current_horizontal_limit, current_horizontal_limit)
+	head.orthonormalize()
 	
 	camera_pivot_point.rotate_x(-pitchInput)
 	if current_vertical_limit > 0:
@@ -55,7 +58,15 @@ func rotate_camera(event: InputEventMouseMotion) -> void:
 	camera_pivot_point.orthonormalize()
 	
 	
-	
+func lock() -> void:
+	set_process_input(false)
+	locked = true
+
+func unlock() -> void:
+	set_process_input(true)
+	locked = false
+
+
 #region Camera rotation
 func change_horizontal_rotation_limit(new_rotation: int) -> void:
 	current_horizontal_limit = new_rotation
@@ -69,3 +80,6 @@ func return_to_original_horizontal_rotation_limit() -> void:
 func return_to_original_vertical_rotation_limit() -> void:
 	current_vertical_limit = camera_vertical_limit
 #endregion
+
+func on_mouse_sensitivity_changed(new_value: float) -> void:
+	mouse_sensitivity = new_value

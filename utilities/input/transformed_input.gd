@@ -37,7 +37,7 @@ func _init(_actor: Node, _deadzone: float = deadzone):
 	deadzone = _deadzone
 
 
-func update_input_direction():
+func update():
 	_update_previous_directions()
 	# This handles deadzone in a correct way for most use cases. The resulting deadzone will have a circular shape as it generally should.
 	input_direction = Input.get_vector(move_left_action, move_right_action, move_forward_action, move_back_action)

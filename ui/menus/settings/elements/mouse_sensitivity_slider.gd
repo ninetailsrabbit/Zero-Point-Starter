@@ -20,3 +20,4 @@ func on_sensitivity_changed(sensitivity_changed: float) -> void:
 	if sensitivity_changed:
 		SettingsHandler.update_accessibility_section("mouse_sensitivity", value)
 		SettingsHandler.save_settings()
+		GlobalGameEvents.mouse_sensitivity_changed.emit(value)
