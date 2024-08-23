@@ -11,16 +11,16 @@ func ready() -> void:
 	pass
 
 
-func _enter() -> void:
+func enter() -> void:
 	pass
 	
 
-func _exit(_next_state: MachineState) -> void:
+func exit(_next_state: MachineState) -> void:
 	pass
 	
 
 func handle_input(_event: InputEvent):
-	pass	
+	pass
 
 
 func physics_update(_delta):

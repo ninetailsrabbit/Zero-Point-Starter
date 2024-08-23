@@ -97,12 +97,12 @@ func register_transitions(new_transitions: Array[MachineTransition]):
 
 func enter_state(state: MachineState):
 	state.entered.emit()
-	state._enter()
+	state.enter()
 	
 
 func exit_state(state: MachineState, _next_state: MachineState):
 	state.finished.emit(_next_state)
-	state._exit(_next_state)
+	state.exit(_next_state)
 
 
 func current_state_is_by_name(state: String) -> bool:
