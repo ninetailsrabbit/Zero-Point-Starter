@@ -12,6 +12,15 @@ static var DeuteranopiaTranslationKey := "DALTONISM_DEUTERANOPIA";
 static var ProtanopiaTranslationKey := "DALTONISM_PROTANOPIA";
 static var TritanopiaTranslationKey := "DALTONISM_TRITANOPIA";
 static var AchromatopsiaTranslationKey := "DALTONISM_ACHROMATOPSIA";
+static var DaltonismKeys: Dictionary = {
+	ViewportHelper.DaltonismTypes.No: NoTranslationKey,
+	ViewportHelper.DaltonismTypes.Protanopia: ProtanopiaTranslationKey,
+	ViewportHelper.DaltonismTypes.Deuteranopia: DeuteranopiaTranslationKey,
+	ViewportHelper.DaltonismTypes.Tritanopia: TritanopiaTranslationKey,
+	ViewportHelper.DaltonismTypes.Achromatopsia: AchromatopsiaTranslationKey,
+	
+}
+
 
 static var GraphicsQualityTranslationKey := "GRAPHICS_QUALITY";
 

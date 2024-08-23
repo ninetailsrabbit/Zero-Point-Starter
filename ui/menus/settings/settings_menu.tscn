@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dxapajbsngnmj"]
+[gd_scene load_steps=12 format=3 uid="uid://dxapajbsngnmj"]
 
 [ext_resource type="Script" path="res://ui/menus/settings/elements/audio_slider.gd" id="1_1bu1f"]
 [ext_resource type="Script" path="res://ui/menus/settings/settings_menu.gd" id="1_7arbm"]
@@ -8,6 +8,9 @@
 [ext_resource type="Script" path="res://ui/menus/settings/elements/photosensitive_checkbox.gd" id="6_eqr7d"]
 [ext_resource type="Script" path="res://ui/menus/settings/elements/screen_shake_checkbox.gd" id="7_kcacm"]
 [ext_resource type="Script" path="res://ui/menus/settings/elements/graphics_quality_settings.gd" id="8_e1lw0"]
+[ext_resource type="Script" path="res://ui/menus/settings/elements/daltonism_settings.gd" id="8_i085s"]
+[ext_resource type="Script" path="res://ui/menus/settings/elements/language_selector.gd" id="10_jkowg"]
+[ext_resource type="Script" path="res://ui/menus/settings/elements/mouse_sensitivity_slider.gd" id="11_h65do"]
 
 [node name="GameSettingsUI" type="Control"]
 layout_mode = 3
@@ -41,7 +44,7 @@ theme_override_constants/margin_bottom = 150
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer"]
 layout_mode = 2
-current_tab = 2
+current_tab = 4
 
 [node name="Audio" type="TabBar" parent="MarginContainer/TabContainer"]
 unique_name_in_owner = true
@@ -256,6 +259,7 @@ script = ExtResource("7_kcacm")
 
 [node name="Graphics" type="TabBar" parent="MarginContainer/TabContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -283,6 +287,7 @@ fit_content = true
 
 [node name="DaltonismContainer" type="HBoxContainer" parent="MarginContainer/TabContainer/Graphics/MarginContainer/VBoxContainer"]
 layout_mode = 2
+script = ExtResource("8_i085s")
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/TabContainer/Graphics/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -325,6 +330,7 @@ text = "SETTINGS_LANGUAGE"
 [node name="LanguageSelector" type="OptionButton" parent="MarginContainer/TabContainer/General/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+script = ExtResource("10_jkowg")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -338,6 +344,8 @@ text = "SUBTITLES_LANGUAGE"
 [node name="LanguageSelector" type="OptionButton" parent="MarginContainer/TabContainer/General/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
+script = ExtResource("10_jkowg")
+setting_related = "subtitles_language"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -351,6 +359,8 @@ text = "VOICES_LANGUAGE"
 [node name="LanguageSelector" type="OptionButton" parent="MarginContainer/TabContainer/General/MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
+script = ExtResource("10_jkowg")
+setting_related = "voices_language"
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -358,10 +368,10 @@ layout_mode = 2
 [node name="AllowTelemetryCheckBox" type="CheckBox" parent="MarginContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "SETTINGS_TELEMETRY"
+script = ExtResource("5_yqy4c")
 
 [node name="Controls" type="TabBar" parent="MarginContainer/TabContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 metadata/_tab_index = 4
 
@@ -393,6 +403,7 @@ step = 0.5
 value = 0.5
 tick_count = 100
 ticks_on_borders = true
+script = ExtResource("11_h65do")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 0

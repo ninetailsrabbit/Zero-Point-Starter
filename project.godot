@@ -143,3 +143,10 @@ locale/translations=PackedStringArray("res://localization/translations/en.po", "
 [physics]
 
 common/physics_ticks_per_second=120
+
+[shader_globals]
+
+daltonism={
+"type": "int",
+"value": 0
+}

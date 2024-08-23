@@ -85,7 +85,6 @@ func create_audio_section() -> void:
 
 func create_graphics_section() -> void:
 	var quality_preset = HardwareDetector.auto_discover_graphics_quality()
-	var quality_graphics = HardwareDetector.graphics_quality_presets[quality_preset]
 		
 	update_graphics_section("fps_counter", false)
 	update_graphics_section("max_fps", 0)
@@ -289,6 +288,9 @@ func update_graphics_section(key: String, value: Variant) -> void:
 
 func update_accessibility_section(key: String, value: Variant) -> void:
 	config_file_api.set_value(AccessibilitySection, key, value)
+	
+	if key == "daltonism":
+		RenderingServer.global_shader_parameter_set("daltonism", value);
 
 
 func update_controls_section(key: String, value: Variant) -> void:

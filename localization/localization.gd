@@ -112,6 +112,9 @@ static func polish() -> Language:
 	
 static func portuguese_brazilian() -> Language:
 	return available_languages[Languages.PortugueseBrazilian]
+
+static func portuguese() -> Language:
+	return available_languages[Languages.Portuguese]
 	
 static func russian() -> Language:
 	return available_languages[Languages.Russian]
