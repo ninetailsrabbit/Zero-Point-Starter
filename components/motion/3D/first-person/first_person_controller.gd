@@ -1,3 +1,4 @@
+@icon("res://components/motion/3D/first-person/first_person_controller.svg")
 class_name FirstPersonController extends CharacterBody3D
 
 @export var mouse_mode_switch_input_actions: Array[String] = ["ui_cancel"]
@@ -12,6 +13,7 @@ var was_grounded: bool = false
 var is_grounded: bool = false
 var motion_input: TransformedInput
 
+
 func _unhandled_input(event: InputEvent) -> void:
 	if InputHelper.is_any_action_just_pressed(event, mouse_mode_switch_input_actions):
 		switch_mouse_capture_mode()
@@ -20,14 +22,17 @@ func _unhandled_input(event: InputEvent) -> void:
 func _ready() -> void:
 	motion_input = TransformedInput.new(self)
 	InputHelper.capture_mouse()
-
+	
 
 func _physics_process(delta: float) -> void:
 	motion_input.update()
 	
 	was_grounded = is_grounded
 	is_grounded = is_on_floor()
-	
+
+
+func current_input_direction() -> Vector3:
+	return motion_input.input_direction_horizontal_axis * head.basis.x + motion_input.input_direction_vertical_axis * head.basis.z
 
 
 func is_falling() -> bool:

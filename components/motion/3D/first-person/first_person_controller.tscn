@@ -1,11 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://dd0blwa1hawbl"]
+[gd_scene load_steps=10 format=3 uid="uid://dd0blwa1hawbl"]
 
 [ext_resource type="Script" path="res://components/motion/3D/first-person/first_person_controller.gd" id="1_siswl"]
 [ext_resource type="Script" path="res://components/camera/3D/movement/first_person_camera_rotation_3d.gd" id="2_6vhab"]
 [ext_resource type="Script" path="res://components/design_patterns/finite_state_machine/finite-state-machine.gd" id="2_l5dql"]
 [ext_resource type="Script" path="res://components/interaction/3D/raycast_interactor_3d.gd" id="3_gxrim"]
-[ext_resource type="Script" path="res://components/motion/3D/first-person/states/ground/ground.gd" id="3_mrdp7"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/states/ground/idle.gd" id="3_rs4o2"]
+[ext_resource type="Script" path="res://components/motion/3D/first-person/mechanics/headbob/headbob.gd" id="4_43lpf"]
+[ext_resource type="Script" path="res://components/motion/3D/first-person/states/ground/walk.gd" id="7_fpqxx"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vvb10"]
 radius = 0.3
@@ -19,7 +20,7 @@ height = 0.6
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.879968, 0)
 script = ExtResource("1_siswl")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="StandCollisionShape" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_vvb10")
 
 [node name="Head" type="Node3D" parent="."]
@@ -34,13 +35,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.178689)
 
 [node name="Camera3D" type="Camera3D" parent="Head/Eyes"]
 
-[node name="CameraMovement3D" type="Node3D" parent="Head/Eyes" node_paths=PackedStringArray("actor", "head", "camera_pivot_point")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.549982, 0.178689)
-script = ExtResource("2_6vhab")
-actor = NodePath("../../..")
-head = NodePath("../..")
-camera_pivot_point = NodePath("..")
-
 [node name="RayCastInteractor3D" type="RayCast3D" parent="Head/Eyes"]
 target_position = Vector3(0, 0, -1)
 debug_shape_custom_color = Color(0.901961, 0, 0, 1)
@@ -49,13 +43,27 @@ script = ExtResource("3_gxrim")
 [node name="Hands" type="Node3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.252887, -0.235752)
 
+[node name="CameraMovement3D" type="Node3D" parent="." node_paths=PackedStringArray("actor", "head", "camera_pivot_point")]
+script = ExtResource("2_6vhab")
+actor = NodePath("..")
+head = NodePath("../Head")
+camera_pivot_point = NodePath("../Head/Eyes")
+
+[node name="HeadBob" type="Node3D" parent="." node_paths=PackedStringArray("actor", "head")]
+script = ExtResource("4_43lpf")
+actor = NodePath("..")
+head = NodePath("../Head/Eyes")
+
 [node name="FiniteStateMachine" type="Node" parent="." node_paths=PackedStringArray("current_state")]
 script = ExtResource("2_l5dql")
 current_state = NodePath("Ground/Idle")
 
 [node name="Ground" type="Node" parent="FiniteStateMachine"]
-script = ExtResource("3_mrdp7")
 
 [node name="Idle" type="Node" parent="FiniteStateMachine/Ground" node_paths=PackedStringArray("actor")]
 script = ExtResource("3_rs4o2")
+actor = NodePath("../../..")
+
+[node name="Walk" type="Node" parent="FiniteStateMachine/Ground" node_paths=PackedStringArray("actor")]
+script = ExtResource("7_fpqxx")
 actor = NodePath("../../..")

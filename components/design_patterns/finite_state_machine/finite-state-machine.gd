@@ -43,19 +43,19 @@ func _process(delta):
 	current_state.update(delta)
 
 
-func change_state_to(next_state):
+func change_state_to(next_state, parameters: Dictionary = {}):
 	var error_msg := "FiniteStateMachine: The change of state cannot be done because %s does not exist in this Finite State Machine" % next_state
 	
 	if not is_transitioning:
 		if typeof(next_state) == TYPE_STRING:
 			if not current_state_is_by_name(next_state) and states.has(next_state):
-				run_transition(current_state, states[next_state])
+				run_transition(current_state, states[next_state], parameters)
 			else:
 				push_error(error_msg % next_state)
 		
 		elif next_state is MachineState:
 			if not current_state_is(next_state) and states.values().has(next_state):
-				run_transition(current_state, next_state)
+				run_transition(current_state, next_state, parameters)
 			else:
 				push_error(error_msg % next_state.name)
 		
@@ -88,7 +88,7 @@ func run_transition(from: MachineState, to: MachineState, parameters: Dictionary
 
 ## Example register_transition(WalkToRun.new())
 func register_transition(transition: MachineTransition):
-	transitions[transition.get_class()] = transition
+	transitions[transition.get_script().get_global_name()] = transition
 
 func register_transitions(new_transitions: Array[MachineTransition]):
 	for transition in new_transitions:
@@ -174,6 +174,7 @@ func _add_state_to_dictionary(state: MachineState):
 		states[state.name] = get_node(state.get_path())
 		state.FSM = self
 		state.ready()
+		print(state.name)
 
 
 func on_state_changed(from: MachineState, to: MachineState):
