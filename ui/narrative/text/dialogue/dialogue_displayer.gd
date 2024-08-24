@@ -3,7 +3,7 @@ class_name DialogueDisplayer extends Control
 signal dialogue_display_started(dialogue: DialogueBlock)
 signal dialogue_display_finished(dialogue: DialogueBlock)
 signal dialogue_blocks_started_to_display(dialogue_blocks: Array[DialogueBlock])
-signal dialogue_blocks_finished_to_display(dialogue_blocks: Array[DialogueBlock])
+signal dialogue_blocks_finished_to_display()
 
 @export var static_display: bool = false
 @export var auto_type_can_be_skipped: bool = false
@@ -57,13 +57,18 @@ func _ready() -> void:
 	
 	dialogue_blocks_finished_to_display.connect(on_dialogue_blocks_finished_to_display)
 	GlobalGameEvents.dialogues_requested.connect(on_dialogues_requested)
+	
+	load_dialogue_blocks([
+		DialogueBlock.new("1", "Captain", "TU PUTA MADRE EN BRAGAS"),
+		DialogueBlock.new("2", "Captain", "TU PUTISIMA MADRE EN BRAGAS"),
+	])
 
 
 func load_dialogue_blocks(new_dialogue_blocks: Array[DialogueBlock] = []) -> void:
 	var previous_dialogue_blocks_count = dialogue_blocks.size()
 	
 	dialogue_blocks.append_array(new_dialogue_blocks)
-	dialogue_blocks = ArrayHelper.remove_duplicates(dialogue_blocks)
+	dialogue_blocks.assign(ArrayHelper.remove_duplicates(dialogue_blocks))
 	
 	if previous_dialogue_blocks_count == 0 and dialogue_blocks.size() > 0:
 		is_displaying = true
@@ -81,8 +86,8 @@ func display_next_dialogue_block() -> void:
 	if dialogue_blocks.is_empty():
 		
 		if current_dialogue_block:
-			dialogue_blocks_finished_to_display.emit(current_dialogue_block)
-			GlobalGameEvents.dialogue_blocks_finished_to_display.emit(current_dialogue_block)
+			dialogue_blocks_finished_to_display.emit()
+			GlobalGameEvents.dialogue_blocks_finished_to_display.emit()
 			
 		return
 

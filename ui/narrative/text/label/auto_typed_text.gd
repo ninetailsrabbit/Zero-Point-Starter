@@ -29,7 +29,6 @@ var is_skipped := false
 var typing_finished := false
 
 
-
 func _input(event: InputEvent):
 	if not typing_finished:
 		if is_typing:
@@ -54,7 +53,7 @@ func display_letters():
 	
 	letter_index += 1
 	
-	if letter_index >= content_to_display.length() - 1:
+	if letter_index > content_to_display.length() - 1:
 		display_finished.emit()
 		return
 		
@@ -62,8 +61,6 @@ func display_letters():
 	
 	var next_character: String = content_to_display[letter_index]
 		
-	letter_index += 1
-	
 	if not bbcode_flag && next_character == bbcode_start_flag:
 		typing_timer.stop()
 		bbcode_flag = true
@@ -95,11 +92,12 @@ func display_letters():
 			typing_timer.start(letter_time)
 
 
-func reload_text(text: String) -> void:
+func reload_text(new_text: String) -> void:
 	if not is_typing:
 		set_process_input(true)
 		text = ""
-		content_to_display = text
+		
+		content_to_display = new_text
 		typing_finished = false
 		is_skipped = false
 		display_letters()

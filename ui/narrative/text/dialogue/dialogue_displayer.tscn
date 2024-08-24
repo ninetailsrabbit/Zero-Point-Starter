@@ -13,6 +13,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2gllr")
+time_between_dialogue_blocks = 2.5
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -40,6 +41,7 @@ theme_override_constants/margin_bottom = 15
 [node name="AutoTypedText" type="RichTextLabel" parent="MarginContainer/DisplaySubtitleZone/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+fit_content = true
 script = ExtResource("2_hhxav")
 
 [node name="SoundQueue" type="Node" parent="MarginContainer/DisplaySubtitleZone/MarginContainer/AutoTypedText"]
