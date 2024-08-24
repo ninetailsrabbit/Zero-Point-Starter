@@ -27,7 +27,9 @@ func exit(next_state: MachineState):
 func physics_update(delta: float):
 	was_underwater = is_underwater
 	var depth = water_height - (eyes.global_position.y - safe_submerged_margin)
-	is_underwater = depth
+	is_underwater = depth > 0
+	
+	print("WAS UNDER, IS UNDER %s %s " % [was_underwater, is_underwater] )
 	
 	if actor.motion_input.input_direction.is_zero_approx():
 		decelerate(delta)
@@ -43,11 +45,11 @@ func physics_update(delta: float):
 	if was_underwater and not is_underwater:
 		actor.velocity += actor.up_direction * underwater_exit_impulse
 		
-	if actor.global_position.y > water_height:
-		FSM.change_state_to("Fall")
+	#if actor.global_position.y > water_height:
+		#FSM.change_state_to("Fall")
 		
 	actor.move_and_slide()
-		
+	
 
 
 func accelerate(delta: float = get_physics_process_delta_time()):
@@ -56,10 +58,11 @@ func accelerate(delta: float = get_physics_process_delta_time()):
 	var current_speed = get_speed()
 
 	if is_underwater:
-		direction = camera_direction
-		
-		if actor.motion_input.input_direction.is_equal_approx(Vector2.DOWN):
-			direction = -direction
+		if actor.motion_input.input_direction.is_equal_approx(Vector2.UP):
+			direction = camera_direction
+			
+		elif actor.motion_input.input_direction.is_equal_approx(Vector2.DOWN):
+			direction = -camera_direction
 	else:
 		# Means that it's looking down so can submerge into the water
 		if sign(camera_direction.y) == sign(VectorHelper.up_direction_opposite_vector3(actor.up_direction)).y:
@@ -74,6 +77,6 @@ func accelerate(delta: float = get_physics_process_delta_time()):
 
 func decelerate(delta: float = get_physics_process_delta_time()) -> void:	
 	if friction > 0:
-		actor.velocity = lerp(actor.velocity, Vector3.ZERO, clamp(friction * delta, 0, 1.0))
+		actor.velocity = lerp(actor.velocity, Vector3(0, actor.velocity.y if is_underwater else 0, 0), clamp(friction * delta, 0, 1.0))
 	else:
-		actor.velocity = Vector3.ZERO
+		actor.velocity = Vector3(0, actor.velocity.y if is_underwater else 0, 0)

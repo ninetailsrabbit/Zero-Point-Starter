@@ -200,7 +200,10 @@ actor = NodePath("../../..")
 
 [node name="Special" type="Node" parent="FiniteStateMachine"]
 
-[node name="Swim" type="Node" parent="FiniteStateMachine/Special" node_paths=PackedStringArray("actor")]
+[node name="Swim" type="Node" parent="FiniteStateMachine/Special" node_paths=PackedStringArray("eyes", "actor")]
 script = ExtResource("16_q5wft")
+eyes = NodePath("../../../Head/Eyes")
 actor = NodePath("../../..")
 gravity_force = 0.1
+acceleration = 0.0
+friction = 0.0
