@@ -44,20 +44,25 @@ func _process(delta):
 
 
 func change_state_to(next_state, parameters: Dictionary = {}):
-	var error_msg := "FiniteStateMachine: The change of state cannot be done because %s does not exist in this Finite State Machine" % next_state
-	
 	if not is_transitioning:
 		if typeof(next_state) == TYPE_STRING:
-			if not current_state_is_by_name(next_state) and states.has(next_state):
+			
+			if current_state_is_by_name(next_state):
+				return
+				
+			if states.has(next_state):
 				run_transition(current_state, states[next_state], parameters)
 			else:
-				push_error(error_msg % next_state)
+				push_error("FiniteStateMachine: The change of state cannot be done because %s does not exist in this Finite State Machine" % next_state)
 		
 		elif next_state is MachineState:
-			if not current_state_is(next_state) and states.values().has(next_state):
+			if current_state_is(next_state):
+				return
+				
+			if states.values().has(next_state):
 				run_transition(current_state, next_state, parameters)
 			else:
-				push_error(error_msg % next_state.name)
+				push_error("FiniteStateMachine: The change of state cannot be done because %s does not exist in this Finite State Machine" % next_state.name)
 		
 
 func run_transition(from: MachineState, to: MachineState, parameters: Dictionary = {}):
