@@ -17,6 +17,8 @@ var input_direction_horizontal_axis: float
 var input_direction_vertical_axis: float
 var input_direction_horizontal_axis_applied_deadzone: float
 var input_direction_vertical_axis_applied_deadzone: float
+var input_joy_direction_left: Vector2
+var input_joy_direction_right: Vector2
 var world_coordinate_space_direction: Vector3
 #endregion
 
@@ -27,6 +29,8 @@ var previous_input_direction_horizontal_axis: float
 var previous_input_direction_vertical_axis: float
 var previous_input_direction_horizontal_axis_applied_deadzone: float
 var previous_input_direction_vertical_axis_applied_deadzone: float
+var previous_input_joy_direction_left: Vector2
+var previous_input_joy_direction_right: Vector2
 var previous_world_coordinate_space_direction: Vector3
 #endregion
 
@@ -53,14 +57,54 @@ func update():
 	input_direction_horizontal_axis = Input.get_axis(move_left_action, move_right_action)
 	input_direction_vertical_axis = Input.get_axis(move_forward_action, move_back_action)
 	
+	_calculate_joystick_movement()
+	
 	input_direction_horizontal_axis_applied_deadzone = input_direction_horizontal_axis * (1.0 - deadzone)
 	input_direction_vertical_axis_applied_deadzone = input_direction_vertical_axis * (1.0 - deadzone)
+
+
+func _calculate_joystick_movement() -> void:
+	var input_joy_axis_x = Input.get_joy_axis(GamepadControllerManager.current_device_id, JOY_AXIS_LEFT_X)
+	var input_joy_axis_y = Input.get_joy_axis(GamepadControllerManager.current_device_id, JOY_AXIS_LEFT_Y)
+	
+	var input_joy_x = 0
+	var input_joy_y = 0
+	
+	if abs(input_joy_axis_x) > deadzone:
+		input_joy_x = input_joy_axis_x
+	else:
+		input_joy_x = 0
+		
+	if abs(input_joy_axis_y) > deadzone:
+		input_joy_y = input_joy_axis_y
+	else:
+		input_joy_y = 0
+		
+	input_joy_direction_left = Vector2(input_joy_x, input_joy_y)
+	
+	input_joy_axis_x = Input.get_joy_axis(GamepadControllerManager.current_device_id, JOY_AXIS_RIGHT_X)
+	input_joy_axis_y = Input.get_joy_axis(GamepadControllerManager.current_device_id, JOY_AXIS_RIGHT_Y)
+	
+	if abs(input_joy_axis_x) > deadzone:
+		input_joy_x = input_joy_axis_x
+	else:
+		input_joy_x = 0
+		
+	if abs(input_joy_axis_y) > deadzone:
+		input_joy_y = input_joy_axis_y
+	else:
+		input_joy_y = 0
+
+	input_joy_direction_right = Vector2(input_joy_x, input_joy_y)
 
 
 func _update_previous_directions():
 	previous_input_direction = input_direction
 	previous_world_coordinate_space_direction = world_coordinate_space_direction
-		
+	
+	previous_input_joy_direction_left = input_joy_direction_left
+	previous_input_joy_direction_right = input_joy_direction_right
+	
 	previous_input_direction_deadzone_square_shape = input_direction_deadzone_square_shape
 		
 	previous_input_direction_horizontal_axis = input_direction_horizontal_axis
@@ -69,6 +113,7 @@ func _update_previous_directions():
 	previous_input_direction_horizontal_axis_applied_deadzone = input_direction_horizontal_axis_applied_deadzone
 	previous_input_direction_vertical_axis_applied_deadzone = input_direction_vertical_axis_applied_deadzone
 
+	
 
 #region Action setters
 func change_move_right_action(new_action: String) -> TransformedInput:

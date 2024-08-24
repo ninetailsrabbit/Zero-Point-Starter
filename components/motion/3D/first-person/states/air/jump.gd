@@ -41,7 +41,6 @@ class_name Jump extends AirState
 		jump_distance = value
 		
 		air_speed = calculate_air_speed(jump_distance, jump_peak_time, jump_fall_time)
-	
 
 
 var jump_velocity: float
@@ -53,6 +52,7 @@ var jump_horizontal_boost = 0.0
 var jump_vertical_boost = 0.0
 
 var last_jumped_position: Vector3 = Vector3.ZERO
+
 
 func ready():
 	jump_velocity = calculate_jump_velocity(jump_height, jump_peak_time)
@@ -72,7 +72,7 @@ func exit(_next_state: MachineState):
 	jump_vertical_boost = 0
 	last_jumped_position = Vector3.ZERO
 	
-	
+
 func physics_update(delta: float):
 	apply_gravity(get_gravity(), delta)
 	air_move(delta)
@@ -101,12 +101,12 @@ func apply_jump() -> void:
 	
 	var up_direction: Vector3 = actor.up_direction
 	
-	var jump_velocity = calculate_jump_velocity(jump_height - (jump_count * height_reduced_by_jump), jump_peak_time)
+	var _jump_velocity = calculate_jump_velocity(jump_height - (jump_count * height_reduced_by_jump), jump_peak_time)
 	
 	if up_direction in [Vector3.DOWN, Vector3.UP]:
-		actor.velocity.y = sign(up_direction.y) * jump_velocity
+		actor.velocity.y = sign(up_direction.y) * _jump_velocity
 	elif up_direction in [Vector3.RIGHT, Vector3.LEFT]:
-		actor.velocity.x = sign(up_direction.x) * jump_velocity
+		actor.velocity.x = sign(up_direction.x) * _jump_velocity
 
 
 func get_gravity() -> float:
@@ -125,11 +125,10 @@ func get_gravity() -> float:
 
 
 func shorten_jump(factor: float = 2.0) -> void:
-	var new_jump_velocity = jump_velocity / 2
+	var new_jump_velocity = jump_velocity / factor
 	
 	if(actor.velocity.y > new_jump_velocity):
 		actor.velocity.y = new_jump_velocity
-
 
 
 func detect_fall_after_jump_fall_time_passed() -> void:

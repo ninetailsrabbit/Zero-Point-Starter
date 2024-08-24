@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dd0blwa1hawbl"]
+[gd_scene load_steps=25 format=3 uid="uid://dd0blwa1hawbl"]
 
 [ext_resource type="Script" path="res://components/motion/3D/first-person/first_person_controller.gd" id="1_siswl"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/mechanics/camera/first_person_camera_rotation_3d.gd" id="2_6vhab"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" path="res://components/motion/3D/first-person/states/ground/slide.gd" id="13_glomj"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/states/air/fall.gd" id="14_rrabi"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/states/air/jump.gd" id="15_3f402"]
+[ext_resource type="Script" path="res://components/motion/3D/first-person/states/special/Swim.gd" id="16_q5wft"]
 
 [sub_resource type="Animation" id="Animation_wv8v6"]
 resource_name = "crouch"
@@ -187,12 +188,19 @@ side_speed = 1.4
 script = ExtResource("13_glomj")
 actor = NodePath("../../..")
 
-[node name="Node" type="Node" parent="FiniteStateMachine"]
+[node name="Air" type="Node" parent="FiniteStateMachine"]
 
-[node name="Fall" type="Node" parent="FiniteStateMachine/Node" node_paths=PackedStringArray("actor")]
+[node name="Fall" type="Node" parent="FiniteStateMachine/Air" node_paths=PackedStringArray("actor")]
 script = ExtResource("14_rrabi")
 actor = NodePath("../../..")
 
-[node name="Jump" type="Node" parent="FiniteStateMachine/Node" node_paths=PackedStringArray("actor")]
+[node name="Jump" type="Node" parent="FiniteStateMachine/Air" node_paths=PackedStringArray("actor")]
 script = ExtResource("15_3f402")
 actor = NodePath("../../..")
+
+[node name="Special" type="Node" parent="FiniteStateMachine"]
+
+[node name="Swim" type="Node" parent="FiniteStateMachine/Special" node_paths=PackedStringArray("actor")]
+script = ExtResource("16_q5wft")
+actor = NodePath("../../..")
+gravity_force = 0.1
