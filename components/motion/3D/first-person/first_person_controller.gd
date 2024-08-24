@@ -60,6 +60,7 @@ func _physics_process(_delta: float) -> void:
 	last_direction = current_input_direction()
 
 
+# Direction that points to the current head rotation in the world, so the player move towards it
 func current_input_direction() -> Vector3:
 	return motion_input.input_direction_horizontal_axis * head.basis.x + motion_input.input_direction_vertical_axis * head.basis.z
 

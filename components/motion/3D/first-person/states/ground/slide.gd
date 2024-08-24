@@ -14,28 +14,28 @@ enum SlideSide {
 @export var slide_tilt_side: SlideSide = SlideSide.Random
 ## This applies a momentum on the last part of the slide to continue the movement
 @export var friction_momentum := 0.1
+@export var slide_velocity_boost: float = 1.0
 @export var reduce_speed_gradually: bool = true
 @export var swing_head: bool = true
-
 
 var slide_timer: Timer
 var entry_velocity: Vector3 = Vector3.ZERO
 var decrease_rate: float = 0.0
-var original_eyes_rotation = 0.0
+var original_camera_rotation = 0.0
 var slide_side: int = 0
 
 func ready():
 	_create_slide_timer()
 	
 
-func _enter():
+func enter():
 	if is_instance_valid(slide_timer):
 		slide_timer.start()
 	
-	entry_velocity = actor.velocity
-	original_eyes_rotation = actor.eyes.rotation
+	entry_velocity = actor.velocity * slide_velocity_boost
+	original_camera_rotation = actor.camera.rotation
 	decrease_rate = slide_time
-	
+
 	match slide_tilt_side:
 		SlideSide.Random:
 			slide_side = sign(randi_range(-1, 1))
@@ -47,13 +47,13 @@ func _enter():
 	actor.animation_player.play(crouch_animation)
 
 
-func _exit(next_state: MachineState) -> void:
+func exit(next_state: MachineState) -> void:
 	slide_timer.stop();
 	decrease_rate = slide_time
 	
-	if actor.eyes.rotation.z != original_eyes_rotation.z:
+	if actor.camera.rotation.z != original_camera_rotation.z:
 		var tween = create_tween()
-		tween.tween_property(actor.eyes, "rotation:z", original_eyes_rotation.z, slide_tilt_comeback_time)\
+		tween.tween_property(actor.camera, "rotation:z", original_camera_rotation.z, slide_tilt_comeback_time)\
 			.set_ease(Tween.EASE_OUT)
 	
 	if not next_state is Crouch:
@@ -61,7 +61,9 @@ func _exit(next_state: MachineState) -> void:
 		await actor.animation_player.animation_finished
 
 
-func physics_update(delta):	
+func physics_update(delta):
+	super.physics_update(delta)
+	
 	if reduce_speed_gradually:
 		decrease_rate -= delta
 		
@@ -70,7 +72,7 @@ func physics_update(delta):
 	actor.velocity = Vector3(entry_velocity.x * momentum, actor.velocity.y, entry_velocity.z * momentum)
 	
 	if swing_head and slide_tilt > 0:
-		actor.eyes.rotation.z =  lerp_angle(actor.eyes.rotation.z, slide_side * deg_to_rad(slide_tilt), delta * slide_lerp_speed)
+		actor.camera.rotation.z =  lerp_angle(actor.camera.rotation.z, slide_side * deg_to_rad(slide_tilt), delta * slide_lerp_speed)
    
 	if not actor.ceil_shape_cast.is_colliding():
 		detect_jump()
