@@ -154,6 +154,16 @@ static func case_insensitive_comparison(one: String, two: String) -> bool:
 	return one.strip_edges().to_lower() == two.strip_edges().to_lower()
 	
 	
+static func is_whitespace(text: String) -> bool:
+	var whitespace_regex: RegEx = RegEx.new()
+	whitespace_regex.compile(r"\s+")
+	
+	if whitespace_regex.search(text):
+		return true
+	
+	return false
+	
+	
 static func remove_whitespaces(text: String) -> String:
 	var whitespace_regex: RegEx = RegEx.new()
 	whitespace_regex.compile(r"\s+")
