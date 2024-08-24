@@ -22,6 +22,7 @@ func physics_update(delta):
 	accelerate(delta)
 	
 	detect_run()
+	detect_crouch()
 	
 	actor.move_and_slide()
 

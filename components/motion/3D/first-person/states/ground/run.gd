@@ -28,6 +28,9 @@ func physics_update(delta):
 	
 	accelerate(delta)
 	
+	if actor.crouch and actor.slide and InputMap.has_action(crouch_input_action) and Input.is_action_pressed(crouch_input_action):
+		FSM.change_state_to("Slide")
+	
 	actor.move_and_slide()
 
 

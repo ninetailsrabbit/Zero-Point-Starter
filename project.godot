@@ -155,6 +155,7 @@ locale/translations=PackedStringArray("res://localization/translations/en.po", "
 2d_physics/layer_6="Hitboxes"
 3d_physics/layer_6="Hitboxes"
 2d_physics/layer_7="Shakeables"
+3d_physics/layer_7="Shakeables"
 
 [physics]
 

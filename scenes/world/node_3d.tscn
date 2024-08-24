@@ -26,7 +26,7 @@ script = ExtResource("1_vuxmu")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 use_collision = true
-size = Vector3(10, 0.1, 10)
+size = Vector3(20, 0.1, 20)
 material = SubResource("StandardMaterial3D_ae76o")
 
 [node name="FirstPersonController" parent="." instance=ExtResource("1_f82m5")]

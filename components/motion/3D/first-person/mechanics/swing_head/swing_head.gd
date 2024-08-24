@@ -1,3 +1,4 @@
+@icon("res://components/motion/3D/first-person/mechanics/headbob/head.svg")
 class_name SwingHead extends Node3D
 
 @export var actor: FirstPersonController

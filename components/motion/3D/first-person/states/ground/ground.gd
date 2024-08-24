@@ -12,6 +12,9 @@ class_name GroundState extends MachineState
 @export var jump_input_action: String = "jump"
 @export var crouch_input_action: String = "crouch"
 @export var crawl_input_action: String = "crawl"
+@export_group("Animation")
+@export var crouch_animation: String = "crouch"
+@export var crawl_animation: String = "crawl"
 
 
 
@@ -60,10 +63,10 @@ func detect_crouch() -> void:
 
 
 func detect_crawl() -> void:
-	if actor.crouch and InputMap.has_action(crawl_input_action) and Input.is_action_pressed(crawl_input_action):
+	if actor.crawl and InputMap.has_action(crawl_input_action) and Input.is_action_pressed(crawl_input_action):
 		FSM.change_state_to("Crawl")
 
 
 func detect_jump() -> void:
-	if actor.jump and InputMap.has_action(jump_input_action) and Input.is_action_pressed(jump_input_action):
+	if actor.jump and InputMap.has_action(jump_input_action) and Input.is_action_just_pressed(jump_input_action):
 		FSM.change_state_to("Jump")

@@ -20,12 +20,16 @@ class_name FirstPersonController extends CharacterBody3D
 @onready var head: Node3D = $Head
 @onready var eyes: Node3D = $Head/Eyes
 @onready var camera: Camera3D = $Head/Eyes/Camera3D
-@onready var ceil_shape_cast: ShapeCast3D = $CeilShapeCast
+@onready var ceil_shape_cast: ShapeCast3D = $Head/CeilShapeCast
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var stand_collision_shape: CollisionShape3D = $StandCollisionShape
+@onready var crouch_collision_shape: CollisionShape3D = $CrouchCollisionShape
+@onready var crawl_collision_shape: CollisionShape3D = $CrawlCollisionShape
 
 var was_grounded: bool = false
 var is_grounded: bool = false
 var motion_input: TransformedInput
-
+var last_direction: Vector3 = Vector3.ZERO
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -44,12 +48,16 @@ func _ready() -> void:
 		RunToWalkTransition.new()
 	])
 	
+	finite_state_machine.state_changed.connect(on_state_changed)
+	
 
 func _physics_process(_delta: float) -> void:
 	motion_input.update()
 	
 	was_grounded = is_grounded
 	is_grounded = is_on_floor()
+	
+	last_direction = current_input_direction()
 
 
 func current_input_direction() -> Vector3:
@@ -72,3 +80,29 @@ func switch_mouse_capture_mode() -> void:
 		InputHelper.capture_mouse()
 	else:
 		InputHelper.show_mouse_cursor()
+
+
+func _update_collisions_based_on_state(current_state: MachineState) -> void:
+	match current_state.name:
+		"Idle", "Walk", "Run":
+			stand_collision_shape.disabled = false
+			crouch_collision_shape.disabled = true
+			crawl_collision_shape.disabled = true
+		"Crouch", "Slide":
+			stand_collision_shape.disabled = true
+			crouch_collision_shape.disabled = false
+			crawl_collision_shape.disabled = true
+		"Crawl":
+			stand_collision_shape.disabled = true
+			crouch_collision_shape.disabled = true
+			crawl_collision_shape.disabled = false
+		_:
+			stand_collision_shape.disabled = false
+			crouch_collision_shape.disabled = true
+			crawl_collision_shape.disabled = true
+
+
+func on_state_changed(_from: MachineState, to: MachineState) -> void:
+	_update_collisions_based_on_state(to)
+
+	
