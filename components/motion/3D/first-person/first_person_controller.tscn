@@ -89,6 +89,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.879968, 0)
 collision_layer = 2
 collision_mask = 21
 script = ExtResource("1_siswl")
+crawl = true
 
 [node name="DebugUI" parent="." node_paths=PackedStringArray("actor", "finite_state_machine") instance=ExtResource("2_q86iu")]
 actor = NodePath("..")

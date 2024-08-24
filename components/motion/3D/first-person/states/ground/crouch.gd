@@ -12,7 +12,7 @@ func exit(next_state: MachineState):
 func physics_update(delta):
 	super.physics_update(delta)
 	
-	if Input.is_action_pressed(crouch_input_action) and not actor.ceil_shape_cast.is_colliding():
+	if not Input.is_action_pressed(crouch_input_action) and not actor.ceil_shape_cast.is_colliding():
 		if actor.motion_input.input_direction.is_zero_approx():
 			FSM.change_state_to("Idle")
 		else:

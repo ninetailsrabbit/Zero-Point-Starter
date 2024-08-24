@@ -13,8 +13,8 @@ func exit(_next_state: MachineState):
 func physics_update(delta):
 	super.physics_update(delta)
 	
-	if Input.is_action_pressed(crawl_animation) and not actor.ceil_shape_cast.is_colliding():
-		FSM.change_state_to("Crawl")
+	if not Input.is_action_pressed(crawl_input_action) and not actor.ceil_shape_cast.is_colliding():
+		FSM.change_state_to("Crouch")
 		
 	accelerate(delta)
 		
