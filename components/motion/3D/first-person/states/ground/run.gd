@@ -31,7 +31,12 @@ func physics_update(delta):
 	detect_slide()
 	detect_jump()
 
+	stair_step_up()
+	
 	actor.move_and_slide()
+	
+	stair_step_down()
+
 
 	
 func _create_sprint_timer() -> void:

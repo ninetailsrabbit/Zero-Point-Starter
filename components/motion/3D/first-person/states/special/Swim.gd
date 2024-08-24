@@ -45,8 +45,8 @@ func physics_update(delta: float):
 	if was_underwater and not is_underwater:
 		actor.velocity += actor.up_direction * underwater_exit_impulse
 		
-	#if actor.global_position.y > water_height:
-		#FSM.change_state_to("Fall")
+	if actor.global_position.y > water_height:
+		FSM.change_state_to("Fall")
 		
 	actor.move_and_slide()
 	
@@ -77,6 +77,6 @@ func accelerate(delta: float = get_physics_process_delta_time()):
 
 func decelerate(delta: float = get_physics_process_delta_time()) -> void:	
 	if friction > 0:
-		actor.velocity = lerp(actor.velocity, Vector3(0, actor.velocity.y if is_underwater else 0, 0), clamp(friction * delta, 0, 1.0))
+		actor.velocity = lerp(actor.velocity, Vector3(0, actor.velocity.y if is_underwater else 0.0, 0), clamp(friction * delta, 0, 1.0))
 	else:
-		actor.velocity = Vector3(0, actor.velocity.y if is_underwater else 0, 0)
+		actor.velocity = Vector3(0, actor.velocity.y if is_underwater else 0.0, 0)

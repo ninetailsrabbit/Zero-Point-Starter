@@ -25,7 +25,11 @@ func physics_update(delta):
 	detect_run()
 	detect_crouch()
 	
+	stair_step_up()
+	
 	actor.move_and_slide()
+	
+	stair_step_down()
 
 
 func _create_catching_breath_timer() -> void:

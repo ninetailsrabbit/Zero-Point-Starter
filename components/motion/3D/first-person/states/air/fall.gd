@@ -25,6 +25,9 @@ func enter():
 	jump_requested = false
 	current_coyote_time_frames = coyote_time_frames
 	current_jump_input_buffer_time_frames = jump_input_buffer_time_frames
+	
+	if FSM.last_state() is GroundState:
+		FSM.last_state().stair_stepping = false
 
 
 func physics_update(delta: float):

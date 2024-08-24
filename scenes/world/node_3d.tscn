@@ -32,7 +32,7 @@ size = Vector3(50, 0.1, 50)
 material = SubResource("StandardMaterial3D_ae76o")
 
 [node name="FirstPersonController" parent="." instance=ExtResource("1_f82m5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.20836, -23.1111)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.10045, 1.20836, -14.3121)
 swim = true
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="."]
