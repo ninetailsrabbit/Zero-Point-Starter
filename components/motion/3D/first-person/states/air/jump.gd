@@ -75,6 +75,7 @@ func exit(_next_state: MachineState):
 	
 func physics_update(delta: float):
 	apply_gravity(get_gravity(), delta)
+	air_move(delta)
 	
 	if Input.is_action_just_pressed(jump_input_action) and jump_count < jump_times:
 		apply_jump()

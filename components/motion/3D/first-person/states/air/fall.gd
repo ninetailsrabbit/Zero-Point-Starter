@@ -38,7 +38,6 @@ func physics_update(delta: float):
 		FSM.change_state_to("Jump")
 		
 	elif (not actor.was_grounded and actor.is_grounded) or actor.is_on_floor():
-		
 		if jump_requested and _jump_input_buffer_is_active():
 			FSM.change_state_to("Jump")
 		else:
