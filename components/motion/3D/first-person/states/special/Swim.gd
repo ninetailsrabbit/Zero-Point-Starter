@@ -29,6 +29,11 @@ func physics_update(delta: float):
 	var depth = water_height - (eyes.global_position.y - safe_submerged_margin)
 	is_underwater = depth
 	
+	if actor.motion_input.input_direction.is_zero_approx():
+		decelerate(delta)
+	else:
+		accelerate(delta)
+		
 	if is_underwater:
 		apply_gravity(gravity_force, delta)
 	else:
@@ -38,13 +43,9 @@ func physics_update(delta: float):
 	if was_underwater and not is_underwater:
 		actor.velocity += actor.up_direction * underwater_exit_impulse
 		
-		
 	if actor.global_position.y > water_height:
 		FSM.change_state_to("Fall")
 		
-	#if actor.motion_input.input_direction.is_zero_approx():
-	#else:
-		#
 	actor.move_and_slide()
 		
 
@@ -64,5 +65,15 @@ func accelerate(delta: float = get_physics_process_delta_time()):
 		if sign(camera_direction.y) == sign(VectorHelper.up_direction_opposite_vector3(actor.up_direction)).y:
 			direction = camera_direction
 			
+	if acceleration > 0:
+		actor.velocity = lerp(actor.velocity, direction * current_speed, clamp(acceleration * delta, 0, 1.0))
+	else:
+		actor.velocity = direction * current_speed
 			
 	
+
+func decelerate(delta: float = get_physics_process_delta_time()) -> void:	
+	if friction > 0:
+		actor.velocity = lerp(actor.velocity, Vector3.ZERO, clamp(friction * delta, 0, 1.0))
+	else:
+		actor.velocity = Vector3.ZERO

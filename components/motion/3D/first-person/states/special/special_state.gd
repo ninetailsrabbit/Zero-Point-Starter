@@ -13,7 +13,11 @@ class_name SpecialState extends MachineState
 
 
 func apply_gravity(force: float = gravity_force, delta: float = get_physics_process_delta_time()):
-	actor.velocity += VectorHelper.up_direction_opposite_vector3(actor.up_direction) * force * delta
+	actor.velocity += get_gravity()
+
+
+func get_gravity(force: float = gravity_force, delta: float = get_physics_process_delta_time()) -> Vector3:
+	return VectorHelper.up_direction_opposite_vector3(actor.up_direction) * force * delta
 
 
 func detect_jump() -> void:

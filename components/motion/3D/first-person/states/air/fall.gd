@@ -46,7 +46,7 @@ func physics_update(delta: float):
 			else:
 				FSM.change_state_to("Walk")
 			
-	
+	detect_swim()
 	actor.move_and_slide()
 
 

@@ -62,6 +62,14 @@ func detect_jump() -> void:
 		FSM.change_state_to("Jump")
 
 
+func detect_swim() -> void:
+	if FSM.states.has("Swim") and actor.swim:
+		var swim_state: Swim = FSM.states["Swim"] as Swim
+		
+		if swim_state.eyes.global_position.y <= swim_state.water_height:
+			FSM.change_state_to("Swim")
+
+
 func limit_fall_velocity() -> void:
 	var up_direction_opposite = VectorHelper.up_direction_opposite_vector3(actor.up_direction)
 	

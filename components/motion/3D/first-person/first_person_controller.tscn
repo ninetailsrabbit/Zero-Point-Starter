@@ -15,23 +15,7 @@
 [ext_resource type="Script" path="res://components/motion/3D/first-person/states/ground/slide.gd" id="13_glomj"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/states/air/fall.gd" id="14_rrabi"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/states/air/jump.gd" id="15_3f402"]
-[ext_resource type="Script" path="res://components/motion/3D/first-person/states/special/Swim.gd" id="16_q5wft"]
-
-[sub_resource type="Animation" id="Animation_wv8v6"]
-resource_name = "crouch"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Head:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 0.549982, 0), Vector3(0, -0.039, 0)]
-}
+[ext_resource type="Script" path="res://components/motion/3D/first-person/states/special/swim.gd" id="16_q5wft"]
 
 [sub_resource type="Animation" id="Animation_c5r52"]
 length = 0.001
@@ -62,6 +46,22 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector3(0, -0.039, 0), Vector3(0, -0.553, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_wv8v6"]
+resource_name = "crouch"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.549982, 0), Vector3(0, -0.039, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_57itv"]
