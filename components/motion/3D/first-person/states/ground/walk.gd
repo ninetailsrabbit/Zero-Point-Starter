@@ -21,6 +21,7 @@ func physics_update(delta):
 	
 	accelerate(delta)
 	
+	detect_jump()
 	detect_run()
 	detect_crouch()
 	

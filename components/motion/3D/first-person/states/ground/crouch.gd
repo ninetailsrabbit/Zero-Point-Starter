@@ -22,21 +22,24 @@ func physics_update(delta):
 	
 	if not actor.ceil_shape_cast.is_colliding():
 		detect_jump()
-		
+	
+	detect_jump()
 	detect_crawl()
 	
 	actor.move_and_slide()
 
 
+#region Animations
 func _crouch_animation() -> void:
 	var previous_state = FSM.last_state()
 	
 	if not previous_state is Slide and not previous_state is Crawl:
 		actor.animation_player.play(crouch_animation)
 		await actor.animation_player.animation_finished
-	
+
+
 func _reset_crouch_animation(next_state: MachineState) -> void:
 	if actor.animation_player and not next_state is Crawl:
 		actor.animation_player.play_backwards(crouch_animation)
 		await actor.animation_player.animation_finished
-	
+#endregion

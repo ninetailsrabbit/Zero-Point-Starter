@@ -24,7 +24,7 @@ func physics_update(delta):
 		apply_gravity(gravity_force, delta)
 
 	if actor.is_falling():
-		pass # TODO - IMPLEMENT FALLING STATE
+		FSM.change_state_to("Fall")
 
 
 func apply_gravity(force: float = gravity_force, delta: float = get_physics_process_delta_time()):
@@ -56,6 +56,11 @@ func detect_run() -> void:
 	if actor.run and InputMap.has_action(run_input_action) and Input.is_action_pressed(run_input_action):
 		FSM.change_state_to("Run")
 
+
+func detect_slide() -> void:
+	if actor.crouch and actor.slide and InputMap.has_action(crouch_input_action) and Input.is_action_pressed(crouch_input_action):
+		FSM.change_state_to("Slide")
+	
 
 func detect_crouch() -> void:
 	if actor.crouch and InputMap.has_action(crouch_input_action) and Input.is_action_pressed(crouch_input_action):

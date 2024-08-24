@@ -12,13 +12,13 @@ var current_coyote_time_frames: int = 0:
 	get:
 		return current_coyote_time_frames
 	set(value):
-		current_coyote_time_frames = max(0, current_coyote_time_frames)
+		current_coyote_time_frames = max(0, value)
 		
 var current_jump_input_buffer_time_frames: int = 0:
 	get:
 		return current_jump_input_buffer_time_frames
 	set(value):
-		current_jump_input_buffer_time_frames = max(0, current_jump_input_buffer_time_frames)
+		current_jump_input_buffer_time_frames = max(0, value)
 
 
 func enter():
