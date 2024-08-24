@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3 uid="uid://bu6bqupq6ngdd"]
+
+[ext_resource type="Script" path="res://ui/narrative/text/dialogue/dialogue_displayer.gd" id="1_2gllr"]
+[ext_resource type="Script" path="res://components/audio/queue/sound_queue.gd" id="1_rphjc"]
+[ext_resource type="Script" path="res://ui/narrative/text/label/auto_typed_text.gd" id="2_hhxav"]
+[ext_resource type="AudioStream" uid="uid://c6w2klst50ssj" path="res://assets/sounds/dialog-text/retro_v5.wav" id="7_3jchh"]
+
+[node name="DialogueDisplayer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2gllr")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 250
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 250
+theme_override_constants/margin_bottom = 50
+
+[node name="DisplaySubtitleZone" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/DisplaySubtitleZone"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 15
+
+[node name="AutoTypedText" type="RichTextLabel" parent="MarginContainer/DisplaySubtitleZone/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("2_hhxav")
+
+[node name="SoundQueue" type="Node" parent="MarginContainer/DisplaySubtitleZone/MarginContainer/AutoTypedText"]
+script = ExtResource("1_rphjc")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MarginContainer/DisplaySubtitleZone/MarginContainer/AutoTypedText/SoundQueue"]
+stream = ExtResource("7_3jchh")
+bus = &"SFX"
+
+[node name="VoiceStreamPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"Voice"
+
+[node name="BetweenBlocksTimer" type="Timer" parent="."]

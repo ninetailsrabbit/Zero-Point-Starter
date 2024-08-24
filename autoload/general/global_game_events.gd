@@ -27,3 +27,12 @@ signal changed_voices_language(language: String)
 signal changed_subtitles_enabled(enabled: bool)
 signal updated_graphic_settings(quality_preset: int) # QualityPreset enum from HardwareDetector
 #endregion
+
+
+#region Narrative
+signal dialogues_requested(dialogue_blocks: Array[DialogueDisplayer.DialogueBlock])
+signal dialogue_display_started(dialogue: DialogueDisplayer.DialogueBlock)
+signal dialogue_display_finished(dialogue: DialogueDisplayer.DialogueBlock)
+signal dialogue_blocks_started_to_display(dialogue_blocks: Array[DialogueDisplayer.DialogueBlock])
+signal dialogue_blocks_finished_to_display(dialogue_blocks: Array[DialogueDisplayer.DialogueBlock])
+#endregion

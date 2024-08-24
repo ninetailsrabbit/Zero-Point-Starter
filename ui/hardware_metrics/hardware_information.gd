@@ -18,7 +18,7 @@ func _input(_event: InputEvent) -> void:
 
 func _ready() -> void:
 	hide()
-	
+		
 	vsync_label.text = "Vsync: %s" % ("Yes" if DisplayServer.window_get_vsync_mode() > 0 else "No")
 	os_label.text = "OS: %s" % HardwareDetector.platform
 	distro_label.text = "Distro: %s" % HardwareDetector.distribution_name
