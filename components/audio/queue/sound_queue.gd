@@ -69,7 +69,7 @@ func play_sound_with_pitch_range(min_pitch_scale: float = 0.9, max_pitch_scale: 
 		var next_audio_stream_player = audio_stream_players[next]
 		next_audio_stream_player.pitch_scale = randf_range(min_pitch_scale, max_pitch_scale)
 		next_audio_stream_player.play()
-		print(next, next_audio_stream_player.name)
+
 		next += 1
 		
 

@@ -7,7 +7,6 @@ signal pulled
 signal throwed
 signal dropped
 
-
 const maximum_transparency_on_pull: int = 255
 
 @export var grab_mode := GrabMode.Dynamic

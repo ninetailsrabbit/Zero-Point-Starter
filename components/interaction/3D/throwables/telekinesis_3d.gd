@@ -13,11 +13,11 @@ signal throwed_throwable(body: Throwable3D)
 @export var pull_area_ability := true
 @export var push_wave_ability := true
 ## The raycast that interacts with throwables to detect them
-@export var throwable_interactor: RayCast3D
+@export var throwable_interactor: ThrowableRayCastInteractor
 ## The current distance applied to the interactor instead of manually change it on raycast properties
 @export_range(0.1, 100.0, 0.01) var throwable_interactor_distance = 5.0:
 	set(value):
-		if throwable_interactor is RayCast3D and throwable_interactor_distance != value:
+		if throwable_interactor is ThrowableRayCastInteractor and throwable_interactor_distance != value:
 			_prepare_throwable_interactor(value)
 			
 		throwable_interactor_distance = clamp(value, 0.1, 100.0)
@@ -56,7 +56,7 @@ func _unhandled_input(_event: InputEvent):
 	if push_wave_ability and active_throwables.is_empty() and InputHelper.action_just_pressed_and_exists(push_wave_input_action):
 		push_wave()
 		
-	elif InputHelper.action_just_pressed_and_exists(throw_input_action):		
+	elif InputHelper.action_just_pressed_and_exists(throw_input_action):
 		for active_throwable: ActiveThrowable in active_throwables:
 			if active_throwable and body_can_be_lifted(active_throwable.body):
 				throw_body(active_throwable.body)
@@ -180,9 +180,6 @@ func _prepare_available_slots():
 
 func _prepare_throwable_interactor(distance: float = throwable_interactor_distance):
 	if throwable_interactor and distance >= 0.1:
-		throwable_interactor.collide_with_bodies = true
-		throwable_interactor.collide_with_areas = false
-		throwable_interactor.collision_mask = GameGlobals.throwables_collision_layer
 		throwable_interactor.target_position = Vector3.FORWARD * distance
 	
 	

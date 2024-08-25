@@ -1,7 +1,7 @@
 @icon("res://components/interaction/3D/interactor_3d.svg")
 class_name RayCastInteractor3D extends RayCast3D
 
-@export var input_action := "interact"
+@export var interact_input_action := "interact"
 @export var input_action_to_cancel := "cancel_interact"
 
 var current_interactable: Interactable3D
@@ -18,7 +18,7 @@ func _enter_tree():
 
 
 func _unhandled_input(_event: InputEvent):
-	if InputMap.has_action(input_action) && Input.is_action_just_pressed(input_action) and current_interactable and not interacting:
+	if InputMap.has_action(interact_input_action) && Input.is_action_just_pressed(interact_input_action) and current_interactable and not interacting:
 		interact(current_interactable);
 	
 

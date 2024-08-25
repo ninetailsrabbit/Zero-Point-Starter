@@ -28,9 +28,7 @@ func physics_update(delta: float):
 	was_underwater = is_underwater
 	var depth = water_height - (eyes.global_position.y - safe_submerged_margin)
 	is_underwater = depth > 0
-	
-	print("WAS UNDER, IS UNDER %s %s " % [was_underwater, is_underwater] )
-	
+		
 	if actor.motion_input.input_direction.is_zero_approx():
 		decelerate(delta)
 	else:
