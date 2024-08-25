@@ -6,7 +6,15 @@ class_name SoundQueue extends Node
 	set(value):
 		queue_count = max(2, value)
 
-var next := 0
+var next: int = 0:
+	set(value):
+		# Logic to start over 0 again and not over 1 after apply the module
+		if next == audio_stream_players.size() - 1 and value == 1:
+			next = 0
+		else:
+			next = value
+			next %= audio_stream_players.size() - 1
+		
 var audio_stream_players := []
 
 func _get_configuration_warnings():
@@ -36,7 +44,7 @@ func _ready():
 	if(child is AudioStreamPlayer or child is AudioStreamPlayer2D or child is AudioStreamPlayer3D):
 		audio_stream_players.append(child)
 		
-		for index in range(queue_count):
+		for index in range(queue_count - audio_stream_players.size()):
 			var duplicated_player = child.duplicate()
 			add_child(duplicated_player)
 			audio_stream_players.append(duplicated_player)
@@ -47,29 +55,29 @@ func play_sound():
 		return
 		
 	if not audio_stream_players[next].playing:
-		next += 1
+	
 		audio_stream_players[next].play()
-		next %= audio_stream_players.size() - 1
-		
+		next += 1
+
+				
 
 func play_sound_with_pitch_range(min_pitch_scale: float = 0.9, max_pitch_scale: float = 1.3):
 	if audio_stream_players.is_empty():
 		return
 		
 	if not audio_stream_players[next].playing:
-		next += 1
 		var next_audio_stream_player = audio_stream_players[next]
 		next_audio_stream_player.pitch_scale = randf_range(min_pitch_scale, max_pitch_scale)
 		next_audio_stream_player.play()
-		next %= audio_stream_players.size() - 1
-
+		print(next, next_audio_stream_player.name)
+		next += 1
+		
 
 func play_sound_with_ease(duration: float = 1.0):
 	if audio_stream_players.is_empty():
 		return
 		
 	if not audio_stream_players[next].playing:
-		next += 1
 		var audio_player = audio_stream_players[next]
 		audio_player.volume_db = MusicManager.VolumeDBInaudible
 		
@@ -78,7 +86,7 @@ func play_sound_with_ease(duration: float = 1.0):
 			.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 		tween.tween_callback(func(): audio_player.play())
 		
-		next %= audio_stream_players.size() - 1
+		next += 1
 
 
 func play_sound_with_ease_and_pitch_range(duration: float = 1.0, min_pitch_scale: float = 0.9, max_pitch_scale: float = 1.3):
@@ -86,7 +94,6 @@ func play_sound_with_ease_and_pitch_range(duration: float = 1.0, min_pitch_scale
 		return
 		
 	if not audio_stream_players[next].playing:
-		next += 1
 		var audio_player = audio_stream_players[next]
 		audio_player.volume_db = MusicManager.VolumeDBInaudible
 		
@@ -99,7 +106,8 @@ func play_sound_with_ease_and_pitch_range(duration: float = 1.0, min_pitch_scale
 				audio_player.play()
 				)
 		
-		next %= audio_stream_players.size() - 1
+		next += 1
+
 
 
 func stop_sounds() -> void:

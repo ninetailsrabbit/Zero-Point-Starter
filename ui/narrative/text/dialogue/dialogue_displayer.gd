@@ -59,7 +59,7 @@ func _ready() -> void:
 	GlobalGameEvents.dialogues_requested.connect(on_dialogues_requested)
 	
 	load_dialogue_blocks([
-		DialogueBlock.new("1", "Captain", "TU PUTA MADRE EN BRAGAS"),
+		DialogueBlock.new("1", "Captain", "TU PUTA MADRE EN BRAGAS TU PUTA MADRE EN BRAGAS TU PUTA MADRE EN BRAGAS TU PUTA MADRE EN BRAGAS"),
 		DialogueBlock.new("2", "Captain", "TU PUTISIMA MADRE EN BRAGAS"),
 	])
 

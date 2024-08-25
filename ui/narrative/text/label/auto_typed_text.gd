@@ -46,6 +46,8 @@ func _ready():
 	fit_content = true
 
 	display_finished.connect(on_finished_display)
+	
+	
 				
 func display_letters():
 	if(typing_finished):

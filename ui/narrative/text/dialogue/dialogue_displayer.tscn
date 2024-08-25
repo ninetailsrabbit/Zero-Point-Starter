@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://ui/narrative/text/dialogue/dialogue_displayer.gd" id="1_2gllr"]
 [ext_resource type="Script" path="res://components/audio/queue/sound_queue.gd" id="1_rphjc"]
 [ext_resource type="Script" path="res://ui/narrative/text/label/auto_typed_text.gd" id="2_hhxav"]
-[ext_resource type="AudioStream" uid="uid://c6w2klst50ssj" path="res://assets/sounds/dialog-text/retro_v5.wav" id="7_3jchh"]
+[ext_resource type="AudioStream" uid="uid://vw2ula4vq56e" path="res://assets/sounds/dialog-text/retro_v6.wav" id="4_bhteg"]
 
 [node name="DialogueDisplayer" type="Control"]
 layout_mode = 3
@@ -13,6 +13,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2gllr")
+use_type_sounds = true
 time_between_dialogue_blocks = 2.5
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -46,9 +47,10 @@ script = ExtResource("2_hhxav")
 
 [node name="SoundQueue" type="Node" parent="MarginContainer/DisplaySubtitleZone/MarginContainer/AutoTypedText"]
 script = ExtResource("1_rphjc")
+queue_count = 7
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MarginContainer/DisplaySubtitleZone/MarginContainer/AutoTypedText/SoundQueue"]
-stream = ExtResource("7_3jchh")
+stream = ExtResource("4_bhteg")
 bus = &"SFX"
 
 [node name="VoiceStreamPlayer" type="AudioStreamPlayer" parent="."]
