@@ -62,20 +62,37 @@ func deactivate() -> void:
 	
 func on_interacted(interactor):
 	if _is_valid_interactor(interactor):
+		
+		if change_cursor and interactor is MouseRayCastInterator3D:
+			CursorManager.change_cursor_to(interact_cursor)
+			
 		GlobalGameEvents.interacted.emit(interactor)
 		
 		
 func on_canceled_interaction(interactor):
 	if _is_valid_interactor(interactor):
+		
+		if change_cursor and interactor is MouseRayCastInterator3D:
+			CursorManager.return_cursor_to_default()
+			
 		GlobalGameEvents.canceled_interaction.emit(interactor)
 		
 		
 func on_focused(interactor):
 	if _is_valid_interactor(interactor):
+		
+		if change_cursor and interactor is MouseRayCastInterator3D:
+			CursorManager.change_cursor_to(focus_cursor)
+			
 		GlobalGameEvents.focused.emit(interactor)
+
 
 func on_unfocused(interactor):
 	if _is_valid_interactor(interactor):
+		
+		if change_cursor and interactor is MouseRayCastInterator3D:
+			CursorManager.return_cursor_to_default()
+			
 		GlobalGameEvents.unfocused.emit(interactor)
 
 

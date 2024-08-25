@@ -28,6 +28,7 @@ func _input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	assert(current_camera is Camera3D, "MouseRayCastInterator3D: this node needs a Camera3D to create the mouse raycast")
+	
 	set_process_input(current_camera is Camera3D)
 	set_process(current_camera is Camera3D)
 
@@ -77,7 +78,10 @@ func cancel_interact(interactable: Interactable3D = current_interactable):
 		interacting = false
 		focused = false
 		
+		CursorManager.return_cursor_to_default()
+		
 		interactable.canceled_interaction.emit(self)
+		
 
 
 func focus(interactable: Interactable3D):
@@ -92,6 +96,8 @@ func unfocus(interactable: Interactable3D = current_interactable):
 		current_interactable = null
 		focused = false
 		interacting = false
+
+		CursorManager.return_cursor_to_default()
 
 		interactable.unfocused.emit(self)
 

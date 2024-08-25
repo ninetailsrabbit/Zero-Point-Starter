@@ -70,7 +70,7 @@ func _physics_process(delta: float) -> void:
 
 # Direction that points to the current head rotation in the world, so the player move towards it
 func current_input_direction() -> Vector3:
-	return motion_input.input_direction_horizontal_axis * head.basis.x + motion_input.input_direction_vertical_axis * head.basis.z
+	return motion_input.input_direction_horizontal_axis * head.global_basis.x + motion_input.input_direction_vertical_axis * head.global_basis.z
 
 
 func is_falling() -> bool:

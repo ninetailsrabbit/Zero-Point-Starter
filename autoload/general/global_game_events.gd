@@ -9,6 +9,11 @@ signal interactable_canceled_interaction(interactor);
 signal interactable_interaction_limit_reached(interactable: Interactable3D);
 #endregion
 
+#region Throwables
+signal throwable_focused(interactor);
+signal throwable_unfocused(interactor);
+#endregion
+
 #region Controllers
 signal controller_connected(device: int, controller_name: String)
 signal controller_disconnected(device: int, controller_name: String)

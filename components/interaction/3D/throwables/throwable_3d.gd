@@ -11,6 +11,19 @@ const maximum_transparency_on_pull: int = 255
 
 @export var grab_mode := GrabMode.Dynamic
 @export_range(0, maximum_transparency_on_pull, 1) var transparency_on_pull: int = maximum_transparency_on_pull
+@export_group("Information")
+@export var title: String = ""
+@export var description: String = ""
+@export var title_translation_key: String = ""
+@export var description_translation_key: String = ""
+@export_group("Pointers and cursors")
+@export var focus_screen_pointer: CompressedTexture2D
+@export var interact_screen_pointer: CompressedTexture2D
+@export var focus_cursor: CompressedTexture2D
+@export var interact_cursor: CompressedTexture2D
+
+@onready var original_collision_layer :=  GameGlobals.throwables_collision_layer
+@onready var original_collision_mask := GameGlobals.world_collision_layer | GameGlobals.player_collision_layer | GameGlobals.enemies_collision_layer | GameGlobals.throwables_collision_layer
 
 
 enum GrabMode {
@@ -25,8 +38,6 @@ enum State {
 }
 
 var original_parent: Node
-var original_collision_layer := GameGlobals.throwables_collision_layer
-var original_collision_mask := GameGlobals.world_collision_layer | GameGlobals.player_collision_layer | GameGlobals.enemies_collision_layer | GameGlobals.throwables_collision_layer
 var current_linear_velocity := Vector3.ZERO
 
 var original_transparency := 255
@@ -41,12 +52,14 @@ func _ready():
 	collision_layer = original_collision_layer
 	collision_mask = original_collision_mask
 	
+
 	var mesh = NodeTraversal.first_node_of_type(self, MeshInstance3D.new())
 	
 	if mesh:
 		active_material = mesh.get_active_material(0)
 		if active_material:
 			original_transparency = active_material.albedo_color.a8;
+			
 	
 	
 func _integrate_forces(state):

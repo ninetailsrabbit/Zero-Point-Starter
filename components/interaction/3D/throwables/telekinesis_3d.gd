@@ -6,6 +6,7 @@ signal throwed_throwable(body: Throwable3D)
 
 @export var actor: CharacterBody3D
 @export var pull_input_action := "pull"
+@export var drop_input_action := "drop"
 @export var throw_input_action := "throw"
 @export var pull_area_input_action := "pull_area"
 @export var push_wave_input_action := "push_wave"
@@ -55,7 +56,12 @@ var active_throwables: Array[ActiveThrowable] = []
 func _unhandled_input(_event: InputEvent):
 	if push_wave_ability and active_throwables.is_empty() and InputHelper.action_just_pressed_and_exists(push_wave_input_action):
 		push_wave()
-		
+	
+	elif InputHelper.action_just_pressed_and_exists(drop_input_action):
+		for active_throwable: ActiveThrowable in active_throwables:
+			if active_throwable and body_can_be_lifted(active_throwable.body):
+				drop_body(active_throwable.body)
+				
 	elif InputHelper.action_just_pressed_and_exists(throw_input_action):
 		for active_throwable: ActiveThrowable in active_throwables:
 			if active_throwable and body_can_be_lifted(active_throwable.body):
@@ -117,7 +123,7 @@ func pull_body(body: Throwable3D):
 		if throwable_area_detector:
 			throwable_area_detector.monitoring = false
 	
-		
+
 func throw_body(body: Throwable3D):
 	active_throwables = active_throwables.filter(func(active_throwable: ActiveThrowable): return active_throwable.body != body)
 	
@@ -125,6 +131,22 @@ func throw_body(body: Throwable3D):
 	
 	body.throw(impulse)
 	body.angular_velocity = Vector3.ONE * angular_power
+	
+	if throwable_interactor:
+		throwable_interactor.enabled = active_throwables.size() < available_slots.size()
+		
+	if throwable_area_detector:
+		throwable_area_detector.monitoring = active_throwables.size() < available_slots.size()
+	
+	throwed_throwable.emit(body)
+
+
+func drop_body(body: Throwable3D):
+	active_throwables = active_throwables.filter(func(active_throwable: ActiveThrowable): return active_throwable.body != body)
+	
+	var impulse := Camera3DHelper.forward_direction(get_viewport().get_camera_3d()) * Vector3.ZERO
+	
+	body.throw(impulse)
 	
 	if throwable_interactor:
 		throwable_interactor.enabled = active_throwables.size() < available_slots.size()

@@ -34,7 +34,8 @@ func focus(throwable: Throwable3D):
 	focused = true
 	
 	throwable.focused.emit(self)
-	
+	GlobalGameEvents.throwable_focused.emit(self)
+
 	
 func unfocus(throwable: Throwable3D = current_throwable):
 	if throwable and focused:
@@ -44,3 +45,4 @@ func unfocus(throwable: Throwable3D = current_throwable):
 		enabled = true
 		
 		throwable.unfocused.emit(self)
+		GlobalGameEvents.throwable_unfocused.emit(self)

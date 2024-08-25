@@ -16,15 +16,23 @@ func _ready():
 	
 	GlobalGameEvents.interactable_focused.connect(on_interactable_focused)
 	GlobalGameEvents.interactable_unfocused.connect(on_interactable_unfocused)
+	
+	GlobalGameEvents.throwable_focused.connect(on_throwable_focused)
+	GlobalGameEvents.throwable_unfocused.connect(on_interactable_unfocused)
 
 
 func on_interactable_focused(interactor) -> void:
 	if interactor is RayCastInteractor3D or interactor is MouseRayCastInterator3D:
 		current_pointer.texture = interactor.current_interactable.focus_screen_pointer
+
+
+func on_throwable_focused(interactor) -> void:
+	if interactor is ThrowableRayCastInteractor:
+		current_pointer.texture = interactor.current_throwable.focus_screen_pointer
 		
 	elif interactor is ThrowableRayCastInteractor:
 		current_pointer.texture = interactor.current_throwable.focus_screen_pointer
 		
-	
+
 func on_interactable_unfocused(_interactor) -> void:
 	current_pointer.texture = default_pointer_texture

@@ -2,7 +2,7 @@ extends Node
 
 
 #region Physics layers
-const world_collision_layer: int = 0
+const world_collision_layer: int = 1
 const player_collision_layer: int = 2
 const enemies_collision_layer: int = 4
 const interactables_collision_layer: int = 8
