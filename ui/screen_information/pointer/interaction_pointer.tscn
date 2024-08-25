@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://bht2ebp61vh22"]
+
+[ext_resource type="Script" path="res://ui/screen_information/pointer/interaction_pointer.gd" id="1_oabxy"]
+[ext_resource type="Texture2D" uid="uid://dtxe218lym3vf" path="res://assets/crosshair/crosshair_dot.png" id="2_4un1s"]
+
+[node name="InteractionPointer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oabxy")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Pointer" type="TextureRect" parent="CenterContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("2_4un1s")

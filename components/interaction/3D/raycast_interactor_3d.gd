@@ -12,9 +12,9 @@ var interacting := false
 func _enter_tree():
 	enabled = true
 	exclude_parent = true
-	collision_mask = GameGlobals.interactables_collision_layer
+	collision_mask = GameGlobals.world_collision_layer | GameGlobals.enemies_collision_layer | GameGlobals.interactables_collision_layer
 	collide_with_areas = true
-	collide_with_bodies = false
+	collide_with_bodies = true
 
 
 func _unhandled_input(_event: InputEvent):
@@ -23,9 +23,9 @@ func _unhandled_input(_event: InputEvent):
 	
 
 func _physics_process(_delta):
-	var detected_interactable: Interactable3D = get_collider() as Interactable3D if is_colliding() else null
+	var detected_interactable = get_collider() if is_colliding() else null
 	
-	if detected_interactable:
+	if detected_interactable is Interactable3D:
 		if current_interactable == null and not focused:
 			focus(detected_interactable)
 	else:
