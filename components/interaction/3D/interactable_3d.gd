@@ -42,6 +42,11 @@ var times_interacted := 0:
 
 func _ready():
 	activate()
+	
+	interacted.connect(on_interacted)
+	canceled_interaction.connect(on_canceled_interaction)
+	focused.connect(on_focused)
+	unfocused.connect(on_unfocused)
 
 
 func activate() -> void:
@@ -58,11 +63,6 @@ func deactivate() -> void:
 	priority = 0
 	collision_layer = 0
 	monitorable = false
-	
-	interacted.connect(on_interacted)
-	canceled_interaction.connect(on_canceled_interaction)
-	focused.connect(on_focused)
-	unfocused.connect(on_unfocused)
 
 	
 func on_interacted(interactor):
@@ -70,8 +70,8 @@ func on_interacted(interactor):
 		
 		if change_cursor and interactor is MouseRayCastInterator3D:
 			CursorManager.change_cursor_to(interact_cursor)
-			
-		GlobalGameEvents.interacted.emit(interactor)
+		print("interacted ", interactor.name)
+		GlobalGameEvents.interactable_interacted.emit(interactor)
 		
 		
 func on_canceled_interaction(interactor):
@@ -80,7 +80,7 @@ func on_canceled_interaction(interactor):
 		if change_cursor and interactor is MouseRayCastInterator3D:
 			CursorManager.return_cursor_to_default()
 			
-		GlobalGameEvents.canceled_interaction.emit(interactor)
+		GlobalGameEvents.interactable_canceled_interaction.emit(interactor)
 		
 		
 func on_focused(interactor):
@@ -89,7 +89,7 @@ func on_focused(interactor):
 		if change_cursor and interactor is MouseRayCastInterator3D:
 			CursorManager.change_cursor_to(focus_cursor)
 			
-		GlobalGameEvents.focused.emit(interactor)
+		GlobalGameEvents.interactable_focused.emit(interactor)
 
 
 func on_unfocused(interactor):
@@ -98,7 +98,7 @@ func on_unfocused(interactor):
 		if change_cursor and interactor is MouseRayCastInterator3D:
 			CursorManager.return_cursor_to_default()
 			
-		GlobalGameEvents.unfocused.emit(interactor)
+		GlobalGameEvents.interactable_unfocused.emit(interactor)
 
 
 func _is_valid_interactor(interactor) -> bool:

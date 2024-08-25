@@ -1,12 +1,14 @@
-[gd_scene load_steps=14 format=3 uid="uid://csmqt11xygt8r"]
+[gd_scene load_steps=19 format=3 uid="uid://csmqt11xygt8r"]
 
 [ext_resource type="PackedScene" uid="uid://dd0blwa1hawbl" path="res://components/motion/3D/first-person/first_person_controller.tscn" id="1_f82m5"]
 [ext_resource type="Script" path="res://components/world/dynamic_directional_light_3d.gd" id="1_vuxmu"]
 [ext_resource type="Script" path="res://components/world/dynamic_world_environment.gd" id="2_3grr6"]
+[ext_resource type="PackedScene" uid="uid://boa6oj3q31yqn" path="res://ui/screen_information/scan/3D/scan_viewport_gui.tscn" id="2_n6ubt"]
 [ext_resource type="Environment" uid="uid://ffsjqtttbrij" path="res://scenes/world/new_environment.tres" id="3_db4td"]
 [ext_resource type="PackedScene" uid="uid://ca0723gt87eb7" path="res://ui/hardware_metrics/hardware_information.tscn" id="5_sl61t"]
 [ext_resource type="Script" path="res://components/interaction/3D/throwables/throwable_3d.gd" id="6_dmf5u"]
 [ext_resource type="Texture2D" uid="uid://dopdnxaxsg7u3" path="res://assets/crosshair/crosshair_circle_focus.png" id="7_wwo2e"]
+[ext_resource type="Script" path="res://components/interaction/3D/interactable_3d.gd" id="8_70njw"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_fv3ym"]
 
@@ -25,9 +27,21 @@ size = Vector3(0.5, 0.5, 0.5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_lsvy5"]
 size = Vector3(0.5, 0.5, 0.5)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7b4d2"]
+albedo_color = Color(0.298039, 1, 0.129412, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_meo52"]
+material = SubResource("StandardMaterial3D_7b4d2")
+size = Vector3(0.4, 0.45, 0.5)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_4wq6i"]
+points = PackedVector3Array(-0.2, -0.225, -0.25, 0.2, -0.225, -0.25, -0.2, -0.225, 0.25, 0, 0.225, -0.25, 0.2, -0.225, 0.25, 0, 0.225, 0.25)
+
 [node name="Node3D" type="Node3D"]
 
 [node name="HardwareInformation" parent="." instance=ExtResource("5_sl61t")]
+
+[node name="ScanViewportGUI" parent="." instance=ExtResource("2_n6ubt")]
 
 [node name="DynamicWorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("3_db4td")
@@ -91,3 +105,15 @@ mesh = SubResource("BoxMesh_xss6k")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Throwable3D"]
 shape = SubResource("BoxShape3D_lsvy5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.89041, 0, 0)
+mesh = SubResource("PrismMesh_meo52")
+
+[node name="Interactable3D" type="Area3D" parent="MeshInstance3D" node_paths=PackedStringArray("target_scannable_object")]
+script = ExtResource("8_70njw")
+scannable = true
+target_scannable_object = NodePath("..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Interactable3D"]
+shape = SubResource("ConvexPolygonShape3D_4wq6i")

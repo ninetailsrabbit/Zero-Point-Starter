@@ -46,27 +46,31 @@ func cancel_scan(interactable: Interactable3D = current_interactable) -> void:
 		set_process_input(false)
 
 
-func on_scan_requested(interactable: Interactable3D) -> void:
-	if interactable.scannable and scan_viewport_3d_scene:
+func on_scan_requested(interactor) -> void:
+	if interactor and interactor.current_interactable and interactor.current_interactable.scannable:
+		print("jaja")
 		show()
 		set_process_input(true)
 
-		current_interactable = interactable
+		current_interactable = interactor.current_interactable
 		
 		var target_to_scan = current_interactable.target_scannable_object
 		
 		var scan_viewport_3d: ScanViewport3D = scan_viewport_3d_scene.instantiate() as ScanViewport3D
 		scan_sub_viewport.add_child(scan_viewport_3d)
-		scan_viewport_3d.marker_3d.add_child(target_to_scan)
+		scan_viewport_3d.marker_3d.add_child(target_to_scan.duplicate())
 		
 		scan_viewport_3d.mouse_rotator_component_3d.target = target_to_scan
 		
 		if current_interactable.can_be_rotated_on_scan:
 			scan_viewport_3d.mouse_rotator_component_3d.enable()
+		
+		if current_interactable.interact_cursor:
+			scan_viewport_3d.set_current_mouse_cursor(current_interactable.interact_cursor)
+			scan_viewport_3d.change_mouse_cursor(current_interactable.interact_cursor)
 			
-		scan_viewport_3d.set_current_mouse_cursor(current_interactable.interact_cursor)
-		scan_viewport_3d.change_mouse_cursor(current_interactable.interact_cursor)
-		scan_viewport_3d.change_rotate_cursor(current_interactable.scan_rotate_cursor)
+		if current_interactable.scan_rotate_cursor:
+			scan_viewport_3d.change_rotate_cursor(current_interactable.scan_rotate_cursor)
 		
 		display_scan_information(current_interactable)
 

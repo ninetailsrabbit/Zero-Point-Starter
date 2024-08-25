@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://components/motion/3D/rotation/mouse_rotator_component_3d.gd" id="2_k7rko"]
 
 [node name="ScanViewport3D" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.31605, 0)
 script = ExtResource("1_wkrwm")
 
 [node name="Camera3D" type="Camera3D" parent="."]

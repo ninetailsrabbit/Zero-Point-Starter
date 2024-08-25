@@ -260,6 +260,15 @@ const Rules: Array[String] = [
 	]
 
 
+static func filter_list(texts: Array[String] = [], censor_character: String = "*") -> Array[String]:
+	var censored_texts: Array[String] = []
+	
+	for text in texts:
+		censored_texts.append(filter(text))
+		
+	return censored_texts
+	
+
 static func filter(text: String, censor_character: String = "*") -> String:
 	var new_text: String = text
 	var regex = RegEx.new()
