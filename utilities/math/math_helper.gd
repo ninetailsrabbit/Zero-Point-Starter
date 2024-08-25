@@ -317,8 +317,13 @@ static func average(numbers: Array = []) -> float:
 	return numbers.reduce(func(accum, element): return accum + element, 0.0) / numbers.size()
 
 
+
 static func spread(scale: float = 1.0) -> float:
 	return (randf() - 0.5) * 2.0 * scale
+
+
+static func get_percentage(max_value: int, value: int) -> int:
+	return roundi((float(value) / float(max_value)) * 100)
 
 
 static func chance(probability_chance: float = 0.5) -> bool:

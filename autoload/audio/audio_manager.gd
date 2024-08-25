@@ -14,6 +14,17 @@ static var default_audio_volumes := {
 	"ambient": 0.9
 }
 
+
+
+func _notification(what):
+	match what:
+		NOTIFICATION_APPLICATION_FOCUS_OUT:
+			mute_all_buses()
+		NOTIFICATION_APPLICATION_FOCUS_IN:
+			unmute_all_buses()
+
+
+
 func reset_to_default_volumes() -> void:
 	for bus: String in available_buses:
 		change_volume(bus, default_audio_volumes[bus.to_lower()])
