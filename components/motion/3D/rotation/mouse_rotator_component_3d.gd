@@ -29,6 +29,18 @@ func _input(event: InputEvent) -> void:
 			CursorManager.change_cursor_to(selected_cursor)
 			reset_target_rotation()
 			
+			
+func _ready() -> void:
+	reset_to_default_cursors()
+	disable()
+
+
+func enable() -> void:
+	set_process_input(true)
+
+func disable() -> void:
+	set_process_input(false)
+
 
 func mouse_movement_detected(event: InputEvent) -> bool:
 	if not keep_pressed_to_rotate:
@@ -41,8 +53,13 @@ func mouse_movement_detected(event: InputEvent) -> bool:
 func mouse_release_detected(event: InputEvent) -> bool:
 	return (mouse_rotation_button == MOUSE_BUTTON_LEFT and not InputHelper.is_mouse_left_button_pressed(event)) \
 			or (mouse_rotation_button == MOUSE_BUTTON_RIGHT and not InputHelper.is_mouse_right_button_pressed(event))
+		
+
+func reset_to_default_cursors() -> void:
+	selected_cursor = default_cursor
+	selected_rotate_cursor = default_rotate_cursor	
 			
-			
+
 func reset_target_rotation() -> void:
 	if target:
 		if reset_rotation_on_release and not target.rotation.is_equal_approx(original_rotation) \

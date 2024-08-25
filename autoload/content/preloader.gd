@@ -20,3 +20,8 @@ const cursor_help: CompressedTexture2D = preload("res://assets/cursors/cursor_he
 const TypeDialogRetro5: AudioStreamWAV = preload("res://assets/sounds/dialog-text/retro_v5.wav")
 const TypeDialogRetro6: AudioStreamWAV = preload("res://assets/sounds/dialog-text/retro_v6.wav")
 #endregion
+
+
+#region Interactables
+const ScanViewport3DScene: PackedScene = preload("res://ui/screen_information/scan/3D/scan_viewport_3d.tscn")
+#endregion

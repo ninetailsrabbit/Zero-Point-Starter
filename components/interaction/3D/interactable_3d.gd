@@ -16,11 +16,16 @@ signal interaction_limit_reached(interactable: Interactable3D)
 @export var description: String = ""
 @export var title_translation_key: String = ""
 @export var description_translation_key: String = ""
+@export_group("Scan")
+@export var scannable: bool = false
+@export var can_be_rotated_on_scan: bool = true
+@export var target_scannable_object: Node3D
 @export_group("Pointers and cursors")
 @export var focus_screen_pointer: CompressedTexture2D
 @export var interact_screen_pointer: CompressedTexture2D
 @export var focus_cursor: CompressedTexture2D
 @export var interact_cursor: CompressedTexture2D
+@export var scan_rotate_cursor: CompressedTexture2D
 
 
 var times_interacted := 0:

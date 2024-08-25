@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8k32nxb50dmd"]
+
+[ext_resource type="Script" path="res://ui/screen_information/scan/3D/scan_viewport_3d.gd" id="1_wkrwm"]
+[ext_resource type="Script" path="res://components/motion/3D/rotation/mouse_rotator_component_3d.gd" id="2_k7rko"]
+
+[node name="ScanViewport3D" type="Node3D"]
+script = ExtResource("1_wkrwm")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.572084)
+
+[node name="MouseRotatorComponent3D" type="Node" parent="."]
+script = ExtResource("2_k7rko")
