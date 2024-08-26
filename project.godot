@@ -34,6 +34,7 @@ SettingsHandler="*res://autoload/persistence/settings_handler.gd"
 GamepadControllerManager="*res://autoload/gamepad/gamepad_controller_manager.gd"
 CursorManager="*res://autoload/cursors/cursor_manager.gd"
 SaveManager="*res://autoload/persistence/save_manager.gd"
+GlobalCameraShifter="*res://autoload/camera/global_camera_shifter.tscn"
 
 [debug]
 
