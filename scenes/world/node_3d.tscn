@@ -39,9 +39,11 @@ points = PackedVector3Array(-0.2, -0.225, -0.25, 0.2, -0.225, -0.25, -0.2, -0.22
 
 [node name="Node3D" type="Node3D"]
 
-[node name="HardwareInformation" parent="." instance=ExtResource("5_sl61t")]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="ScanViewportGUI" parent="." instance=ExtResource("2_n6ubt")]
+[node name="HardwareInformation" parent="CanvasLayer" instance=ExtResource("5_sl61t")]
+
+[node name="ScanViewportGUI" parent="CanvasLayer" instance=ExtResource("2_n6ubt")]
 
 [node name="DynamicWorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("3_db4td")
