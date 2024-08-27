@@ -5,8 +5,8 @@ class_name RayCastInteractor3D extends RayCast3D
 @export var input_action_to_cancel := "cancel_interact"
 
 var current_interactable: Interactable3D
-var focused := false
-var interacting := false
+var focused: bool = false
+var interacting: bool = false
 
 
 func _enter_tree():
@@ -16,11 +16,15 @@ func _enter_tree():
 	collide_with_areas = true
 	collide_with_bodies = true
 
-
+	
 func _unhandled_input(_event: InputEvent):
 	if InputMap.has_action(interact_input_action) && Input.is_action_just_pressed(interact_input_action) and current_interactable and not interacting:
 		interact(current_interactable);
 	
+	
+func _ready() -> void:
+	GlobalGameEvents.canceled_interactable_scan.connect(on_canceled_interactable_scan)
+
 
 func _physics_process(_delta):
 	var detected_interactable = get_collider() if is_colliding() else null
@@ -38,7 +42,7 @@ func interact(interactable: Interactable3D):
 		interacting = true
 		enabled = false
 		
-		interactable.interacted.emit(self)
+		interactable.interacted.emit()
 	
 	
 func cancel_interact(interactable: Interactable3D = current_interactable):
@@ -47,14 +51,14 @@ func cancel_interact(interactable: Interactable3D = current_interactable):
 		focused = false
 		enabled = true
 				
-		interactable.canceled_interaction.emit(self)
+		interactable.canceled_interaction.emit()
 
 
 func focus(interactable: Interactable3D):
 	current_interactable = interactable
 	focused = true
 	
-	interactable.focused.emit(self)
+	interactable.focused.emit()
 	
 	
 func unfocus(interactable: Interactable3D = current_interactable):
@@ -64,4 +68,11 @@ func unfocus(interactable: Interactable3D = current_interactable):
 		interacting = false
 		enabled = true
 		
-		interactable.unfocused.emit(self)
+		interactable.unfocused.emit()
+		
+
+func on_canceled_interactable_scan(interactable: Interactable3D) -> void:
+	current_interactable = null
+	focused = false
+	interacting = false
+	enabled = true

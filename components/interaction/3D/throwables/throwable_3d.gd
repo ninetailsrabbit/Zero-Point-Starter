@@ -60,6 +60,9 @@ func _ready():
 		if active_material:
 			original_transparency = active_material.albedo_color.a8;
 			
+	focused.connect(on_focused)
+	unfocused.connect(on_unfocused)
+			
 	
 	
 func _integrate_forces(state):
@@ -169,6 +172,13 @@ func state_is_neutral() -> bool:
 func state_is_pull() -> bool:
 	return current_state == State.Pull
 
+
+func on_focused() -> void:
+	GlobalGameEvents.throwable_focused.emit(self)
+
+
+func on_unfocused() -> void:
+	GlobalGameEvents.throwable_unfocused.emit(self)
 
  #1. Force vs.Impulse:
 #

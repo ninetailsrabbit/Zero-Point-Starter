@@ -66,6 +66,7 @@ func _ready() -> void:
 	])
 	
 	finite_state_machine.state_changed.connect(on_state_changed)
+	
 	GlobalGameEvents.interactable_interacted.connect(on_interactable_interacted)
 	GlobalGameEvents.interactable_canceled_interaction.connect(on_interactable_canceled_interaction)
 	GlobalGameEvents.canceled_interactable_scan.connect(on_interactable_canceled_interaction)
@@ -154,12 +155,12 @@ func on_state_changed(_from: MachineState, to: MachineState) -> void:
 	_update_collisions_based_on_state(to)
 
 
-func on_interactable_interacted(interactor) -> void:
-	if interactor.current_interactable and interactor.current_interactable.lock_player_on_interact:
+func on_interactable_interacted(interactable: Interactable3D) -> void:
+	if interactable.lock_player_on_interact:
 		lock_movement()
 	
 
-func on_interactable_canceled_interaction(_interactor) -> void:
+func on_interactable_canceled_interaction(_interactable: Interactable3D) -> void:
 	unlock_movement()
 	camera.make_current()
 	InputHelper.capture_mouse()

@@ -2,18 +2,18 @@ extends Node
 
 
 #region Interactables
-signal interactable_focused(interactor);
-signal interactable_unfocused(interactor);
-signal interactable_interacted(interactor);
-signal interactable_canceled_interaction(interactor);
+signal interactable_focused(interactable: Interactable3D);
+signal interactable_unfocused(interactable: Interactable3D);
+signal interactable_interacted(interactable: Interactable3D);
+signal interactable_canceled_interaction(interactable: Interactable3D);
 signal interactable_interaction_limit_reached(interactable: Interactable3D);
 signal canceled_interactable_scan(interactable: Interactable3D);
 
 #endregion
 
 #region Throwables
-signal throwable_focused(interactor);
-signal throwable_unfocused(interactor);
+signal throwable_focused();
+signal throwable_unfocused();
 #endregion
 
 #region Controllers

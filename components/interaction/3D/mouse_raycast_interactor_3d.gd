@@ -70,7 +70,7 @@ func interact(interactable: Interactable3D):
 	if interactable:
 		interacting = true
 		
-		interactable.interacted.emit(self)
+		interactable.interacted.emit()
 	
 	
 func cancel_interact(interactable: Interactable3D = current_interactable):
@@ -80,15 +80,14 @@ func cancel_interact(interactable: Interactable3D = current_interactable):
 		
 		CursorManager.return_cursor_to_default()
 		
-		interactable.canceled_interaction.emit(self)
+		interactable.canceled_interaction.emit()
 		
-
 
 func focus(interactable: Interactable3D):
 	current_interactable = interactable
 	focused = true
 	
-	interactable.focused.emit(self)
+	interactable.focused.emit()
 	
 	
 func unfocus(interactable: Interactable3D = current_interactable):
@@ -99,7 +98,7 @@ func unfocus(interactable: Interactable3D = current_interactable):
 
 		CursorManager.return_cursor_to_default()
 
-		interactable.unfocused.emit(self)
+		interactable.unfocused.emit()
 
 
 func change_camera_to(new_camera: Camera3D) -> void:

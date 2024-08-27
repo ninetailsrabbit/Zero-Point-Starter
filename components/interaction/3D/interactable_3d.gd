@@ -1,11 +1,11 @@
 @icon("res://components/interaction/3D/interactable.svg")
 class_name Interactable3D extends Area3D
 
-signal interacted(interactor)
-signal canceled_interaction(interactor)
-signal focused(interactor)
-signal unfocused(interactor)
-signal interaction_limit_reached(interactable: Interactable3D)
+signal interacted()
+signal canceled_interaction()
+signal focused()
+signal unfocused()
+signal interaction_limit_reached()
 
 ## The number of times this interactable can be interacted with, 0 means no limit.
 @export var number_of_times_can_be_interacted: int = 0
@@ -37,9 +37,10 @@ var times_interacted := 0:
 		times_interacted = value
 		
 		if previous_value != times_interacted && times_interacted == number_of_times_can_be_interacted:
-			interaction_limit_reached.emit(self)
+			interaction_limit_reached.emit()
 			GlobalGameEvents.interactable_interaction_limit_reached.emit(self)
 			deactivate()
+
 
 func _ready():
 	activate()
@@ -66,42 +67,29 @@ func deactivate() -> void:
 	monitorable = false
 
 	
-func on_interacted(interactor):
-	if _is_valid_interactor(interactor):
-		
-		if change_cursor and interactor is MouseRayCastInterator3D:
-			CursorManager.change_cursor_to(interact_cursor)
-		
-		GlobalGameEvents.interactable_interacted.emit(interactor)
-		
-		
-func on_canceled_interaction(interactor):
-	if _is_valid_interactor(interactor):
-		
-		if change_cursor and interactor is MouseRayCastInterator3D:
-			CursorManager.return_cursor_to_default()
-			
-		GlobalGameEvents.interactable_canceled_interaction.emit(interactor)
-		
-		
-func on_focused(interactor):
-	if _is_valid_interactor(interactor):
-		
-		if change_cursor and interactor is MouseRayCastInterator3D:
-			CursorManager.change_cursor_to(focus_cursor)
-			
-		GlobalGameEvents.interactable_focused.emit(interactor)
-
-
-func on_unfocused(interactor):
-	if _is_valid_interactor(interactor):
-		
-		if change_cursor and interactor is MouseRayCastInterator3D:
-			CursorManager.return_cursor_to_default()
-			
-		GlobalGameEvents.interactable_unfocused.emit(interactor)
-
-
-func _is_valid_interactor(interactor) -> bool:
-	return interactor is RayCastInteractor3D or interactor is MouseRayCastInterator3D
+func on_interacted():
+	if change_cursor and interact_cursor:
+		CursorManager.change_cursor_to(interact_cursor)
 	
+	GlobalGameEvents.interactable_interacted.emit(self)
+	
+		
+func on_canceled_interaction():
+	if change_cursor and interact_cursor:
+		CursorManager.return_cursor_to_default()
+	
+	GlobalGameEvents.interactable_canceled_interaction.emit(self)
+		
+		
+func on_focused():
+	if change_cursor and focus_cursor:
+		CursorManager.change_cursor_to(focus_cursor)
+		
+	GlobalGameEvents.interactable_focused.emit(self)
+
+
+func on_unfocused():
+	if change_cursor and focus_cursor:
+		CursorManager.return_cursor_to_default()
+			
+	GlobalGameEvents.interactable_unfocused.emit(self)

@@ -128,10 +128,12 @@ mesh = SubResource("PrismMesh_meo52")
 
 [node name="Interactable3D" type="Area3D" parent="MeshInstance3D" node_paths=PackedStringArray("target_scannable_object")]
 script = ExtResource("8_70njw")
+lock_player_on_interact = true
 title = "Es un buen prisma"
 description = "Este prisma es posible que te lo puedas meter por tu puto culo"
 title_translation_key = "Es un buen prisma"
 description_translation_key = "Este prisma es posible que te lo puedas meter por tu puto culo"
+scannable = true
 target_scannable_object = NodePath("..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Interactable3D"]
@@ -142,11 +144,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.55971, 0, 0)
 layers = 4
 mesh = SubResource("BoxMesh_tcvm5")
 
-[node name="Interactable3D" type="Area3D" parent="MeshInstance3D2"]
+[node name="Interactable3D" type="Area3D" parent="MeshInstance3D2" node_paths=PackedStringArray("target_scannable_object")]
 script = ExtResource("8_70njw")
+lock_player_on_interact = true
 title_translation_key = "Cubo mierda"
 description_translation_key = "Metetelo por el culo payaso"
 scannable = true
+target_scannable_object = NodePath("..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D2/Interactable3D"]
 shape = SubResource("ConvexPolygonShape3D_bap0s")

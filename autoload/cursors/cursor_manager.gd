@@ -31,6 +31,7 @@ func return_cursor_to_default(cursor_shape: Input.CursorShape = Input.CursorShap
 
 func change_cursor_to(texture: Texture2D, cursor_shape: Input.CursorShape = Input.CursorShape.CURSOR_ARROW, save_last_texture: bool = true) -> void:
 	Input.set_custom_mouse_cursor(texture, cursor_shape, texture.get_size() / 2)
+	
 	if save_last_texture:
 		last_cursor_texture = texture
 	

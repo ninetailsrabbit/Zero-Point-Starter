@@ -1,6 +1,5 @@
 class_name ThrowableRayCastInteractor extends RayCast3D
 
-
 @export var interact_action := "interact"
 @export var input_action_to_cancel := "cancel_interaact"
 
@@ -33,8 +32,7 @@ func focus(throwable: Throwable3D):
 	current_throwable = throwable
 	focused = true
 	
-	throwable.focused.emit(self)
-	GlobalGameEvents.throwable_focused.emit(self)
+	throwable.focused.emit()
 
 	
 func unfocus(throwable: Throwable3D = current_throwable):
@@ -44,5 +42,4 @@ func unfocus(throwable: Throwable3D = current_throwable):
 		interacting = false
 		enabled = true
 		
-		throwable.unfocused.emit(self)
-		GlobalGameEvents.throwable_unfocused.emit(self)
+		throwable.unfocused.emit()
