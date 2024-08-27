@@ -327,6 +327,8 @@ static func get_percentage(max_value: int, value: int) -> int:
 
 
 static func chance(probability_chance: float = 0.5) -> bool:
+	probability_chance = clamp(probability_chance, 0.0, 1.0)
+	
 	return randf() < probability_chance
 
 
