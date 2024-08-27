@@ -42,7 +42,7 @@ func _can_move(direction: Vector2) -> bool:
 
 
 func _can_rotate(direction: Vector2) -> bool:
-	return target and _tween_can_run() and direction in [Vector2.LEFT, Vector2.RIGHT]
+	return target and _tween_can_run() and direction in VectorHelper.horizontal_directions_v2
 	
 
 func _tween_can_run() -> bool:

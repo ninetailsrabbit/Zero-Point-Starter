@@ -18,7 +18,7 @@ func _physics_process(delta: float) -> void:
 	if actor.is_grounded:
 		var direction = actor.motion_input.input_direction
 		
-		if direction in [Vector2.RIGHT, Vector2.LEFT]:
+		if direction in VectorHelper.horizontal_directions_v2:
 			head.rotation.z = lerp_angle(head.rotation.z, -sign(direction.x) * deg_to_rad(swing_rotation_degrees), swing_lerp_factor * delta)
 		else:
 			head.rotation.z = lerp_angle(head.rotation.z, original_head_rotation.z, swing_lerp_recovery_factor * delta)

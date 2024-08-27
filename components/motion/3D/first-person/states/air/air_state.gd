@@ -54,7 +54,7 @@ func decelerate(delta: float = get_physics_process_delta_time()) -> void:
 
 
 func get_speed() -> float:
-	return air_side_speed if actor.motion_input.input_direction in [Vector2.RIGHT, Vector2.LEFT] else air_speed
+	return air_side_speed if actor.motion_input.input_direction in VectorHelper.horizontal_directions_v2 else air_speed
 
 
 func detect_jump() -> void:

@@ -22,4 +22,4 @@ func detect_jump() -> void:
 
 
 func get_speed() -> float:
-	return side_speed if actor.motion_input.input_direction in [Vector2.RIGHT, Vector2.LEFT] else speed
+	return side_speed if actor.motion_input.input_direction in VectorHelper.horizontal_directions_v2 else speed
