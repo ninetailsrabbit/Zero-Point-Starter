@@ -26,7 +26,7 @@ func _ready() -> void:
 
 func return_cursor_to_default(cursor_shape: Input.CursorShape = Input.CursorShape.CURSOR_ARROW) -> void:
 	if default_game_cursors_by_shape.has(cursor_shape):
-		change_cursor_to(default_game_cursors_by_shape[cursor_shape])
+		change_cursor_to(default_game_cursors_by_shape[cursor_shape], cursor_shape)
 
 
 func change_cursor_to(texture: Texture2D, cursor_shape: Input.CursorShape = Input.CursorShape.CURSOR_ARROW, save_last_texture: bool = true) -> void:

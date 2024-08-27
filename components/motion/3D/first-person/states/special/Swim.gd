@@ -20,7 +20,7 @@ func enter():
 	actor.velocity /= speed_reduction_on_water_entrance
 	## TODO - APPLY SUBMERGED AND OTHER UNDERWATER EFFECTS
 
-func exit(next_state: MachineState):
+func exit(_next_state: MachineState):
 	pass ## TODO - SUBMERGED AND REFRACTION EFFECTS RESET
 	
 

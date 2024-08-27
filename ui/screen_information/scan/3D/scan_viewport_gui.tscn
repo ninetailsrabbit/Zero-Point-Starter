@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://boa6oj3q31yqn"]
+[gd_scene load_steps=4 format=3 uid="uid://boa6oj3q31yqn"]
 
 [ext_resource type="Script" path="res://ui/screen_information/scan/3D/scan_viewport_gui.gd" id="1_gliyh"]
+[ext_resource type="PackedScene" uid="uid://c8k32nxb50dmd" path="res://ui/screen_information/scan/3D/scan_viewport_3d.tscn" id="2_haruv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n2ga5"]
 bg_color = Color(0.835294, 0.835294, 0.32549, 1)
@@ -20,31 +21,39 @@ grow_vertical = 2
 script = ExtResource("1_gliyh")
 
 [node name="ColorRect" type="ColorRect" parent="."]
+show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0313726, 0.0313726, 0.0313726, 0.517647)
+color = Color(0.0313726, 0.0313726, 0.0313726, 0.556863)
 
-[node name="ScanViewport" type="CenterContainer" parent="."]
-unique_name_in_owner = true
+[node name="ScanViewport2" type="CenterContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="ScanViewport"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="ScanViewport2"]
 layout_mode = 2
 
-[node name="ScanSubViewport" type="SubViewport" parent="ScanViewport/SubViewportContainer"]
+[node name="ScanSubViewport" type="SubViewport" parent="ScanViewport2/SubViewportContainer"]
 unique_name_in_owner = true
 transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 4
+
+[node name="ScanViewport3D" parent="ScanViewport2/SubViewportContainer/ScanSubViewport" instance=ExtResource("2_haruv")]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1

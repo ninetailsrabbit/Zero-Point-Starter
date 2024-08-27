@@ -7,19 +7,6 @@ class_name ScanViewport3D extends Node3D
 @onready var mouse_rotator_component_3d: MouseRotatorComponent3D = $MouseRotatorComponent3D
 
 
-func _ready() -> void:
-	if blur_on_scan:
-		enable_blur()
-
-
-func enable_blur() -> void:
-	var camera_attributes: CameraAttributesPractical = scan_camera.attributes as CameraAttributesPractical
-	
-	if camera_attributes == null:
-		scan_camera.attributes = CameraAttributesPractical.new()
-		
-	camera_attributes.dof_blur_far_enabled = true
-		
 	
 func set_current_mouse_cursor(texture: Texture2D):
 	CursorManager.change_cursor_to(texture)

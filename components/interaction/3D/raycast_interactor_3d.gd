@@ -24,7 +24,7 @@ func _unhandled_input(_event: InputEvent):
 
 func _physics_process(_delta):
 	var detected_interactable = get_collider() if is_colliding() else null
-	
+
 	if detected_interactable is Interactable3D:
 		if current_interactable == null and not focused:
 			focus(detected_interactable)

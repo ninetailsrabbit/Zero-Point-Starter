@@ -34,3 +34,11 @@ func _physics_process(delta: float) -> void:
 			lerp(head.position.y, original_head_position.y, delta * lerp_speed),
 			head.position.z
 		)
+
+
+func lock() -> void:
+	set_physics_process(false)
+	
+
+func unlock() -> void:
+	set_physics_process(true)

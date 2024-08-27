@@ -8,9 +8,10 @@ signal unfocused(interactor)
 signal interaction_limit_reached(interactable: Interactable3D)
 
 ## The number of times this interactable can be interacted with, 0 means no limit.
-@export var number_of_times_can_be_interacted := 0
-@export var change_cursor := true
-@export var change_screen_pointer := true
+@export var number_of_times_can_be_interacted: int = 0
+@export var change_cursor: bool = true
+@export var change_screen_pointer: bool = true
+@export var lock_player_on_interact: bool = false
 @export_group("Information")
 @export var title: String = ""
 @export var description: String = ""
@@ -70,7 +71,7 @@ func on_interacted(interactor):
 		
 		if change_cursor and interactor is MouseRayCastInterator3D:
 			CursorManager.change_cursor_to(interact_cursor)
-		print("interacted ", interactor.name)
+		
 		GlobalGameEvents.interactable_interacted.emit(interactor)
 		
 		

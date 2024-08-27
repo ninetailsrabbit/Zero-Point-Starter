@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://csmqt11xygt8r"]
+[gd_scene load_steps=22 format=3 uid="uid://csmqt11xygt8r"]
 
 [ext_resource type="PackedScene" uid="uid://dd0blwa1hawbl" path="res://components/motion/3D/first-person/first_person_controller.tscn" id="1_f82m5"]
 [ext_resource type="Script" path="res://components/world/dynamic_directional_light_3d.gd" id="1_vuxmu"]
@@ -32,12 +32,31 @@ albedo_color = Color(0.298039, 1, 0.129412, 1)
 
 [sub_resource type="PrismMesh" id="PrismMesh_meo52"]
 material = SubResource("StandardMaterial3D_7b4d2")
-size = Vector3(0.4, 0.45, 0.5)
+size = Vector3(0.2, 0.2, 0.3)
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_4wq6i"]
 points = PackedVector3Array(-0.2, -0.225, -0.25, 0.2, -0.225, -0.25, -0.2, -0.225, 0.25, 0, 0.225, -0.25, 0.2, -0.225, 0.25, 0, 0.225, 0.25)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3f4x7"]
+albedo_color = Color(0.0980392, 0.505882, 0.184314, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tcvm5"]
+material = SubResource("StandardMaterial3D_3f4x7")
+size = Vector3(0.15, 0.2, 0.15)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_bap0s"]
+points = PackedVector3Array(0.1, 0.1, 0.1, 0.1, 0.1, -0.1, -0.1, 0.1, 0.1, 0.1, -0.1, 0.1, 0.1, -0.1, -0.1, -0.1, 0.1, -0.1, -0.1, -0.1, 0.1, -0.1, -0.1, -0.1)
+
 [node name="Node3D" type="Node3D"]
+
+[node name="DynamicWorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("3_db4td")
+camera_attributes = SubResource("CameraAttributesPractical_fv3ym")
+script = ExtResource("2_3grr6")
+
+[node name="DynamicDirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.893614, -9.32112e-08, -0.448836, 0.291823, 0.759782, 0.581008, 0.341017, -0.650178, 0.678952, 0, 4.93868, 0)
+script = ExtResource("1_vuxmu")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -47,15 +66,6 @@ points = PackedVector3Array(-0.2, -0.225, -0.25, 0.2, -0.225, -0.25, -0.2, -0.22
 layer = 2
 
 [node name="ScanViewportGUI" parent="CanvasLayer2" instance=ExtResource("2_n6ubt")]
-
-[node name="DynamicWorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("3_db4td")
-camera_attributes = SubResource("CameraAttributesPractical_fv3ym")
-script = ExtResource("2_3grr6")
-
-[node name="DynamicDirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.893614, 0, -0.448836, 0.291823, 0.759782, 0.581008, 0.341017, -0.650178, 0.678952, 0, 4.93868, 0)
-script = ExtResource("1_vuxmu")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.72211, 0)
@@ -113,12 +123,30 @@ shape = SubResource("BoxShape3D_lsvy5")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.89041, 0, 0)
+layers = 4
 mesh = SubResource("PrismMesh_meo52")
 
 [node name="Interactable3D" type="Area3D" parent="MeshInstance3D" node_paths=PackedStringArray("target_scannable_object")]
 script = ExtResource("8_70njw")
-scannable = true
+title = "Es un buen prisma"
+description = "Este prisma es posible que te lo puedas meter por tu puto culo"
+title_translation_key = "Es un buen prisma"
+description_translation_key = "Este prisma es posible que te lo puedas meter por tu puto culo"
 target_scannable_object = NodePath("..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Interactable3D"]
 shape = SubResource("ConvexPolygonShape3D_4wq6i")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.55971, 0, 0)
+layers = 4
+mesh = SubResource("BoxMesh_tcvm5")
+
+[node name="Interactable3D" type="Area3D" parent="MeshInstance3D2"]
+script = ExtResource("8_70njw")
+title_translation_key = "Cubo mierda"
+description_translation_key = "Metetelo por el culo payaso"
+scannable = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D2/Interactable3D"]
+shape = SubResource("ConvexPolygonShape3D_bap0s")

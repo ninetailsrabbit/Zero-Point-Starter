@@ -26,6 +26,10 @@ class_name FirstPersonController extends CharacterBody3D
 @onready var head: Node3D = $Head
 @onready var eyes: Node3D = $Head/Eyes
 @onready var camera: Camera3D = $Head/Eyes/Camera3D
+@onready var camera_movement_3d: FirstPersonCameraRotation3D = $CameraMovement3D
+@onready var head_bob: HeadBob = $HeadBob
+@onready var swing_head: SwingHead = $SwingHead
+
 @onready var ceil_shape_cast: ShapeCast3D = $Head/CeilShapeCast
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var stand_collision_shape: CollisionShape3D = $StandCollisionShape
@@ -33,6 +37,8 @@ class_name FirstPersonController extends CharacterBody3D
 @onready var crawl_collision_shape: CollisionShape3D = $CrawlCollisionShape
 
 @onready var original_camera_fov = camera.fov
+
+const group_name = "first_person_controller"
 
 var was_grounded: bool = false
 var is_grounded: bool = false
@@ -44,6 +50,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		switch_mouse_capture_mode()
 
 
+func _enter_tree() -> void:
+	add_to_group(group_name)
+	
+	
 func _ready() -> void:
 	debug_ui.visible = OS.is_debug_build()
 	
@@ -56,6 +66,9 @@ func _ready() -> void:
 	])
 	
 	finite_state_machine.state_changed.connect(on_state_changed)
+	GlobalGameEvents.interactable_interacted.connect(on_interactable_interacted)
+	GlobalGameEvents.interactable_canceled_interaction.connect(on_interactable_canceled_interaction)
+	GlobalGameEvents.canceled_interactable_scan.connect(on_interactable_canceled_interaction)
 	
 
 func _physics_process(delta: float) -> void:
@@ -84,6 +97,20 @@ func is_falling() -> bool:
 	return not is_grounded and opposite_to_gravity_vector
 
 
+func lock_movement() -> void:
+	finite_state_machine.lock_state_machine()
+	camera_movement_3d.lock()
+	head_bob.lock()
+	swing_head.lock()
+	
+	
+func unlock_movement() -> void:
+	finite_state_machine.unlock_state_machine()
+	camera_movement_3d.unlock()
+	head_bob.unlock()
+	swing_head.unlock()
+	
+	
 func switch_mouse_capture_mode() -> void:
 	if InputHelper.is_mouse_visible():
 		InputHelper.capture_mouse()
@@ -125,3 +152,14 @@ func _update_camera_fov(current_state: MachineState, delta: float = get_physics_
 
 func on_state_changed(_from: MachineState, to: MachineState) -> void:
 	_update_collisions_based_on_state(to)
+
+
+func on_interactable_interacted(interactor) -> void:
+	if interactor.current_interactable and interactor.current_interactable.lock_player_on_interact:
+		lock_movement()
+	
+
+func on_interactable_canceled_interaction(_interactor) -> void:
+	unlock_movement()
+	camera.make_current()
+	InputHelper.capture_mouse()

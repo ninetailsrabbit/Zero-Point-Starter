@@ -11,18 +11,20 @@ static func is_mouse_right_click(event: InputEvent) -> bool:
 
 
 static func is_mouse_left_button_pressed(event: InputEvent) -> bool:
-	return  event is InputEventMouseButton and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	return  event is InputEventMouse and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
 
 
 static func is_mouse_right_button_pressed(event: InputEvent) -> bool:
-	return event is InputEventMouseButton and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
+	return event is InputEventMouse and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
 
 
 static func is_mouse_visible() -> bool:
 	return Input.mouse_mode == Input.MOUSE_MODE_VISIBLE || Input.mouse_mode == Input.MOUSE_MODE_CONFINED
 
+
 static func is_mouse_captured() -> bool:
 	return Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
+
 
 static func show_mouse_cursor() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

@@ -23,4 +23,12 @@ func _physics_process(delta: float) -> void:
 		else:
 			head.rotation.z = lerp_angle(head.rotation.z, original_head_rotation.z, swing_lerp_recovery_factor * delta)
 
+
+func lock() -> void:
+	set_physics_process(false)
+	
+
+func unlock() -> void:
+	set_physics_process(true)
+
 			
