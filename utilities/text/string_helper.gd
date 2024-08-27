@@ -7,6 +7,7 @@ const AsciiUppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 const AsciiDigits = "0123456789"
 const AsciiHexdigits = "0123456789ABCDEF"
 const AsciiPunctuation =  "!\"#$%&'()*+, -./:;<=>?@[\\]^_`{|}~"
+const bar = "█"
 
 static var random_number_generator := RandomNumberGenerator.new()
 
@@ -169,3 +170,16 @@ static func remove_whitespaces(text: String) -> String:
 	whitespace_regex.compile(r"\s+")
 	
 	return StringHelper.str_replace(text, whitespace_regex, func(_text: String): return "")
+
+
+static func repeat(text: String, times: int) -> String:
+	var result: String = ""
+	
+	for i: int in range(times):
+		result += text
+		
+	return result
+
+
+static func bars(amount: int) -> String:
+	return repeat(bar, amount)

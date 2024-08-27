@@ -1,13 +1,38 @@
-[gd_scene load_steps=3 format=3 uid="uid://c8k32nxb50dmd"]
+[gd_scene load_steps=10 format=3 uid="uid://c8k32nxb50dmd"]
 
 [ext_resource type="Script" path="res://ui/screen_information/scan/3D/scan_viewport_3d.gd" id="1_wkrwm"]
+[ext_resource type="Script" path="res://components/world/dynamic_world_environment.gd" id="2_2gyoy"]
 [ext_resource type="Script" path="res://components/motion/3D/rotation/mouse_rotator_component_3d.gd" id="2_k7rko"]
+[ext_resource type="Script" path="res://components/world/dynamic_directional_light_3d.gd" id="3_wqaxr"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_l16ax"]
+
+[sub_resource type="Sky" id="Sky_xpvoq"]
+sky_material = SubResource("ProceduralSkyMaterial_l16ax")
+
+[sub_resource type="Environment" id="Environment_02k47"]
+background_mode = 2
+sky = SubResource("Sky_xpvoq")
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_i00g4"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_pah12"]
 
 [node name="ScanViewport3D" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.31605, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.84301, 0)
 script = ExtResource("1_wkrwm")
 
+[node name="DynamicWorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_02k47")
+camera_attributes = SubResource("CameraAttributesPractical_i00g4")
+script = ExtResource("2_2gyoy")
+
+[node name="DynamicDirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.73855, 0)
+script = ExtResource("3_wqaxr")
+
 [node name="Camera3D" type="Camera3D" parent="."]
+attributes = SubResource("CameraAttributesPractical_pah12")
 
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.572084)
