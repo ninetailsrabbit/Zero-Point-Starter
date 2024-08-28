@@ -33,6 +33,11 @@ var right_wall: CSGBox3D
 var materials_by_room_part: Dictionary ##  CSGShape and the surface related index
 
 
+func _enter_tree() -> void:
+	if get_child_count() == 0 and not room_size.is_zero_approx():
+		build()
+
+
 func build() -> void:
 	NodeTraversal.set_owner_to_edited_scene_root(self)
 	

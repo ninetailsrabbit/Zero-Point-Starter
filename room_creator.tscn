@@ -20,6 +20,4 @@ floor_thickness = 0.1
 
 [node name="RoomCreator" type="Node3D"]
 script = ExtResource("1_7s4rn")
-clear_generated_rooms = null
-clear_last_generated_rooms = null
 room_parameters = SubResource("Resource_kdsdg")
