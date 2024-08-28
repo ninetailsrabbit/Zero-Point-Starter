@@ -88,8 +88,8 @@ func change_material_on_door_slots(new_material: Material) -> RoomMesh:
 #endregion
 
 #region Getters
-func get_surface_material(name: String):
-	var surface_index: int = room_mesh_shape.surface_find_by_name(name)
+func get_surface_material(_name: String):
+	var surface_index: int = room_mesh_shape.surface_find_by_name(_name)
 	
 	return null if surface_index == -1 else room_mesh_shape.surface_get_material(surface_index)
 	

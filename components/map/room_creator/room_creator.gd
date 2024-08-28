@@ -271,7 +271,7 @@ func clear_rooms_in_scene_tree() -> void:
 
 func clear_last_generated_rooms_in_scene_tree() -> void:
 	if _tool_can_be_used() and not csg_rooms_created.is_empty():
-		var rooms_to_remove_count = room_parameters.number_of_rooms_per_generation + (ceil(room_parameters.number_of_rooms_per_generation / 2) if room_parameters.use_bridge_connector_between_rooms else 0)
+		var rooms_to_remove_count = room_parameters.number_of_rooms_per_generation + (ceili(room_parameters.number_of_rooms_per_generation / 2) if room_parameters.use_bridge_connector_between_rooms else 0)
 		
 		var last_rooms_created = csg_rooms_created.slice(max(0, csg_rooms_created.size() - rooms_to_remove_count))
 		csg_rooms_created = csg_rooms_created.slice(0, last_rooms_created.size())

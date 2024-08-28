@@ -71,7 +71,7 @@ func unfocus(interactable: Interactable3D = current_interactable):
 		interactable.unfocused.emit()
 		
 
-func on_canceled_interactable_scan(interactable: Interactable3D) -> void:
+func on_canceled_interactable_scan(_interactable: Interactable3D) -> void:
 	current_interactable = null
 	focused = false
 	interacting = false
