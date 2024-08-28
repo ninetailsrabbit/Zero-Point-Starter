@@ -48,6 +48,9 @@ var last_direction: Vector3 = Vector3.ZERO
 func _unhandled_input(event: InputEvent) -> void:
 	if InputHelper.is_any_action_just_pressed(event, mouse_mode_switch_input_actions):
 		switch_mouse_capture_mode()
+		
+	if Input.is_action_just_pressed("ui_accept"):
+		camera._camera_shake()
 
 
 func _enter_tree() -> void:
