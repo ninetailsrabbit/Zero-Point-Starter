@@ -3,7 +3,7 @@ class_name RoomCreator extends Node3D
 
 
 signal created_csg_rooms(csg_rooms: Array[CSGRoom])
-signal created_rooms(rooms: Array)
+signal created_rooms(rooms: Array[RoomMesh])
 
 # Boolean variables that behave as tool buttons
 @export var create_new_room: bool = false:
@@ -17,7 +17,8 @@ signal created_rooms(rooms: Array)
 		clear_last_generated_rooms_in_scene_tree()
 @export var generate_final_mesh: bool = false:
 	set(value):
-		create_csg_rooms()
+		generate_room_meshes()
+	
 @export_group("Parameters")
 @export var room_parameters: RoomParameters
 @export var generate_mesh_per_room: bool = true
@@ -42,16 +43,17 @@ enum AvailableCollisions {
 }
 
 var wall_rotations: Dictionary = {
-	"FrontWall": {"FrontWall": PI, "BackWall": 0.0, "RightWall": PI / 2, "LeftWall": -PI / 2},
-	"BackWall": {"FrontWall": 0.0, "BackWall": PI, "RightWall": -PI / 2, "LeftWall": PI / 2},
-	"RighWall": {"FrontWall": -PI / 2, "BackWall": PI / 2, "RightWall": PI, "LeftWall": 0.0},
-	"LeftWall": {"FrontWall": PI / 2, "BackWall": -PI / 2, "RightWall": 0.0, "LeftWall": PI},
+	"FrontWall": {"FrontWall": PI, "BackWall": 0, "RightWall": PI / 2, "LeftWall": -PI / 2},
+	"BackWall": {"FrontWall": 0, "BackWall": PI, "RightWall": -PI / 2, "LeftWall": PI / 2},
+	"RighWall": {"FrontWall": -PI / 2, "BackWall": PI / 2, "RightWall": PI, "LeftWall": 0},
+	"LeftWall": {"FrontWall": PI / 2, "BackWall": -PI / 2, "RightWall": 0, "LeftWall": PI},
 }
 
 var csg_rooms_created: Array[CSGRoom] = []
 var rooms_created: Array[RoomMesh] = []
 var csg_rooms_output_node: Node3D
 var room_meshes_output_node: Node3D
+
 
 func create_csg_rooms() -> void:
 	if _tool_can_be_used():
@@ -117,7 +119,6 @@ func connect_rooms(room_a: CSGRoom, room_b: CSGRoom) -> void:
 	if available_sockets_room_a.size() > 0 and available_sockets_room_b.size() > 0:
 		var room_a_socket: Marker3D = available_sockets_room_a.front() as Marker3D
 		var room_b_socket: Marker3D = available_sockets_room_b.front() as Marker3D
-		
 		var wall_room_a: CSGBox3D = room_a_socket.get_parent() as CSGBox3D
 		var wall_room_b: CSGBox3D = room_b_socket.get_parent() as CSGBox3D
 		
@@ -140,17 +141,82 @@ func generate_room_size_based_on_range(min_room_size: Vector3 = room_parameters.
 			randf_range(min_room_size.y, max_room_size.y),
 			randf_range(min_room_size.z, max_room_size.z),
 		)
-	
+
+
 func calculate_number_of_rooms(use_bridge_connectors: bool = room_parameters.use_bridge_connector_between_rooms) -> int:
 	var number_of_rooms = room_parameters.number_of_rooms_per_generation
 	
 	if use_bridge_connectors:
-		number_of_rooms += ceil(number_of_rooms / 2.0)
+		number_of_rooms += ceili(number_of_rooms / 2.0)
 		
 		if number_of_rooms % 2 == 0:
 			number_of_rooms += 1
 	
 	return number_of_rooms
+
+
+func generate_room_meshes() -> void:
+	if _tool_can_be_used():
+		
+		if generate_mesh_per_room:
+			if room_meshes_output_node == null:
+				room_meshes_output_node = Node3D.new()
+				room_meshes_output_node.name = "RoomMeshesOutputNode"
+				add_child(room_meshes_output_node)
+				NodeTraversal.set_owner_to_edited_scene_root(room_meshes_output_node)
+				
+			var room_created_names: Array = rooms_created.map(func(room: RoomMesh): return room.name)
+			var new_rooms = csg_rooms_created.filter(func(csg_room): return not csg_room.name in room_created_names)
+			
+			for room: CSGRoom in new_rooms:
+				var room_mesh_instance = room.generate_mesh_instance()
+				
+				if room_mesh_instance:
+					room_meshes_output_node.add_child(room_mesh_instance)
+					NodeTraversal.set_owner_to_edited_scene_root(room_mesh_instance)
+					
+					name_surfaces_on_room_mesh(room, room_mesh_instance)
+					# generate collisions
+					rooms_created.append(room_mesh_instance)
+					
+			created_rooms.emit(rooms_created)
+		else:
+			var csg_combiner_root: CSGCombiner3D = csg_rooms_output_node.get_node("CSGCombinerRoot") as CSGCombiner3D
+			
+			if room_meshes_output_node:
+				room_meshes_output_node.free()
+				
+				room_meshes_output_node = Node3D.new()
+				room_meshes_output_node.name = "RoomMeshesOutputNode"
+				add_child(room_meshes_output_node)
+				NodeTraversal.set_owner_to_edited_scene_root(room_meshes_output_node)
+				
+				var meshes = csg_combiner_root.get_meshes()
+				
+				if meshes.size() > 1:
+					var room_mesh_instance = RoomMesh.new()
+					room_mesh_instance.name = "GeneratedRoomMesh"
+					room_mesh_instance.mesh = meshes[1] as ArrayMesh
+					
+					room_meshes_output_node.add_child(room_mesh_instance)
+					NodeTraversal.set_owner_to_edited_scene_root(room_mesh_instance)
+					
+					name_surfaces_on_combined_mesh(csg_combiner_root, room_mesh_instance)
+					# generate collisions
+				
+
+func name_surfaces_on_combined_mesh(root_node_for_rooms: CSGCombiner3D, room_mesh_instance: MeshInstance3D) -> void:
+	var index: int = 0
+	
+	for room: CSGRoom in root_node_for_rooms.get_children().filter(func(child): return child is CSGRoom):
+		for material: StandardMaterial3D in room.materials_by_room_part:
+			room_mesh_instance.mesh.surface_set_name(index, material.name)
+			index += 1
+	
+	
+func name_surfaces_on_room_mesh(room: CSGRoom, room_mesh_instance: MeshInstance3D) -> void:
+	for material: StandardMaterial3D in room.materials_by_room_part:
+		room_mesh_instance.mesh.surface_set_name(room.materials_by_room_part[material], material.name)
 
 
 func clear_rooms_in_scene_tree() -> void:

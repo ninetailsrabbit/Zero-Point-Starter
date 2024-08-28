@@ -89,8 +89,8 @@ func generate_mesh_instance():
 		var room_mesh: RoomMesh = RoomMesh.new()
 		room_mesh.name = name
 		room_mesh.mesh = meshes[1]
-		position = position
-		rotation = rotation
+		room_mesh.position = position
+		room_mesh.rotation = rotation
 		
 		return room_mesh
 	
@@ -98,22 +98,23 @@ func generate_mesh_instance():
 
 #region Getters
 func walls() -> Array[CSGBox3D]:
-	var result = []
-	
-	for wall in ArrayHelper.remove_falsy_values([front_wall, back_wall, right_wall, left_wall]):
-		result.append(wall as CSGBox3D)
+	var result: Array[CSGBox3D] = []
+
+	for wall: CSGBox3D in ArrayHelper.remove_falsy_values([front_wall, back_wall, right_wall, left_wall]):
+		result.append(wall)
 	
 	return result
 
 
 func available_sockets() -> Array[Marker3D]:
-	var markers = find_children("*", type_string(typeof(Marker3D))).filter(func(socket: Node): return not socket.get_meta("connected"))
+	var markers = find_children("*", type_string(typeof(Marker3D))).filter(func(socket: Node): return socket is Marker3D and not socket.get_meta("connected"))
 	var sockets: Array[Marker3D] = []
 	
-	for socket in markers:
-		sockets.append(socket as Marker3D)
+	for socket: Marker3D in markers:
+		sockets.append(socket)
 	
 	return sockets
+
 
 func get_door_sloot_from_wall(wall: CSGBox3D):
 	if wall:
@@ -125,7 +126,7 @@ func get_door_sloot_from_wall(wall: CSGBox3D):
 #region Part creators
 func create_door_slot_in_random_wall(socket_number: int = 1, size: Vector3 = room_size, _door_size: Vector3 = door_size) -> void:
 	var available_walls = walls().filter(func(wall: CSGBox3D): return wall.name.containsn("wall") and wall.get_child_count() == 0)
-	
+
 	if available_walls.size() > 0:
 		create_door_slot_in_wall(available_walls.pick_random(), socket_number, size, _door_size)
 
@@ -134,9 +135,10 @@ func create_door_slot_in_wall(wall: CSGBox3D, socket_number: int = 1, size: Vect
 	if wall.get_child_count() == 0:
 		var regex: RegEx = RegEx.new()
 		regex.compile("(front|back)")
+		
 		var regex_result = regex.search(wall.name.to_lower()) # Front and back walls does not apply door rotation to fit in
 		
-		var door_position: Vector3 = Vector3(0, Vector3.DOWN.y * (room_size.y / 2) - (_door_size.y / 2), 0)
+		var door_position: Vector3 = Vector3(0, Vector3.DOWN.y * ( (room_size.y / 2) - (_door_size.y / 2) ), 0)
 		var door_rotation: Vector3 = Vector3(0, 0 if regex_result else PI / 2, 0)
 		
 		if randomize_door_position_in_wall:
@@ -148,10 +150,10 @@ func create_door_slot_in_wall(wall: CSGBox3D, socket_number: int = 1, size: Vect
 				
 		var door_slot: CSGBox3D = CSGBox3D.new()
 		door_slot.name = "DoorSlot"
-		operation = CSGBox3D.OPERATION_SUBTRACTION
-		size = _door_size
-		position = door_position
-		rotation = door_rotation
+		door_slot.operation = CSGBox3D.OPERATION_SUBTRACTION
+		door_slot.size = _door_size
+		door_slot.position = door_position
+		door_slot.rotation = door_rotation
 		
 		wall.add_child(door_slot)
 		
@@ -185,6 +187,7 @@ func create_floor(size: Vector3 = room_size) -> void:
 	add_child(floor)
 	NodeTraversal.set_owner_to_edited_scene_root(floor)
 
+
 func create_ceil(size: Vector3 = room_size) -> void:
 	ceil = CSGBox3D.new()
 	ceil.name = "Ceil"
@@ -201,7 +204,6 @@ func create_front_wall(size: Vector3 = room_size) -> void:
 	front_wall.size = Vector3(size.x, size.y, wall_thickness)
 	front_wall.position = Vector3(0, size.y / 2, min(-size.z / 2, -(size.z + wall_thickness) / 2.5) )
 	
-	
 	add_child(front_wall)
 	NodeTraversal.set_owner_to_edited_scene_root(front_wall)
 
@@ -211,7 +213,6 @@ func create_back_wall(size: Vector3 = room_size) -> void:
 	back_wall.name = "BackWall"
 	back_wall.size = Vector3(size.x, size.y, wall_thickness)
 	back_wall.position = Vector3(0, size.y / 2, max(size.z / 2, (size.z + wall_thickness) / 2.5) )
-	
 	
 	add_child(back_wall)
 	NodeTraversal.set_owner_to_edited_scene_root(back_wall)
@@ -223,7 +224,6 @@ func create_right_wall(size: Vector3 = room_size) -> void:
 	right_wall.size = Vector3(wall_thickness, size.y, size.z)
 	right_wall.position = Vector3(max(size.x / 2, (size.x + wall_thickness) / 2.5) , size.y / 2, 0)
 	
-	
 	add_child(right_wall)
 	NodeTraversal.set_owner_to_edited_scene_root(right_wall)
 
@@ -233,7 +233,6 @@ func create_left_wall(size: Vector3 = room_size) -> void:
 	left_wall.name = "LeftWall"
 	left_wall.size = Vector3(wall_thickness, size.y, size.z)
 	left_wall.position = Vector3(min(-size.x / 2, (-size.x + wall_thickness) / 2.5) , size.y / 2, 0)
-	
 	
 	add_child(left_wall)
 	NodeTraversal.set_owner_to_edited_scene_root(left_wall)

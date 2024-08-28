@@ -7,7 +7,7 @@
 script = ExtResource("2_qfb4s")
 number_of_rooms_per_generation = 5
 doors_per_room = 2
-use_bridge_connector_between_rooms = false
+use_bridge_connector_between_rooms = true
 randomize_door_position_in_wall = false
 door_size = Vector3(1.5, 2, 0.25)
 min_bridge_connector_size = Vector3(2, 3, 4)
