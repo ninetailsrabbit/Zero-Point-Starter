@@ -1,4 +1,5 @@
 @tool
+@icon("res://components/map/room_creator/room_creator.svg")
 class_name RoomCreator extends Node3D
 
 
@@ -31,7 +32,7 @@ signal created_rooms(rooms: Array[RoomMesh])
 @export var include_back_wall : bool = true;
 @export_group("Collisions")
 @export var generate_collisions: bool = true
-@export var available_collisions: AvailableCollisions = AvailableCollisions.Trimesh
+@export var type_of_collision: AvailableCollisions = AvailableCollisions.Trimesh
 @export var create_static_body: bool = true
 @export var clean_collision: bool = true
 @export var simplified_collision: bool = false
@@ -155,6 +156,42 @@ func calculate_number_of_rooms(use_bridge_connectors: bool = room_parameters.use
 	return number_of_rooms
 
 
+func generate_collision_on_room_mesh(room_mesh_instance: RoomMesh) -> void:
+	if generate_collisions:
+		match type_of_collision:
+			AvailableCollisions.Convex:
+				var convex_collision = CollisionShape3D.new()
+				convex_collision.name = "%sConvexCollision" % room_mesh_instance.name
+				convex_collision.shape = room_mesh_instance.mesh.create_convex_shape(clean_collision, simplified_collision)
+			
+				if create_static_body:
+					var body = StaticBody3D.new()
+					body.name = "%sStaticBody3D" % room_mesh_instance.name
+					room_mesh_instance.add_child(body)
+					NodeTraversal.set_owner_to_edited_scene_root(body)
+					body.add_child(convex_collision)
+				else:
+					room_mesh_instance.add_child(convex_collision)
+					
+				NodeTraversal.set_owner_to_edited_scene_root(convex_collision)
+				
+			AvailableCollisions.Trimesh:
+				var trimesh_collision = CollisionShape3D.new()
+				trimesh_collision.name = "%sTrimeshCollision" % room_mesh_instance.name
+				trimesh_collision.shape = room_mesh_instance.mesh.create_trimesh_shape()
+				
+				if create_static_body:
+					var body = StaticBody3D.new()
+					body.name = "%sStaticBody3D" % room_mesh_instance.name
+					room_mesh_instance.add_child(body)
+					NodeTraversal.set_owner_to_edited_scene_root(body)
+					body.add_child(trimesh_collision)
+				else:
+					room_mesh_instance.add_child(trimesh_collision)
+			
+				NodeTraversal.set_owner_to_edited_scene_root(trimesh_collision)
+	
+
 func generate_room_meshes() -> void:
 	if _tool_can_be_used():
 		
@@ -176,7 +213,7 @@ func generate_room_meshes() -> void:
 					NodeTraversal.set_owner_to_edited_scene_root(room_mesh_instance)
 					
 					name_surfaces_on_room_mesh(room, room_mesh_instance)
-					# generate collisions
+					generate_collision_on_room_mesh(room_mesh_instance)
 					rooms_created.append(room_mesh_instance)
 					
 			created_rooms.emit(rooms_created)
@@ -186,37 +223,37 @@ func generate_room_meshes() -> void:
 			if room_meshes_output_node:
 				room_meshes_output_node.free()
 				
-				room_meshes_output_node = Node3D.new()
-				room_meshes_output_node.name = "RoomMeshesOutputNode"
-				add_child(room_meshes_output_node)
-				NodeTraversal.set_owner_to_edited_scene_root(room_meshes_output_node)
+			room_meshes_output_node = Node3D.new()
+			room_meshes_output_node.name = "RoomMeshesOutputNode"
+			add_child(room_meshes_output_node)
+			NodeTraversal.set_owner_to_edited_scene_root(room_meshes_output_node)
+			
+			var meshes = csg_combiner_root.get_meshes()
+			
+			if meshes.size() > 1:
+				var room_mesh_instance = RoomMesh.new()
+				room_mesh_instance.name = "GeneratedRoomMesh"
+				room_mesh_instance.mesh = meshes[1] as ArrayMesh
 				
-				var meshes = csg_combiner_root.get_meshes()
+				room_meshes_output_node.add_child(room_mesh_instance)
+				NodeTraversal.set_owner_to_edited_scene_root(room_mesh_instance)
 				
-				if meshes.size() > 1:
-					var room_mesh_instance = RoomMesh.new()
-					room_mesh_instance.name = "GeneratedRoomMesh"
-					room_mesh_instance.mesh = meshes[1] as ArrayMesh
-					
-					room_meshes_output_node.add_child(room_mesh_instance)
-					NodeTraversal.set_owner_to_edited_scene_root(room_mesh_instance)
-					
-					name_surfaces_on_combined_mesh(csg_combiner_root, room_mesh_instance)
-					# generate collisions
-				
+				name_surfaces_on_combined_mesh(csg_combiner_root, room_mesh_instance)
+				generate_collision_on_room_mesh(room_mesh_instance)
 
+				
 func name_surfaces_on_combined_mesh(root_node_for_rooms: CSGCombiner3D, room_mesh_instance: MeshInstance3D) -> void:
 	var index: int = 0
 	
 	for room: CSGRoom in root_node_for_rooms.get_children().filter(func(child): return child is CSGRoom):
-		for material: StandardMaterial3D in room.materials_by_room_part:
-			room_mesh_instance.mesh.surface_set_name(index, material.name)
+		for shape: CSGBox3D in room.materials_by_room_part:
+			room_mesh_instance.mesh.surface_set_name(index, shape.name)
 			index += 1
 	
 	
 func name_surfaces_on_room_mesh(room: CSGRoom, room_mesh_instance: MeshInstance3D) -> void:
-	for material: StandardMaterial3D in room.materials_by_room_part:
-		room_mesh_instance.mesh.surface_set_name(room.materials_by_room_part[material], material.name)
+	for shape: CSGBox3D in room.materials_by_room_part:
+		room_mesh_instance.mesh.surface_set_name(room.materials_by_room_part[shape], shape.name)
 
 
 func clear_rooms_in_scene_tree() -> void:
