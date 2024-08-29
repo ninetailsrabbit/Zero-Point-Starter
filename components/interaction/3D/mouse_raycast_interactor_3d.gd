@@ -31,6 +31,10 @@ func _ready() -> void:
 	
 	set_process_input(current_camera is Camera3D)
 	set_process(current_camera is Camera3D)
+	
+	GlobalGameEvents.canceled_interactable_scan.connect(on_canceled_interaction)
+	GlobalGameEvents.interactable_canceled_interaction.connect(on_canceled_interaction)
+
 
 
 func _process(_delta: float) -> void:
@@ -118,3 +122,9 @@ func disable() -> void:
 	set_process(false)
 	set_process_input(false)
 	
+
+func on_canceled_interaction(_interactable: Interactable3D) -> void:
+	interacting = false
+	focused = false
+		
+	CursorManager.return_cursor_to_default()

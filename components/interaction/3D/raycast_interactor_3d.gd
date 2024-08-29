@@ -23,7 +23,8 @@ func _unhandled_input(_event: InputEvent):
 	
 	
 func _ready() -> void:
-	GlobalGameEvents.canceled_interactable_scan.connect(on_canceled_interactable_scan)
+	GlobalGameEvents.canceled_interactable_scan.connect(on_canceled_interaction)
+	GlobalGameEvents.interactable_canceled_interaction.connect(on_canceled_interaction)
 
 
 func _physics_process(_delta):
@@ -71,7 +72,7 @@ func unfocus(interactable: Interactable3D = current_interactable):
 		interactable.unfocused.emit()
 		
 
-func on_canceled_interactable_scan(_interactable: Interactable3D) -> void:
+func on_canceled_interaction(_interactable: Interactable3D) -> void:
 	current_interactable = null
 	focused = false
 	interacting = false

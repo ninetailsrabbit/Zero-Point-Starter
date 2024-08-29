@@ -33,7 +33,6 @@ func _screen_mode_to_string(mode: DisplayServer.WindowMode) -> String:
 
 
 func on_screen_mode_selected(idx) -> void:
-	print("idx %d and borderless %d" % [idx, borderless_id])
 	if get_item_id(idx) == borderless_id:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
