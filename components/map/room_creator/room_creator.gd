@@ -46,7 +46,7 @@ enum AvailableCollisions {
 var wall_rotations: Dictionary = {
 	"FrontWall": {"FrontWall": PI, "BackWall": 0, "RightWall": PI / 2, "LeftWall": -PI / 2},
 	"BackWall": {"FrontWall": 0, "BackWall": PI, "RightWall": -PI / 2, "LeftWall": PI / 2},
-	"RighWall": {"FrontWall": -PI / 2, "BackWall": PI / 2, "RightWall": PI, "LeftWall": 0},
+	"RightWall": {"FrontWall": -PI / 2, "BackWall": PI / 2, "RightWall": PI, "LeftWall": 0},
 	"LeftWall": {"FrontWall": PI / 2, "BackWall": -PI / 2, "RightWall": 0, "LeftWall": PI},
 }
 
@@ -129,9 +129,10 @@ func connect_rooms(room_a: CSGRoom, room_b: CSGRoom) -> void:
 		room_b.rotate_y(rotation_to_align_rooms - (-room_a.rotation.y))
 		room_b.global_translate(room_a_socket.global_position - room_b_socket.global_position)
 		
-		room_a_socket.set_meta("connected", true)
-		room_b_socket.set_meta("connected", true)
+		room_a_socket.set_meta("connected", room_b_socket)
+		room_b_socket.set_meta("connected", room_a_socket)
 	
+
 	
 func generate_room_size_based_on_range(min_room_size: Vector3 = room_parameters.min_room_size, max_room_size: Vector3 = room_parameters.max_room_size) -> Vector3:
 	if min_room_size.is_equal_approx(max_room_size):
@@ -272,17 +273,17 @@ func clear_rooms_in_scene_tree() -> void:
 func clear_last_generated_rooms_in_scene_tree() -> void:
 	if _tool_can_be_used() and not csg_rooms_created.is_empty():
 		var rooms_to_remove_count = room_parameters.number_of_rooms_per_generation + (ceili(room_parameters.number_of_rooms_per_generation / 2) if room_parameters.use_bridge_connector_between_rooms else 0)
-		
+
 		var last_rooms_created = csg_rooms_created.slice(max(0, csg_rooms_created.size() - rooms_to_remove_count))
-		csg_rooms_created = csg_rooms_created.slice(0, last_rooms_created.size())
+		csg_rooms_created = csg_rooms_created.slice(0, csg_rooms_created.size() - last_rooms_created.size())
 		
 		for room in last_rooms_created:
 			room.free()
-			
+		
 		if csg_rooms_created.is_empty() and csg_rooms_output_node:
-			csg_rooms_output_node.free()
-			csg_rooms_output_node = null
-
+				csg_rooms_output_node.free()
+				csg_rooms_output_node = null
+			
 
 func _tool_can_be_used() -> bool:
 	return room_parameters and (Engine.is_editor_hint() and is_inside_tree()) or (not Engine.is_editor_hint() and is_node_ready())

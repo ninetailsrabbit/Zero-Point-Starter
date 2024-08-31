@@ -118,6 +118,7 @@ func available_sockets() -> Array[Marker3D]:
 	return sockets
 
 
+
 func get_door_sloot_from_wall(wall: CSGBox3D):
 	if wall:
 		return wall.get_node_or_null("DoorSlot")
