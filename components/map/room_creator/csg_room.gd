@@ -76,10 +76,12 @@ func build() -> void:
 func create_materials_on_room() -> void:
 	if generate_materials:
 		var shapes =  NodeTraversal.get_all_children(self).filter(func(child): return child is CSGBox3D)
+		var index: int = 0
 		
-		for index in shapes.size():
-			shapes[index].material = StandardMaterial3D.new()
-			materials_by_room_part[shapes[index]] = index
+		for shape: CSGBox3D in shapes:
+			shape.material = StandardMaterial3D.new()
+			materials_by_room_part[shape] = index
+			index += 1
 
 
 func generate_mesh_instance():
