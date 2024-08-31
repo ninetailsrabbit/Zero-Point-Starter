@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://components/motion/3D/first-person/first_person_controller.gd" id="1_siswl"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/mechanics/camera/first_person_camera_rotation_3d.gd" id="2_6vhab"]
 [ext_resource type="Script" path="res://components/design_patterns/finite_state_machine/finite-state-machine.gd" id="2_l5dql"]
-[ext_resource type="PackedScene" uid="uid://bcj2w63oj13e5" path="res://components/motion/3D/first-person/debug/first_person_debug_ui.tscn" id="2_q86iu"]
+[ext_resource type="PackedScene" uid="uid://bcj2w63oj13e5" path="res://components/motion/3D/first-person/debug_ui/first_person_debug_ui.tscn" id="2_q86iu"]
 [ext_resource type="Script" path="res://components/interaction/3D/raycast_interactor_3d.gd" id="3_gxrim"]
 [ext_resource type="PackedScene" uid="uid://bht2ebp61vh22" path="res://ui/screen_information/pointer/interaction_pointer.tscn" id="3_p2bi0"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/states/ground/idle.gd" id="3_rs4o2"]

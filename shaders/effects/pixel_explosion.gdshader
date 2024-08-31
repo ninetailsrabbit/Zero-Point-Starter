@@ -29,7 +29,7 @@ void fragment() {
     float angle_sin = sin(angle);
     float angle_cos = cos(angle);
     mat2 rotation_matrix = mat2(vec2(angle_cos, angle_sin), vec2(-angle_sin, angle_cos));
-    vec2 rotated_fract_uv = (rotation_matrix * (fract_uv - 0.5)) + 0.5; 
+    vec2 rotated_fract_uv = (rotation_matrix * (fract_uv - 0.5)) + 0.5;
     float inverse_particle_scale = 1.0 / mix(particle_scale_begin, particle_scale_end, progress);
     if (isinf(inverse_particle_scale)){
         COLOR.a = 0.0;
