@@ -148,17 +148,6 @@ static func remove_meta_from_all_children(node: Node, meta: String) -> void:
 		if child.has_meta(meta):
 			child.remove_meta(meta)
 			
-			
-
-static func get_tree_depth(node: Node) -> int:
-	var depth := 0
-	
-	while(node.get_parent() != null):
-		depth += 1
-		node = node.get_parent()
-		
-	return depth
-	
 
 static func get_nearest_node_by_distance(from: Vector2, nodes: Array = [], min_distance: float = 0.0, max_range: float = 9999) -> Dictionary:
 	var result := {"target": null, "distance": null}
@@ -195,3 +184,27 @@ static func get_nearest_nodes_sorted_by_distance(from: Vector2, nodes: Array = [
 	nodes_copy.sort_custom(func(a, b): return a.global_position.distance_to(from) < b.global_position.distance_to(from))
 	
 	return nodes_copy
+
+
+static func get_tree_depth(node: Node) -> int:
+	var depth := 0
+	
+	while(node.get_parent() != null):
+		depth += 1
+		node = node.get_parent()
+		
+	return depth
+	
+	
+static func get_absolute_z_index(node: Node2D) -> int:
+	var z := 0
+	
+	while node is Node2D:
+		z += node.z_index
+		
+		if not node.z_as_relative:
+			break
+			
+		node = node.get_parent()
+		
+	return z

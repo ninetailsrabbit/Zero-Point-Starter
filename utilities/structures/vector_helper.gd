@@ -201,6 +201,14 @@ static func rotate_vertical_random(origin: Vector3 = Vector3.ONE) -> Vector3:
 	return origin.rotated(arc_direction, randf_range(-PI / 2, PI / 2))
 
 
+## Consider exploring alternative color difference metrics like Delta-E or CIELAB if precise color matching is crucial
+static func colors_are_similar(color_a: Color, color_b: Color, tolerance := 100.0) -> bool:
+	var v1 := Vector4(color_a.r, color_a.g, color_a.b, color_a.a)
+	var v2 := Vector4(color_b.r, color_b.g, color_b.b, color_b.a)
+
+	return v2.distance_to(v1) <= (tolerance / 255.0)
+
+
 static func color_from_vector(vec) -> Color:
 	if vec is Vector3:
 		return Color(vec.x, vec.y, vec.z)
@@ -228,3 +236,75 @@ static func get_position_by_polar_coordinates_v3(center_position: Vector3, angle
 	var polar_coordinate := direction_from_rotation_v3(angle_radians) * radius
 
 	return center_position + polar_coordinate
+
+
+## Also known as the "city distance" or "L1 distance".
+## It measures the distance between two points as the sum of the absolute differences of their coordinates in each dimension.
+## 
+static func distance_manhattan_v2(a: Vector2, b: Vector2) -> float:
+	return abs(a.x - b.x) + abs(a.y - b.y)
+
+## Also known as the "chess distance" or "L∞ distance".
+## It measures the distance between two points as the greater of the absolute differences of their coordinates in each dimension
+static func distance_chebyshev_v2(a: Vector2, b: Vector2) -> float:
+	return max(abs(a.x - b.x), abs(a.y - b.y))
+
+
+static func length_manhattan_v2(a : Vector2) -> float:
+	return abs(a.x) + abs(a.y)
+
+
+static func length_chebyshev_v2(a : Vector2) -> float:
+	return max(abs(a.x), abs(a.y))
+
+## This function calculates the closest point on a line segment (defined by two points, a and b) to a third point c. 
+## It also clamps the result to ensure that the closest point lies within the line segment.
+static func closest_point_on_line_clamped_v2(a: Vector2, b: Vector2, c: Vector2) -> Vector2:
+	b = (b - a).normalized()
+	c = c - a
+	return a + b * clamp(c.dot(b), 0.0, 1.0)
+
+## This function is similar to the previous one but does not clamp the result. 
+## It calculates the closest point on the line segment defined by a and b to a third point c.
+## It uses the same vector operations as the previous closest_point_on_line_clamped_v2 function.
+static func closest_point_on_line_v2(a: Vector2, b: Vector2, c: Vector2) -> Vector2:
+	b = (b - a).normalized()
+	c = c - a
+	
+	return a + b * (c.dot(b))
+
+## 
+# Vector3 versions of the above calculation functions
+##
+static func distance_manhattan_v3(a: Vector3, b: Vector3) -> float:
+	return abs(a.x - b.x) + abs(a.y - b.y) + abs(a.z - b.z)
+
+
+static func distance_chebyshev_v3(a: Vector3, b: Vector3) -> float:
+	return max(abs(a.x - b.x), max(abs(a.y - b.y), abs(a.z - b.z)))
+
+
+static func length_manhattan_v3(a: Vector3) -> float:
+	return abs(a.x) + abs(a.y) + abs(a.z)
+
+
+static func length_chebyshev_v3(a: Vector3) -> float:
+	return max(abs(a.x), max(abs(a.y), abs(a.z)))
+
+
+static func closest_point_on_line_v3(a: Vector3, b: Vector3, c: Vector3) -> Vector3:
+	b = (b - a).normalized()
+	c = c - a
+	return a + b * (c.dot(b))
+
+
+static func closest_point_on_line_clamped_v3(a: Vector3, b: Vector3, c: Vector3) -> Vector3:
+	b = (b - a).normalized()
+	c = c - a
+	return a + b * clamp(c.dot(b), 0.0, 1.0)
+
+
+static func closest_point_on_line_normalized_v3(a: Vector3, b: Vector3, c: Vector3) -> float:
+	b = b - a
+	c = c - a
+	return c.dot(b.normalized()) / b.length()
