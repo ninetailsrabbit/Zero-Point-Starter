@@ -93,7 +93,7 @@ func create_csg_rooms() -> void:
 			room.is_bridge_room_connector = is_bridge_connector
 			room.room_size = generate_room_size_based_on_range(room_parameters.min_bridge_connector_size, room_parameters.max_bridge_connector_size) if is_bridge_connector else generate_room_size_based_on_range()
 			room.door_size = room_parameters.door_size
-			room.number_of_doors = 1 if csg_rooms_created.is_empty() else room_parameters.doors_per_room
+			room.number_of_doors = 1 if csg_rooms_created.is_empty() and room_parameters.number_of_rooms_per_generation > 1 else room_parameters.doors_per_room
 			room.randomize_door_position_in_wall = room_parameters.randomize_door_position_in_wall
 			room.include_floor = include_floor
 			room.include_ceil = include_ceil
@@ -211,8 +211,11 @@ func generate_room_meshes() -> void:
 				
 				if room_mesh_instance:
 					room_meshes_output_node.add_child(room_mesh_instance)
+					
 					NodeTraversal.set_owner_to_edited_scene_root(room_mesh_instance)
 					
+					add_door_sockets_to_generated_room_mesh(room_mesh_instance)
+						
 					name_surfaces_on_room_mesh(room, room_mesh_instance)
 					generate_collision_on_room_mesh(room_mesh_instance)
 					rooms_created.append(room_mesh_instance)
@@ -236,13 +239,31 @@ func generate_room_meshes() -> void:
 				room_mesh_instance.name = "GeneratedRoomMesh"
 				room_mesh_instance.mesh = meshes[1] as ArrayMesh
 				
+				for socket: Marker3D in NodeTraversal.find_nodes_of_type(csg_combiner_root, Marker3D.new()):
+					room_mesh_instance.sockets.append(socket)
+
 				room_meshes_output_node.add_child(room_mesh_instance)
+				
 				NodeTraversal.set_owner_to_edited_scene_root(room_mesh_instance)
+				add_door_sockets_to_generated_room_mesh(room_mesh_instance)
 				
 				name_surfaces_on_combined_mesh(csg_combiner_root, room_mesh_instance)
 				generate_collision_on_room_mesh(room_mesh_instance)
 
-				
+
+func add_door_sockets_to_generated_room_mesh(room_mesh_instance: RoomMesh) -> void:
+	for socket: Marker3D in room_mesh_instance.sockets:
+		## Duplicate does not work as expected so a new Marker3d needs to be created and assign the properties manually
+		var door_socket = Marker3D.new()
+		door_socket.name = socket.name
+		
+		room_mesh_instance.add_child(door_socket)
+		NodeTraversal.set_owner_to_edited_scene_root(door_socket)
+		
+		door_socket.global_position = socket.global_position
+		door_socket.global_rotation = socket.global_rotation
+
+	
 func name_surfaces_on_combined_mesh(root_node_for_rooms: CSGCombiner3D, room_mesh_instance: MeshInstance3D) -> void:
 	var index: int = 0
 	

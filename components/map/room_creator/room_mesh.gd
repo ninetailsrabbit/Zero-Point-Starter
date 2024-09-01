@@ -1,8 +1,8 @@
 @tool
 class_name RoomMesh extends MeshInstance3D
 
-
 var room_mesh_shape: ArrayMesh
+var sockets: Array[Marker3D] = []
 
 #region Materials
 var floor_material: Material
@@ -23,6 +23,9 @@ var left_wall_door_slot_material: Material
 
 func _ready() -> void:
 	update_room_materials()
+	
+	#for socket: Marker3D in sockets:
+		#add_child(socket.duplicate())
 
 
 func update_room_materials() -> void:

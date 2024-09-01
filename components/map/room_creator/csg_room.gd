@@ -93,10 +93,12 @@ func generate_mesh_instance():
 		room_mesh.mesh = meshes[1]
 		room_mesh.position = position
 		room_mesh.rotation = rotation
+		room_mesh.sockets = door_sockets()
 		
 		return room_mesh
 	
 	return null
+
 
 #region Getters
 func walls() -> Array[CSGBox3D]:
@@ -109,7 +111,7 @@ func walls() -> Array[CSGBox3D]:
 
 
 func available_sockets() -> Array[Marker3D]:
-	var markers = find_children("*", type_string(typeof(Marker3D))).filter(func(socket: Node): return socket is Marker3D and not socket.get_meta("connected"))
+	var markers = door_sockets().filter(func(socket: Node): return socket is Marker3D and not socket.get_meta("connected"))
 	var sockets: Array[Marker3D] = []
 	
 	for socket: Marker3D in markers:
@@ -117,6 +119,15 @@ func available_sockets() -> Array[Marker3D]:
 	
 	return sockets
 
+
+func door_sockets() ->  Array[Marker3D]:
+	var markers = NodeTraversal.find_nodes_of_type(self, Marker3D.new())
+	var sockets: Array[Marker3D] = []
+	
+	for socket: Marker3D in markers:
+		sockets.append(socket)
+	
+	return sockets
 
 
 func get_door_sloot_from_wall(wall: CSGBox3D):
