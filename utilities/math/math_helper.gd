@@ -73,6 +73,9 @@ static func factorials_from(number) -> Array[float]:
 		
 	return result
 
+## Only for radians
+static func quantize_angle_to_90(target_angle: float) -> float:
+	return roundf(fmod(target_angle, TAU) / (PI / 2)) * (PI / 2)
 
 ## Quaternions are a mathematical representation commonly used in 3D graphics to represent rotations.
 ## Axis-angle representation specifies a rotation by an axis vector and the angle of rotation around that axis
