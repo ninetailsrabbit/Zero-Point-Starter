@@ -99,7 +99,6 @@ func generate_mesh_instance():
 	
 	return null
 
-
 #region Getters
 func walls() -> Array[CSGBox3D]:
 	var result: Array[CSGBox3D] = []
@@ -132,7 +131,7 @@ func door_sockets() ->  Array[Marker3D]:
 
 func get_door_sloot_from_wall(wall: CSGBox3D):
 	if wall:
-		return wall.get_node_or_null("DoorSlot")
+		return wall.get_node_or_null("%sDoorSlot" % wall.name)
 		
 	return null
 #endregion
@@ -163,7 +162,7 @@ func create_door_slot_in_wall(wall: CSGBox3D, socket_number: int = 1, size: Vect
 				door_position.x = (-1 if MathHelper.chance(0.5) else 1) * randf_range(_door_size.x, (wall.size.x - _door_size.x) / 2)
 				
 		var door_slot: CSGBox3D = CSGBox3D.new()
-		door_slot.name = "DoorSlot"
+		door_slot.name = "%sDoorSlot" % wall.name
 		door_slot.operation = CSGBox3D.OPERATION_SUBTRACTION
 		door_slot.size = _door_size
 		door_slot.position = door_position
@@ -187,6 +186,8 @@ func create_door_slot_in_wall(wall: CSGBox3D, socket_number: int = 1, size: Vect
 				room_socket.position += Vector3.RIGHT * (wall_thickness / 2)
 			"leftwall":
 				room_socket.position += Vector3.LEFT * (wall_thickness / 2)
+			
+		room_socket.set_meta("wall", wall.name)
 				
 		wall.add_child(room_socket)
 		NodeTraversal.set_owner_to_edited_scene_root(room_socket)

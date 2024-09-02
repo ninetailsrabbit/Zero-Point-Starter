@@ -40,7 +40,7 @@ func _physics_process(_delta):
 
 func interact(interactable: Interactable3D):
 	if interactable:
-		interacting = true
+		interacting = interactable.interaction_is_constant
 		enabled = false
 		
 		interactable.interacted.emit()

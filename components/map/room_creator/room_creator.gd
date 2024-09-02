@@ -43,7 +43,7 @@ enum AvailableCollisions {
 	Trimesh, # More complex shapes that contains csg operations as substraction
 }
 
-var wall_rotations: Dictionary = {
+static var wall_rotations: Dictionary = {
 	"FrontWall": {"FrontWall": PI, "BackWall": 0, "RightWall": PI / 2, "LeftWall": -PI / 2},
 	"BackWall": {"FrontWall": 0, "BackWall": PI, "RightWall": -PI / 2, "LeftWall": PI / 2},
 	"RightWall": {"FrontWall": -PI / 2, "BackWall": PI / 2, "RightWall": PI, "LeftWall": 0},
@@ -138,11 +138,16 @@ func generate_room_size_based_on_range(min_room_size: Vector3 = room_parameters.
 	if min_room_size.is_equal_approx(max_room_size):
 		return min_room_size
 	else:
-		return Vector3(
-			randf_range(min_room_size.x, max_room_size.x),
-			randf_range(min_room_size.y, max_room_size.y),
-			randf_range(min_room_size.z, max_room_size.z),
-		)
+		var room_size: Vector3 = Vector3(
+				randf_range(min_room_size.x, max_room_size.x),
+				randf_range(min_room_size.y, max_room_size.y),
+				randf_range(min_room_size.z, max_room_size.z),
+			) 
+		
+		if room_parameters.use_integer_values_size:
+			room_size = round(room_size)
+			
+		return room_size
 
 
 func calculate_number_of_rooms(use_bridge_connectors: bool = room_parameters.use_bridge_connector_between_rooms) -> int:
@@ -207,7 +212,7 @@ func generate_room_meshes() -> void:
 			var new_rooms = csg_rooms_created.filter(func(csg_room): return not csg_room.name in room_created_names)
 			
 			for room: CSGRoom in new_rooms:
-				var room_mesh_instance = room.generate_mesh_instance()
+				var room_mesh_instance: RoomMesh = room.generate_mesh_instance() as RoomMesh
 				
 				if room_mesh_instance:
 					room_meshes_output_node.add_child(room_mesh_instance)
@@ -219,6 +224,7 @@ func generate_room_meshes() -> void:
 					name_surfaces_on_room_mesh(room, room_mesh_instance)
 					generate_collision_on_room_mesh(room_mesh_instance)
 					rooms_created.append(room_mesh_instance)
+					room_mesh_instance.set_script(null)
 					
 			created_rooms.emit(rooms_created)
 		else:
@@ -245,10 +251,12 @@ func generate_room_meshes() -> void:
 				room_meshes_output_node.add_child(room_mesh_instance)
 				
 				NodeTraversal.set_owner_to_edited_scene_root(room_mesh_instance)
+				
 				add_door_sockets_to_generated_room_mesh(room_mesh_instance)
 				
 				name_surfaces_on_combined_mesh(csg_combiner_root, room_mesh_instance)
 				generate_collision_on_room_mesh(room_mesh_instance)
+				room_mesh_instance.set_script(null)
 
 
 func add_door_sockets_to_generated_room_mesh(room_mesh_instance: RoomMesh) -> void:
@@ -256,6 +264,7 @@ func add_door_sockets_to_generated_room_mesh(room_mesh_instance: RoomMesh) -> vo
 		## Duplicate does not work as expected so a new Marker3d needs to be created and assign the properties manually
 		var door_socket = Marker3D.new()
 		door_socket.name = socket.name
+		door_socket.set_meta("wall", socket.get_meta("wall"))
 		
 		room_mesh_instance.add_child(door_socket)
 		NodeTraversal.set_owner_to_edited_scene_root(door_socket)
