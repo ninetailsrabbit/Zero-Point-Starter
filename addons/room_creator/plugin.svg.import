@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://4hlj37hyktvu"
-path="res://.godot/imported/room_creator.svg-1f8c1c3db5dc01698b2497f0eb10711c.ctex"
+path="res://.godot/imported/plugin.svg-a668e41659fa5f1a433b97298d5c90aa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://components/map/room_creator/room_creator.svg"
-dest_files=["res://.godot/imported/room_creator.svg-1f8c1c3db5dc01698b2497f0eb10711c.ctex"]
+source_file="res://addons/room_creator/plugin.svg"
+dest_files=["res://.godot/imported/plugin.svg-a668e41659fa5f1a433b97298d5c90aa.ctex"]
 
 [params]
 

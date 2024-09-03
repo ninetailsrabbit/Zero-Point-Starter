@@ -1,24 +1,14 @@
 @tool
-@icon("res://components/map/room_creator/room_creator.svg")
 class_name RoomCreator extends Node3D
-
 
 signal created_csg_rooms(csg_rooms: Array[CSGRoom])
 signal created_rooms(rooms: Array[RoomMesh])
 
-# Boolean variables that behave as tool buttons
-@export var create_new_room: bool = false:
-	set(value):
-		create_csg_rooms()
-@export var clear_generated_rooms: bool = false:
-	set(value):
-		clear_rooms_in_scene_tree()
-@export var clear_last_generated_rooms: bool = false:
-	set(value):
-		clear_last_generated_rooms_in_scene_tree()
-@export var generate_final_mesh: bool = false:
-	set(value):
-		generate_room_meshes()
+# Tool buttons parsed from the inspector plugin script
+@export var button_Generate_Rooms: String
+@export var button_Clear: String
+@export var button_Clear_Last_Generated_Rooms: String
+@export var button_Generate_Final_Mesh: String
 	
 @export_group("Parameters")
 @export var room_parameters: RoomParameters
@@ -55,6 +45,19 @@ var rooms_created: Array[RoomMesh] = []
 var csg_rooms_output_node: Node3D
 var room_meshes_output_node: Node3D
 
+
+func _on_button_pressed(text: String):
+	print("puto texto ", text)
+	match text:
+		"Generate Rooms":
+			create_csg_rooms()
+		"Clear":
+			clear_rooms_in_scene_tree()
+		"Clear Last Generated Rooms":
+			clear_last_generated_rooms_in_scene_tree()
+		"Generate Final Mesh":
+			generate_room_meshes()
+		
 
 func create_csg_rooms() -> void:
 	if _tool_can_be_used():

@@ -48,19 +48,19 @@ void fragment() {
 	vec4 target;
 	switch(daltonism){
 		case 0:
-			target=source;   
+			target=source;
 			break;
 		case 1:
-			target=prota*source;	
+			target=prota*source;
 			break;
 		case 2:
-			target=deute*source;	
+			target=deute*source;
 			break;
 		case 3:
-			target=trita*source;	
+			target=trita*source;
 			break;
 		case 4:
-			target=source*achroma;	
+			target=source*achroma;
 			break;
 	}
 	ALBEDO = target.rgb;
