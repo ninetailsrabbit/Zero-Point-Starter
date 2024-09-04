@@ -11,6 +11,10 @@ signal created_rooms(rooms: Array[RoomMesh])
 @export var button_Clear_Last_Generated_Rooms: String
 
 @export_group("Generation")
+@export var display_mode: DisplayMode = DisplayMode.Connected
+@export var grid_columns: int = 4
+@export_range(1, 1000, 1) var number_of_rooms_per_generation: int = 1
+@export_range(1, 4, 1) var doors_per_room: int = 2
 @export var generate_mesh_mode: MeshGenerationMode = MeshGenerationMode.MeshPerRoom
 @export var generate_materials: bool = true
 @export var include_ceil : bool = true
@@ -27,9 +31,17 @@ signal created_rooms(rooms: Array[RoomMesh])
 @export var create_static_body: bool = true
 @export var clean_collision: bool = true
 @export var simplified_collision: bool = false
-
-@export_group("Size Parameters")
+@export_group("Bridge connector size")
+@export var use_bridge_connector_between_rooms : bool = false
+@export var min_bridge_connector_size: Vector3 = Vector3(2.0, 3.0, 4.0)
+@export var max_bridge_connector_size: Vector3 = Vector3(2.0, 3.0, 10.0)
+@export_group("Room Parameters")
 @export var room_parameters: RoomParameters
+
+enum DisplayMode {
+	Connected,
+	Grid
+}
 
 enum MeshGenerationMode {
 	MeshPerRoom,
@@ -73,31 +85,42 @@ func create_csg_rooms() -> void:
 		if generate_mesh_mode == MeshGenerationMode.OneCombinedMesh:
 			root_node = _prepare_csg_combiner_root()
 		
-		var number_of_rooms: int = calculate_number_of_rooms(room_parameters.use_bridge_connector_between_rooms)
+		var number_of_rooms: int = calculate_number_of_rooms(use_bridge_connector_between_rooms)
 
 		for room_number in number_of_rooms:
 			var csg_room = create_csg_room()
 			root_node.add_child(csg_room)
 			
 			if csg_rooms_created.size() > 0 and csg_room:
-				connect_rooms(csg_rooms_created.back(), csg_room)
+				var previous_room: CSGRoom = csg_rooms_created.back() as CSGRoom
 				
+				if display_mode == DisplayMode.Connected:
+					connect_rooms(previous_room, csg_room)
+				elif display_mode == DisplayMode.Grid:
+					var new_grid_row = csg_rooms_created.size() % grid_columns == 0
+					csg_room.position = Vector3(
+						0 if new_grid_row else previous_room.position.x + room_parameters.max_room_size.x, 
+						0, 
+						previous_room.position.z - (room_parameters.max_room_size.z + room_parameters.max_room_size.z / 2.0) if new_grid_row else previous_room.position.z
+					)
+					
+					
 			csg_rooms_created.append(csg_room)
 		
 		created_csg_rooms.emit(csg_rooms_created)
 
 
 func create_csg_room() -> CSGRoom:
-	var is_bridge_connector: bool = room_parameters.use_bridge_connector_between_rooms and csg_rooms_created.size() > 0 and not csg_rooms_created.back().is_bridge_room_connector
+	var is_bridge_connector: bool = use_bridge_connector_between_rooms and csg_rooms_created.size() > 0 and not csg_rooms_created.back().is_bridge_room_connector
 	var room: CSGRoom = CSGRoom.new()
 	
 	room.name = "Room%d" % csg_rooms_created.size()
 	room.position = csg_rooms_created.back().position if csg_rooms_created.size() > 0 else Vector3.ZERO
 	room.use_collision = false
 	room.is_bridge_room_connector = is_bridge_connector
-	room.room_size = generate_room_size_based_on_range(room_parameters.min_bridge_connector_size, room_parameters.max_bridge_connector_size) if is_bridge_connector else generate_room_size_based_on_range()
+	room.room_size = generate_room_size_based_on_range(min_bridge_connector_size, max_bridge_connector_size) if is_bridge_connector else generate_room_size_based_on_range()
 	room.door_size = room_parameters.door_size
-	room.number_of_doors = 1 if csg_rooms_created.is_empty() and room_parameters.number_of_rooms_per_generation > 1 else room_parameters.doors_per_room
+	room.number_of_doors = 2
 	room.randomize_door_position_in_wall = room_parameters.randomize_door_position_in_wall
 	room.include_floor = include_floor
 	room.include_ceil = include_ceil
@@ -154,8 +177,8 @@ func generate_room_size_based_on_range(min_room_size: Vector3 = room_parameters.
 		return room_size
 
 
-func calculate_number_of_rooms(use_bridge_connectors: bool = room_parameters.use_bridge_connector_between_rooms) -> int:
-	var number_of_rooms = room_parameters.number_of_rooms_per_generation
+func calculate_number_of_rooms(use_bridge_connectors: bool = use_bridge_connector_between_rooms) -> int:
+	var number_of_rooms = number_of_rooms_per_generation
 	
 	if use_bridge_connectors:
 		number_of_rooms += ceili(number_of_rooms / 2.0)
@@ -306,7 +329,7 @@ func clear_rooms_in_scene_tree() -> void:
 
 func clear_last_generated_rooms_in_scene_tree() -> void:
 	if _tool_can_be_used() and not csg_rooms_created.is_empty():
-		var rooms_to_remove_count = room_parameters.number_of_rooms_per_generation + (ceili(room_parameters.number_of_rooms_per_generation / 2) if room_parameters.use_bridge_connector_between_rooms else 0)
+		var rooms_to_remove_count = number_of_rooms_per_generation + (ceili(number_of_rooms_per_generation / 2) if use_bridge_connector_between_rooms else 0)
 
 		var last_rooms_created = csg_rooms_created.slice(max(0, csg_rooms_created.size() - rooms_to_remove_count))
 		csg_rooms_created = csg_rooms_created.slice(0, csg_rooms_created.size() - last_rooms_created.size())
