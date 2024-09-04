@@ -19,6 +19,8 @@ func _init(obj: Object, text:String):
 			emoji = "🏚️"
 		"Generate Final Mesh":
 			emoji = "🧱"
+		"Save Rooms As Scenes":
+			emoji = "💾"
 		"Clear All":
 			emoji = "🗑️"
 		"Clear Last Generated Rooms":

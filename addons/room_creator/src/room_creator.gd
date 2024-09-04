@@ -7,9 +7,12 @@ signal created_rooms(rooms: Array[RoomMesh])
 # Tool buttons parsed from the inspector plugin script
 @export var button_Generate_Rooms: String
 @export var button_Generate_Final_Mesh: String
+@export var button_Save_Rooms_As_Scenes: String
 @export var button_Clear_All: String
 @export var button_Clear_Last_Generated_Rooms: String
 
+@export_group("Save")
+@export_dir var output_folder: String = "res://room_creator/rooms"
 @export_group("Generation")
 @export var display_mode: DisplayMode = DisplayMode.Connected
 @export var grid_columns: int = 4
@@ -70,12 +73,40 @@ func _on_tool_button_pressed(text: String) -> void:
 	match text:
 		"Generate Rooms":
 			create_csg_rooms()
+		"Generate Final Mesh":
+			generate_room_meshes()
+		"Save Rooms As Scenes":
+			save_generated_meshes()
 		"Clear All":
 			clear_rooms_in_scene_tree()
 		"Clear Last Generated Rooms":
 			clear_last_generated_rooms_in_scene_tree()
-		"Generate Final Mesh":
-			generate_room_meshes()
+	
+
+func save_generated_meshes() -> void:
+	var index: int = 0
+	
+	if not DirAccess.dir_exists_absolute(output_folder):
+		var folder_creation_result = DirAccess.make_dir_recursive_absolute(output_folder)
+		if folder_creation_result != OK:
+			push_error("RoomCreator: An error %d ocurred when creating output folder %s " % output_folder)
+			return
+			
+	for room: RoomMesh in rooms_created:
+		var target_room: MeshInstance3D = room.duplicate()
+		
+		for child: Node in NodeTraversal.get_all_children(target_room):
+			child.owner = target_room
+			
+		var scene: PackedScene = PackedScene.new()
+		var result = scene.pack(target_room)
+	
+		if result == OK:
+			var error = ResourceSaver.save(scene, "%s/%s.tscn" % [output_folder, room.name.to_lower()])
+			if error != OK:
+				push_error("RoomCreator: An error %d occurred while saving the scene %s to %s" % [error, room.name, output_folder])
+		
+		index += 1
 
 
 func create_csg_rooms() -> void:
