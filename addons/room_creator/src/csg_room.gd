@@ -14,16 +14,20 @@ class_name CSGRoom extends CSGCombiner3D
 @export var wall_thickness: float = 0.15
 @export var ceil_thickness: float = 0.1
 @export var floor_thickness: float = 0.1
+@export_group("Ceil columns")
+@export var ceil_column_height: float = 0.6
+@export var ceil_column_thickness: float = 0.5
 @export_group("Includes")
-@export var include_ceil : bool= true;
-@export var include_floor : bool= true;
-@export var include_right_wall : bool= true;
-@export var include_left_wall : bool= true;
-@export var include_front_wall : bool= true;
-@export var include_back_wall : bool= true;
+@export var include_ceil : bool = true
+@export var include_ceil_columns : bool = true
+@export var include_floor : bool = true
+@export var include_right_wall : bool = true
+@export var include_left_wall : bool = true
+@export var include_front_wall : bool = true
+@export var include_back_wall : bool = true
 
-var floor: CSGBox3D
-var ceil: CSGBox3D
+var floor_side: CSGBox3D
+var ceil_side: CSGBox3D
 var front_wall: CSGBox3D
 var back_wall: CSGBox3D
 var left_wall: CSGBox3D
@@ -48,6 +52,9 @@ func build() -> void:
 		
 	if include_ceil:
 		create_ceil(room_size)
+		
+		if include_ceil_columns:
+			create_ceil_columns(room_size)
 		
 	if include_front_wall:
 		create_front_wall(room_size)
@@ -191,25 +198,44 @@ func create_door_slot_in_wall(wall: CSGBox3D, socket_number: int = 1, size: Vect
 		wall.add_child(room_socket)
 		NodeTraversal.set_owner_to_edited_scene_root(room_socket)
 	
+
+func create_ceil_columns(size: Vector3 = room_size) -> void:
+	var ceil_column_base: CSGBox3D = ceil_side.duplicate()
+	ceil_column_base.name = "CeilColumnsInterior"
+	ceil_column_base.size = Vector3(ceil_column_base.size.x - ceil_thickness,  ceil_column_height, ceil_column_base.size.z - ceil_thickness)
+	
+	var ceil_column_substraction: CSGBox3D = ceil_column_base.duplicate()
+	ceil_column_substraction.name = "CeilColumnsExterior"
+	ceil_column_substraction.operation = CSGShape3D.OPERATION_SUBTRACTION
+	ceil_column_substraction.size = Vector3(size.x - ceil_column_thickness * 2, ceil_column_base.size.y + ceil_column_thickness * 2, size.z - ceil_column_thickness * 2)
+	
+	add_child(ceil_column_base)
+	NodeTraversal.set_owner_to_edited_scene_root(ceil_column_base)
+	ceil_column_base.add_child(ceil_column_substraction)
+	NodeTraversal.set_owner_to_edited_scene_root(ceil_column_substraction)
+	
+	ceil_column_substraction.position = Vector3.ZERO
+	ceil_column_base.position.y -= min(ceil_column_height, ceil_column_thickness) - ceil_thickness * 2
+	
 	
 func create_floor(size: Vector3 = room_size) -> void:
-	floor = CSGBox3D.new()
-	floor.name = "Floor"
-	floor.size = Vector3(size.x + floor_thickness * 2, floor_thickness, size.z + floor_thickness * 2)
-	floor.position = Vector3.ZERO
+	floor_side = CSGBox3D.new()
+	floor_side.name = "Floor"
+	floor_side.size = Vector3(size.x + floor_thickness * 2, floor_thickness, size.z + floor_thickness * 2)
+	floor_side.position = Vector3.ZERO
 	
-	add_child(floor)
-	NodeTraversal.set_owner_to_edited_scene_root(floor)
+	add_child(floor_side)
+	NodeTraversal.set_owner_to_edited_scene_root(floor_side)
 
 
 func create_ceil(size: Vector3 = room_size) -> void:
-	ceil = CSGBox3D.new()
-	ceil.name = "Ceil"
-	ceil.size = Vector3(size.x + ceil_thickness * 2, ceil_thickness, size.z + ceil_thickness * 2)
-	ceil.position = Vector3(0, max(size.y, (size.y + ceil_thickness) - size.y / 2.5), 0)
+	ceil_side = CSGBox3D.new()
+	ceil_side.name = "Ceil"
+	ceil_side.size = Vector3(size.x + ceil_thickness * 2, ceil_thickness, size.z + ceil_thickness * 2)
+	ceil_side.position = Vector3(0, max(size.y, (size.y + ceil_thickness) - size.y / 2.5), 0)
 	
-	add_child(ceil)
-	NodeTraversal.set_owner_to_edited_scene_root(ceil)
+	add_child(ceil_side)
+	NodeTraversal.set_owner_to_edited_scene_root(ceil_side)
 
 
 func create_front_wall(size: Vector3 = room_size) -> void:

@@ -13,12 +13,13 @@ signal created_rooms(rooms: Array[RoomMesh])
 @export_group("Generation")
 @export var generate_mesh_mode: MeshGenerationMode = MeshGenerationMode.MeshPerRoom
 @export var generate_materials: bool = true
-@export var include_ceil : bool = true;
-@export var include_floor : bool = true;
-@export var include_right_wall : bool = true;
-@export var include_left_wall : bool = true;
-@export var include_front_wall : bool = true;
-@export var include_back_wall : bool = true;
+@export var include_ceil : bool = true
+@export var include_floor : bool = true
+@export var include_right_wall : bool = true
+@export var include_left_wall : bool = true
+@export var include_front_wall : bool = true
+@export var include_back_wall : bool = true
+@export var include_ceil_columns : bool = true
 @export_group("Collisions")
 @export var generate_collisions: bool = true
 @export var type_of_collision: AvailableCollisions = AvailableCollisions.Trimesh
@@ -99,11 +100,17 @@ func create_csg_room() -> CSGRoom:
 	room.randomize_door_position_in_wall = room_parameters.randomize_door_position_in_wall
 	room.include_floor = include_floor
 	room.include_ceil = include_ceil
+	room.include_ceil_columns = include_ceil_columns
 	room.include_front_wall = include_front_wall
 	room.include_back_wall = include_back_wall
 	room.include_left_wall = include_left_wall
 	room.include_right_wall = include_right_wall
 	room.generate_materials = generate_materials
+	room.ceil_thickness = room_parameters.ceil_thickness
+	room.floor_thickness = room_parameters.floor_thickness
+	room.wall_thickness = room_parameters.wall_thickness
+	room.ceil_column_thickness = room_parameters.ceil_column_thickness
+	room.ceil_column_height = room_parameters.ceil_column_height
 	
 	return room
 
@@ -127,7 +134,6 @@ func connect_rooms(room_a: CSGRoom, room_b: CSGRoom) -> void:
 		room_a_socket.set_meta("connected", room_b_socket)
 		room_b_socket.set_meta("connected", room_a_socket)
 	
-
 	
 func generate_room_size_based_on_range(min_room_size: Vector3 = room_parameters.min_room_size, max_room_size: Vector3 = room_parameters.max_room_size) -> Vector3:
 	if min_room_size.is_equal_approx(max_room_size):
