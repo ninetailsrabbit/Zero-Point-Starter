@@ -71,12 +71,16 @@ func build() -> void:
 	if include_left_wall:
 		create_left_wall(room_size)
 		
-	if include_corner_columns and not is_bridge_room_connector:
+	if include_corner_columns:
 		create_corner_columns()
 	
 	if is_bridge_room_connector:
-		create_door_slot_in_wall(front_wall, 1)
-		create_door_slot_in_wall(back_wall, 2)
+		if include_front_wall and include_back_wall:
+			create_door_slot_in_wall(front_wall, 1)
+			create_door_slot_in_wall(back_wall, 2)
+		elif include_right_wall and include_left_wall:
+			create_door_slot_in_wall(right_wall, 1)
+			create_door_slot_in_wall(left_wall, 2)
 	else:
 		for socket_number in number_of_doors:
 			create_door_slot_in_random_wall(socket_number)
@@ -84,8 +88,6 @@ func build() -> void:
 	create_materials_on_room()
 		
 
-
-	
 func create_materials_on_room() -> void:
 	if generate_materials:
 		var shapes =  NodeTraversal.get_all_children(self).filter(func(child): return child is CSGBox3D)
@@ -233,26 +235,26 @@ func create_corner_columns(size: Vector3 = room_size) -> void:
 	var top_left_column: CSGBox3D = CSGBox3D.new()
 	var bottom_right_column: CSGBox3D = CSGBox3D.new()
 	var bottom_left_column: CSGBox3D = CSGBox3D.new()
-	
+
 	top_right_column.name = "TopRightCornerColumn"
 	top_right_column.size = column_size
 	
 	add_child(top_right_column)
 	NodeTraversal.set_owner_to_edited_scene_root(top_right_column)
 	top_right_column.position = Vector3( (size.x / 2.0) - adjustment_thickness, size.y / 2.0, -((size.z / 2.0) - adjustment_thickness))
-	
+
 	top_left_column.name = "TopLeftCornerColumn"
 	top_left_column.size = column_size
 	top_left_column.position = Vector3(-((size.x / 2.0) - adjustment_thickness), size.y / 2.0, -((size.z / 2.0) - adjustment_thickness))
 	add_child(top_left_column)
 	NodeTraversal.set_owner_to_edited_scene_root(top_left_column)
-	
+
 	bottom_right_column.name = "BottomRightCornerColumn"
 	bottom_right_column.size = column_size
 	add_child(bottom_right_column)
 	NodeTraversal.set_owner_to_edited_scene_root(bottom_right_column)
 	bottom_right_column.position = Vector3( (size.x / 2.0) - adjustment_thickness, size.y / 2.0, ((size.z / 2.0) - adjustment_thickness))
-	
+
 	bottom_left_column.name = "BottomLeftCornerColumn"
 	bottom_left_column.size = column_size
 	add_child(bottom_left_column)

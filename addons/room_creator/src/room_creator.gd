@@ -104,7 +104,7 @@ func create_csg_rooms() -> void:
 						previous_room.position.z - (room_parameters.max_room_size.z + room_parameters.max_room_size.z / 2.0) if new_grid_row else previous_room.position.z
 					)
 					
-					
+
 			csg_rooms_created.append(csg_room)
 		
 		created_csg_rooms.emit(csg_rooms_created)
