@@ -1,13 +1,17 @@
 class_name DynamicWorldEnvironment extends WorldEnvironment
 
 
-
 func _ready() -> void:
 	GlobalGameEvents.updated_graphic_settings.connect(on_updated_graphic_settings)
 	
+	update_world_graphic_settings()
 	
-	
+
 func on_updated_graphic_settings() -> void:
+	update_world_graphic_settings()
+
+
+func update_world_graphic_settings() -> void:
 	var quality_preset = SettingsHandler.get_graphics_section("quality_preset")
 	var viewport: Viewport = get_viewport()
 	

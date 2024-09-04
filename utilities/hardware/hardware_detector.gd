@@ -92,7 +92,7 @@ static func auto_discover_graphics_quality() -> QualityPreset:
 
 static var devices_by_quality: Dictionary = {
 	QualityPreset.Low: [
-	 	"M1", "M2", "M3", "MX", "Vega", "Radeon Graphics", "Radeon Pro", "FirePro", "Intel", "HD", "Iris",
+		"M1", "M2", "M3", "MX", "Vega", "Radeon Graphics", "Radeon Pro", "FirePro", "Intel", "HD", "Iris",
 		"GT 705", "GT 710", "710M", "GT 720", "GT 730", "GT 735", "GT 740", "GTX 740", "740M", "GTX 745",
 		"745M", "GTX 750", "750M", "755M", "GTX 760", "760M", "765M", "GTX 770", "770M", "GTX 780", "780M",
 		"810M", "820M", "825M", "830M", "840M", "845M", "850M", "860M", "870M", "880M", "GT 945", "GTX 945",
@@ -110,7 +110,7 @@ static var devices_by_quality: Dictionary = {
 		"R7 M460", "R7 M465"
 	],
 	QualityPreset.Medium: [
-	 	"GTX 970", "GTX 980", "GTX 1060", "GTX 1650", "GTX 1660", "GTX 1660 Ti", "GTX 1050 Ti", "GTX 1070",
+		"GTX 970", "GTX 980", "GTX 1060", "GTX 1650", "GTX 1660", "GTX 1660 Ti", "GTX 1050 Ti", "GTX 1070",
 		"GTX 1070 Ti", "GTX 1080", "GTX 1080 Ti", "RX 470", "RX 480", "RX 570", "RX 580", "RX 590",
 		"RX 5500 XT", "RX 5600 XT", "RX 5700", "RX 5700 XT", "R9 Fury", "R9 Fury X", "R9 Nano", "Vega 56",
 		"Vega 64"
@@ -171,7 +171,7 @@ static var graphics_quality_presets: Dictionary = {
 			
 		]
 
-	),	
+	),
 	QualityPreset.Ultra: GraphicQualityPreset.new("For recent PCs with high-end dedicated graphics",
 		[
 			GraphicQualityDisplay.new("environment/glow_enabled","Glow", 1, "Enabled"),
