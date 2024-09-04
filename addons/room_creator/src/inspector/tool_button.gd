@@ -4,15 +4,27 @@ var object: Object
 
 func _init(obj: Object, text:String):
 	object = obj
-	size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 	var button := Button.new()
 	add_child(button)
-	self.set("theme_override_constants/margin_left",2)
-	self.set("theme_override_constants/margin_top",2)
-	self.set("theme_override_constants/margin_right",2)
-	self.set("theme_override_constants/margin_bottom",2)
+	self.set("theme_override_constants/margin_left",5)
+	self.set("theme_override_constants/margin_top",5)
+	self.set("theme_override_constants/margin_right",5)
+	self.set("theme_override_constants/margin_bottom",5)
+	
+	var emoji: String = ""
+	match text:
+		"Generate Rooms":
+			emoji = "🏚️"
+		"Generate Final Mesh":
+			emoji = "🧱"
+		"Clear All":
+			emoji = "🗑️"
+		"Clear Last Generated Rooms":
+			emoji = "🗑️"
+	
 	button.size_flags_horizontal = SIZE_EXPAND_FILL
 	button.flat = false
-	button.text = text
-	button.button_down.connect(object._on_button_pressed.bind(text))
+	button.text = "%s %s" % [emoji, text]
+	button.button_down.connect(object._on_tool_button_pressed.bind(text))

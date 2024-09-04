@@ -5,6 +5,7 @@ class_name RoomParameters extends Resource
 @export_range(1, 4, 1) var doors_per_room: int = 2
 @export var use_bridge_connector_between_rooms : bool = false
 @export var randomize_door_position_in_wall: bool = false
+## Decimal values are rounded when generate betwen a min-max size range
 @export var use_integer_values_size: bool = true
 @export_group("Size")
 @export var door_size: Vector3 = Vector3(1.5, 2.0, 0.25)

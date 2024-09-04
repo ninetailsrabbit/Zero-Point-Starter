@@ -6,13 +6,12 @@ signal created_rooms(rooms: Array[RoomMesh])
 
 # Tool buttons parsed from the inspector plugin script
 @export var button_Generate_Rooms: String
-@export var button_Clear: String
-@export var button_Clear_Last_Generated_Rooms: String
 @export var button_Generate_Final_Mesh: String
-	
-@export_group("Parameters")
-@export var room_parameters: RoomParameters
-@export var generate_mesh_per_room: bool = true
+@export var button_Clear_All: String
+@export var button_Clear_Last_Generated_Rooms: String
+
+@export_group("Generation")
+@export var generate_mesh_mode: MeshGenerationMode = MeshGenerationMode.MeshPerRoom
 @export var generate_materials: bool = true
 @export var include_ceil : bool = true;
 @export var include_floor : bool = true;
@@ -27,6 +26,13 @@ signal created_rooms(rooms: Array[RoomMesh])
 @export var clean_collision: bool = true
 @export var simplified_collision: bool = false
 
+@export_group("Size Parameters")
+@export var room_parameters: RoomParameters
+
+enum MeshGenerationMode {
+	MeshPerRoom,
+	OneCombinedMesh
+}
 
 enum AvailableCollisions {
 	Convex, # Basic shapes
@@ -46,75 +52,61 @@ var csg_rooms_output_node: Node3D
 var room_meshes_output_node: Node3D
 
 
-func _on_button_pressed(text: String):
-	print("puto texto ", text)
+func _on_tool_button_pressed(text: String) -> void:
 	match text:
 		"Generate Rooms":
 			create_csg_rooms()
-		"Clear":
+		"Clear All":
 			clear_rooms_in_scene_tree()
 		"Clear Last Generated Rooms":
 			clear_last_generated_rooms_in_scene_tree()
 		"Generate Final Mesh":
 			generate_room_meshes()
-		
+
 
 func create_csg_rooms() -> void:
 	if _tool_can_be_used():
+		var root_node = _prepare_csg_rooms_output_node()
 		
-		if csg_rooms_output_node == null:
-			csg_rooms_output_node = Node3D.new()
-			csg_rooms_output_node.name = "CSGRoomsOutputNode"
-			add_child(csg_rooms_output_node)
-			NodeTraversal.set_owner_to_edited_scene_root(csg_rooms_output_node)
-			
-		var root_node = csg_rooms_output_node
-		
-		if not generate_mesh_per_room:
-			var csg_combiner_root: CSGCombiner3D = csg_rooms_output_node.get_node_or_null("CSGCombinerRoot")
-			
-			if csg_combiner_root == null:
-				csg_combiner_root = CSGCombiner3D.new()
-				csg_combiner_root.name = "CSGCombinerRoot"
-				csg_combiner_root.use_collision = false
-				
-			if not csg_combiner_root.is_inside_tree():
-				csg_rooms_output_node.add_child(csg_combiner_root)
-				NodeTraversal.set_owner_to_edited_scene_root(csg_combiner_root)
-				
-			root_node = csg_combiner_root
+		if generate_mesh_mode == MeshGenerationMode.OneCombinedMesh:
+			root_node = _prepare_csg_combiner_root()
 		
 		var number_of_rooms: int = calculate_number_of_rooms(room_parameters.use_bridge_connector_between_rooms)
 
 		for room_number in number_of_rooms:
-			var is_bridge_connector: bool = room_parameters.use_bridge_connector_between_rooms and csg_rooms_created.size() > 0 and not csg_rooms_created.back().is_bridge_room_connector
+			var csg_room = create_csg_room()
+			root_node.add_child(csg_room)
 			
-			var room: CSGRoom = CSGRoom.new()
-			room.name = "Room%d" % csg_rooms_created.size()
-			room.position = csg_rooms_created.back().position if csg_rooms_created.size() > 0 else Vector3.ZERO
-			room.use_collision = false
-			room.is_bridge_room_connector = is_bridge_connector
-			room.room_size = generate_room_size_based_on_range(room_parameters.min_bridge_connector_size, room_parameters.max_bridge_connector_size) if is_bridge_connector else generate_room_size_based_on_range()
-			room.door_size = room_parameters.door_size
-			room.number_of_doors = 1 if csg_rooms_created.is_empty() and room_parameters.number_of_rooms_per_generation > 1 else room_parameters.doors_per_room
-			room.randomize_door_position_in_wall = room_parameters.randomize_door_position_in_wall
-			room.include_floor = include_floor
-			room.include_ceil = include_ceil
-			room.include_front_wall = include_front_wall
-			room.include_back_wall = include_back_wall
-			room.include_left_wall = include_left_wall
-			room.include_right_wall = include_right_wall
-			room.generate_materials = generate_materials
-			
-			root_node.add_child(room)
-			
-			if csg_rooms_created.size() > 0 and room:
-				connect_rooms(csg_rooms_created.back(), room)
+			if csg_rooms_created.size() > 0 and csg_room:
+				connect_rooms(csg_rooms_created.back(), csg_room)
 				
-			csg_rooms_created.append(room)
+			csg_rooms_created.append(csg_room)
 		
 		created_csg_rooms.emit(csg_rooms_created)
-			
+
+
+func create_csg_room() -> CSGRoom:
+	var is_bridge_connector: bool = room_parameters.use_bridge_connector_between_rooms and csg_rooms_created.size() > 0 and not csg_rooms_created.back().is_bridge_room_connector
+	var room: CSGRoom = CSGRoom.new()
+	
+	room.name = "Room%d" % csg_rooms_created.size()
+	room.position = csg_rooms_created.back().position if csg_rooms_created.size() > 0 else Vector3.ZERO
+	room.use_collision = false
+	room.is_bridge_room_connector = is_bridge_connector
+	room.room_size = generate_room_size_based_on_range(room_parameters.min_bridge_connector_size, room_parameters.max_bridge_connector_size) if is_bridge_connector else generate_room_size_based_on_range()
+	room.door_size = room_parameters.door_size
+	room.number_of_doors = 1 if csg_rooms_created.is_empty() and room_parameters.number_of_rooms_per_generation > 1 else room_parameters.doors_per_room
+	room.randomize_door_position_in_wall = room_parameters.randomize_door_position_in_wall
+	room.include_floor = include_floor
+	room.include_ceil = include_ceil
+	room.include_front_wall = include_front_wall
+	room.include_back_wall = include_back_wall
+	room.include_left_wall = include_left_wall
+	room.include_right_wall = include_right_wall
+	room.generate_materials = generate_materials
+	
+	return room
+
 
 func connect_rooms(room_a: CSGRoom, room_b: CSGRoom) -> void:
 	var available_sockets_room_a: Array[Marker3D]= room_a.available_sockets()
@@ -204,7 +196,7 @@ func generate_collision_on_room_mesh(room_mesh_instance: RoomMesh) -> void:
 func generate_room_meshes() -> void:
 	if _tool_can_be_used():
 		
-		if generate_mesh_per_room:
+		if generate_mesh_mode == MeshGenerationMode.MeshPerRoom:
 			if room_meshes_output_node == null:
 				room_meshes_output_node = Node3D.new()
 				room_meshes_output_node.name = "RoomMeshesOutputNode"
@@ -223,14 +215,15 @@ func generate_room_meshes() -> void:
 					NodeTraversal.set_owner_to_edited_scene_root(room_mesh_instance)
 					
 					add_door_sockets_to_generated_room_mesh(room_mesh_instance)
-						
 					name_surfaces_on_room_mesh(room, room_mesh_instance)
 					generate_collision_on_room_mesh(room_mesh_instance)
 					rooms_created.append(room_mesh_instance)
+					
 					room_mesh_instance.set_script(null)
 					
 			created_rooms.emit(rooms_created)
-		else:
+			
+		elif generate_mesh_mode == MeshGenerationMode.OneCombinedMesh:
 			var csg_combiner_root: CSGCombiner3D = csg_rooms_output_node.get_node("CSGCombinerRoot") as CSGCombiner3D
 			
 			if room_meshes_output_node:
@@ -256,9 +249,9 @@ func generate_room_meshes() -> void:
 				NodeTraversal.set_owner_to_edited_scene_root(room_mesh_instance)
 				
 				add_door_sockets_to_generated_room_mesh(room_mesh_instance)
-				
 				name_surfaces_on_combined_mesh(csg_combiner_root, room_mesh_instance)
 				generate_collision_on_room_mesh(room_mesh_instance)
+				
 				room_mesh_instance.set_script(null)
 
 
@@ -292,7 +285,6 @@ func name_surfaces_on_room_mesh(room: CSGRoom, room_mesh_instance: MeshInstance3
 
 func clear_rooms_in_scene_tree() -> void:
 	if _tool_can_be_used():
-		
 		for child in get_children():
 			child.free()
 			
@@ -317,6 +309,31 @@ func clear_last_generated_rooms_in_scene_tree() -> void:
 				csg_rooms_output_node.free()
 				csg_rooms_output_node = null
 			
+
+func _prepare_csg_rooms_output_node() -> Node3D:
+	if csg_rooms_output_node == null:
+		csg_rooms_output_node = Node3D.new()
+		csg_rooms_output_node.name = "CSGRoomsOutputNode"
+		add_child(csg_rooms_output_node)
+		NodeTraversal.set_owner_to_edited_scene_root(csg_rooms_output_node)
+		
+	return csg_rooms_output_node
+	
+	
+func _prepare_csg_combiner_root() -> CSGCombiner3D:
+	var csg_combiner_root: CSGCombiner3D = csg_rooms_output_node.get_node_or_null("CSGCombinerRoot")
+			
+	if csg_combiner_root == null:
+		csg_combiner_root = CSGCombiner3D.new()
+		csg_combiner_root.name = "CSGCombinerRoot"
+		csg_combiner_root.use_collision = false
+		
+	if not csg_combiner_root.is_inside_tree():
+		csg_rooms_output_node.add_child(csg_combiner_root)
+		NodeTraversal.set_owner_to_edited_scene_root(csg_combiner_root)
+	
+	return csg_combiner_root
+
 
 func _tool_can_be_used() -> bool:
 	return room_parameters and (Engine.is_editor_hint() and is_inside_tree()) or (not Engine.is_editor_hint() and is_node_ready())

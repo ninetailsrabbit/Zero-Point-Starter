@@ -22,7 +22,6 @@ class_name CSGRoom extends CSGCombiner3D
 @export var include_front_wall : bool= true;
 @export var include_back_wall : bool= true;
 
-
 var floor: CSGBox3D
 var ceil: CSGBox3D
 var front_wall: CSGBox3D
