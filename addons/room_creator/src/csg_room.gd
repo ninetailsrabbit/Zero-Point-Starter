@@ -17,14 +17,17 @@ class_name CSGRoom extends CSGCombiner3D
 @export_group("Ceil columns")
 @export var ceil_column_height: float = 0.6
 @export var ceil_column_thickness: float = 0.5
+@export_group("Corner columns")
+@export var corner_column_thickness: float = 0.5
 @export_group("Includes")
 @export var include_ceil : bool = true
-@export var include_ceil_columns : bool = true
+@export var include_ceil_columns : bool = false
 @export var include_floor : bool = true
 @export var include_right_wall : bool = true
 @export var include_left_wall : bool = true
 @export var include_front_wall : bool = true
 @export var include_back_wall : bool = true
+@export var include_corner_columns : bool = false
 
 var floor_side: CSGBox3D
 var ceil_side: CSGBox3D
@@ -67,6 +70,9 @@ func build() -> void:
 		
 	if include_left_wall:
 		create_left_wall(room_size)
+		
+	if include_corner_columns and not is_bridge_room_connector:
+		create_corner_columns()
 	
 	if is_bridge_room_connector:
 		create_door_slot_in_wall(front_wall, 1)
@@ -79,6 +85,7 @@ func build() -> void:
 		
 
 
+	
 func create_materials_on_room() -> void:
 	if generate_materials:
 		var shapes =  NodeTraversal.get_all_children(self).filter(func(child): return child is CSGBox3D)
@@ -216,6 +223,41 @@ func create_ceil_columns(size: Vector3 = room_size) -> void:
 	
 	ceil_column_substraction.position = Vector3.ZERO
 	ceil_column_base.position.y -= min(ceil_column_height, ceil_column_thickness) - ceil_thickness * 2
+	
+
+func create_corner_columns(size: Vector3 = room_size) -> void:
+	var adjustment_thickness = corner_column_thickness / 2.0 + wall_thickness / 2.0
+	var column_size: Vector3 =  Vector3(corner_column_thickness, size.y, corner_column_thickness)
+	
+	var top_right_column: CSGBox3D = CSGBox3D.new()
+	var top_left_column: CSGBox3D = CSGBox3D.new()
+	var bottom_right_column: CSGBox3D = CSGBox3D.new()
+	var bottom_left_column: CSGBox3D = CSGBox3D.new()
+	
+	top_right_column.name = "TopRightCornerColumn"
+	top_right_column.size = column_size
+	
+	add_child(top_right_column)
+	NodeTraversal.set_owner_to_edited_scene_root(top_right_column)
+	top_right_column.position = Vector3( (size.x / 2.0) - adjustment_thickness, size.y / 2.0, -((size.z / 2.0) - adjustment_thickness))
+	
+	top_left_column.name = "TopLeftCornerColumn"
+	top_left_column.size = column_size
+	top_left_column.position = Vector3(-((size.x / 2.0) - adjustment_thickness), size.y / 2.0, -((size.z / 2.0) - adjustment_thickness))
+	add_child(top_left_column)
+	NodeTraversal.set_owner_to_edited_scene_root(top_left_column)
+	
+	bottom_right_column.name = "BottomRightCornerColumn"
+	bottom_right_column.size = column_size
+	add_child(bottom_right_column)
+	NodeTraversal.set_owner_to_edited_scene_root(bottom_right_column)
+	bottom_right_column.position = Vector3( (size.x / 2.0) - adjustment_thickness, size.y / 2.0, ((size.z / 2.0) - adjustment_thickness))
+	
+	bottom_left_column.name = "BottomLeftCornerColumn"
+	bottom_left_column.size = column_size
+	add_child(bottom_left_column)
+	NodeTraversal.set_owner_to_edited_scene_root(bottom_left_column)
+	bottom_left_column.position = Vector3(-((size.x / 2.0) - adjustment_thickness), size.y / 2.0, ((size.z / 2.0) - adjustment_thickness))
 	
 	
 func create_floor(size: Vector3 = room_size) -> void:

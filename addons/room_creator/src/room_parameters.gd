@@ -18,6 +18,7 @@ class_name RoomParameters extends Resource
 @export var ceil_thickness: float = 0.1
 @export var floor_thickness: float = 0.1
 @export_group("Ceil columns")
-@export var include_ceil_columns: bool = false
 @export var ceil_column_height: float = 0.30
 @export var ceil_column_thickness: float = 0.30
+@export_group("Corner columns")
+@export var corner_column_thickness: float = 0.5

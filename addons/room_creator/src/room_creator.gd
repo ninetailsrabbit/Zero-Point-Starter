@@ -14,12 +14,13 @@ signal created_rooms(rooms: Array[RoomMesh])
 @export var generate_mesh_mode: MeshGenerationMode = MeshGenerationMode.MeshPerRoom
 @export var generate_materials: bool = true
 @export var include_ceil : bool = true
+@export var include_ceil_columns : bool = false
 @export var include_floor : bool = true
 @export var include_right_wall : bool = true
 @export var include_left_wall : bool = true
 @export var include_front_wall : bool = true
 @export var include_back_wall : bool = true
-@export var include_ceil_columns : bool = true
+@export var include_corner_columns : bool = false
 @export_group("Collisions")
 @export var generate_collisions: bool = true
 @export var type_of_collision: AvailableCollisions = AvailableCollisions.Trimesh
@@ -101,6 +102,7 @@ func create_csg_room() -> CSGRoom:
 	room.include_floor = include_floor
 	room.include_ceil = include_ceil
 	room.include_ceil_columns = include_ceil_columns
+	room.include_corner_columns = include_corner_columns
 	room.include_front_wall = include_front_wall
 	room.include_back_wall = include_back_wall
 	room.include_left_wall = include_left_wall
@@ -111,6 +113,7 @@ func create_csg_room() -> CSGRoom:
 	room.wall_thickness = room_parameters.wall_thickness
 	room.ceil_column_thickness = room_parameters.ceil_column_thickness
 	room.ceil_column_height = room_parameters.ceil_column_height
+	room.corner_column_thickness = room_parameters.corner_column_thickness
 	
 	return room
 
