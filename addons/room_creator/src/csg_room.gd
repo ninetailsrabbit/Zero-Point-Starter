@@ -29,12 +29,12 @@ class_name CSGRoom extends CSGCombiner3D
 @export var include_back_wall : bool = true
 @export var include_corner_columns : bool = false
 
-var floor_side: CSGBox3D
-var ceil_side: CSGBox3D
-var front_wall: CSGBox3D
-var back_wall: CSGBox3D
-var left_wall: CSGBox3D
-var right_wall: CSGBox3D
+var floor_side: CSGShape3D
+var ceil_side: CSGShape3D
+var front_wall: CSGShape3D
+var back_wall: CSGShape3D
+var left_wall: CSGShape3D
+var right_wall: CSGShape3D
 
 var materials_by_room_part: Dictionary ##  CSGShape and the surface related index
 
@@ -90,11 +90,12 @@ func build() -> void:
 
 func create_materials_on_room() -> void:
 	if generate_materials:
-		var shapes =  NodeTraversal.get_all_children(self).filter(func(child): return child is CSGBox3D)
+		var shapes =  NodeTraversal.get_all_children(self).filter(func(child): return child is CSGShape3D)
 		var index: int = 0
 		
-		for shape: CSGBox3D in shapes:
+		for shape: CSGShape3D in shapes:
 			shape.material = StandardMaterial3D.new()
+				
 			materials_by_room_part[shape] = index
 			index += 1
 
@@ -115,10 +116,10 @@ func generate_mesh_instance():
 	return null
 
 #region Getters
-func walls() -> Array[CSGBox3D]:
-	var result: Array[CSGBox3D] = []
+func walls() -> Array[CSGShape3D]:
+	var result: Array[CSGShape3D] = []
 
-	for wall: CSGBox3D in ArrayHelper.remove_falsy_values([front_wall, back_wall, right_wall, left_wall]):
+	for wall: CSGShape3D in ArrayHelper.remove_falsy_values([front_wall, back_wall, right_wall, left_wall]):
 		result.append(wall)
 	
 	return result
@@ -144,7 +145,7 @@ func door_sockets() ->  Array[Marker3D]:
 	return sockets
 
 
-func get_door_sloot_from_wall(wall: CSGBox3D):
+func get_door_sloot_from_wall(wall: CSGShape3D):
 	if wall:
 		return wall.get_node_or_null("%sDoorSlot" % wall.name)
 		
@@ -153,13 +154,13 @@ func get_door_sloot_from_wall(wall: CSGBox3D):
 
 #region Part creators
 func create_door_slot_in_random_wall(socket_number: int = 1, size: Vector3 = room_size, _door_size: Vector3 = door_size) -> void:
-	var available_walls = walls().filter(func(wall: CSGBox3D): return wall.name.containsn("wall") and wall.get_child_count() == 0)
+	var available_walls = walls().filter(func(wall: CSGShape3D): return wall.name.containsn("wall") and wall.get_child_count() == 0)
 
 	if available_walls.size() > 0:
 		create_door_slot_in_wall(available_walls.pick_random(), socket_number, size, _door_size)
 
 
-func create_door_slot_in_wall(wall: CSGBox3D, socket_number: int = 1, size: Vector3 = room_size, _door_size: Vector3 = door_size) -> void:
+func create_door_slot_in_wall(wall: CSGShape3D, socket_number: int = 1, size: Vector3 = room_size, _door_size: Vector3 = door_size) -> void:
 	if wall.get_child_count() == 0:
 		var regex: RegEx = RegEx.new()
 		regex.compile("(front|back)")
@@ -209,11 +210,11 @@ func create_door_slot_in_wall(wall: CSGBox3D, socket_number: int = 1, size: Vect
 	
 
 func create_ceil_columns(size: Vector3 = room_size) -> void:
-	var ceil_column_base: CSGBox3D = ceil_side.duplicate()
+	var ceil_column_base: CSGShape3D = ceil_side.duplicate()
 	ceil_column_base.name = "CeilColumnsInterior"
 	ceil_column_base.size = Vector3(ceil_column_base.size.x - ceil_thickness,  ceil_column_height, ceil_column_base.size.z - ceil_thickness)
 	
-	var ceil_column_substraction: CSGBox3D = ceil_column_base.duplicate()
+	var ceil_column_substraction: CSGShape3D = ceil_column_base.duplicate()
 	ceil_column_substraction.name = "CeilColumnsExterior"
 	ceil_column_substraction.operation = CSGShape3D.OPERATION_SUBTRACTION
 	ceil_column_substraction.size = Vector3(size.x - ceil_column_thickness * 2, ceil_column_base.size.y + ceil_column_thickness * 2, size.z - ceil_column_thickness * 2)
@@ -263,9 +264,16 @@ func create_corner_columns(size: Vector3 = room_size) -> void:
 	
 	
 func create_floor(size: Vector3 = room_size) -> void:
-	floor_side = CSGBox3D.new()
+	if floor_thickness == 0:
+		floor_side = CSGMesh3D.new()
+		floor_side.mesh = PlaneMesh.new()
+		floor_side.mesh.size = Vector2(size.x, size.z)
+		floor_side.flip_faces = false
+	else:
+		floor_side = CSGBox3D.new()
+		floor_side.size = Vector3(size.x + floor_thickness * 2, floor_thickness, size.z + floor_thickness * 2)
+		
 	floor_side.name = "Floor"
-	floor_side.size = Vector3(size.x + floor_thickness * 2, floor_thickness, size.z + floor_thickness * 2)
 	floor_side.position = Vector3.ZERO
 	
 	add_child(floor_side)
@@ -273,50 +281,94 @@ func create_floor(size: Vector3 = room_size) -> void:
 
 
 func create_ceil(size: Vector3 = room_size) -> void:
-	ceil_side = CSGBox3D.new()
+	if ceil_thickness == 0:
+		ceil_side = CSGMesh3D.new()
+		ceil_side.mesh = PlaneMesh.new()
+		ceil_side.mesh.size = Vector2(size.x, size.z)
+		ceil_side.position = Vector3(0, max(size.y, size.y - size.y / 2.5), 0)
+		ceil_side.flip_faces = true
+	else:
+		ceil_side = CSGBox3D.new()
+		ceil_side.size = Vector3(size.x + ceil_thickness * 2, ceil_thickness, size.z + ceil_thickness * 2)
+		ceil_side.position = Vector3(0, max(size.y, (size.y + ceil_thickness) - size.y / 2.5), 0)
+		
 	ceil_side.name = "Ceil"
-	ceil_side.size = Vector3(size.x + ceil_thickness * 2, ceil_thickness, size.z + ceil_thickness * 2)
-	ceil_side.position = Vector3(0, max(size.y, (size.y + ceil_thickness) - size.y / 2.5), 0)
 	
 	add_child(ceil_side)
 	NodeTraversal.set_owner_to_edited_scene_root(ceil_side)
 
 
 func create_front_wall(size: Vector3 = room_size) -> void:
-	front_wall = CSGBox3D.new()
+	if wall_thickness == 0:
+		front_wall = CSGMesh3D.new()
+		front_wall.mesh = PlaneMesh.new()
+		front_wall.mesh.size = Vector2(size.x, size.y)
+		front_wall.position = Vector3(0, size.y / 2, min(-size.z / 2, -size.z / 2.5))
+		front_wall.flip_faces = false
+		front_wall.mesh.orientation = PlaneMesh.FACE_Z
+	else:
+		front_wall = CSGBox3D.new()
+		front_wall.size = Vector3(size.x, size.y, wall_thickness)
+		front_wall.position = Vector3(0, size.y / 2, min(-size.z / 2, -(size.z + wall_thickness) / 2.5) )
+		
 	front_wall.name = "FrontWall"
-	front_wall.size = Vector3(size.x, size.y, wall_thickness)
-	front_wall.position = Vector3(0, size.y / 2, min(-size.z / 2, -(size.z + wall_thickness) / 2.5) )
 	
 	add_child(front_wall)
 	NodeTraversal.set_owner_to_edited_scene_root(front_wall)
 
 
 func create_back_wall(size: Vector3 = room_size) -> void:
-	back_wall = CSGBox3D.new()
+	if wall_thickness == 0:
+		back_wall = CSGMesh3D.new()
+		back_wall.mesh = PlaneMesh.new()
+		back_wall.mesh.size = Vector2(size.x, size.y)
+		back_wall.position = Vector3(0, size.y / 2, max(size.z / 2, size.z / 2.5))
+		back_wall.flip_faces = true
+		back_wall.mesh.orientation = PlaneMesh.FACE_Z
+	else:
+		back_wall = CSGBox3D.new()
+		back_wall.size = Vector3(size.x, size.y, wall_thickness)
+		back_wall.position = Vector3(0, size.y / 2, max(size.z / 2, (size.z + wall_thickness) / 2.5) )
+		
 	back_wall.name = "BackWall"
-	back_wall.size = Vector3(size.x, size.y, wall_thickness)
-	back_wall.position = Vector3(0, size.y / 2, max(size.z / 2, (size.z + wall_thickness) / 2.5) )
 	
 	add_child(back_wall)
 	NodeTraversal.set_owner_to_edited_scene_root(back_wall)
 
 
 func create_right_wall(size: Vector3 = room_size) -> void:
-	right_wall = CSGBox3D.new()
+	if wall_thickness == 0:
+		right_wall = CSGMesh3D.new()
+		right_wall.mesh = PlaneMesh.new()
+		right_wall.mesh.size = Vector2(size.z, size.y)
+		right_wall.position = Vector3(max(size.x / 2, size.x / 2.5), size.y / 2, 0)
+		right_wall.flip_faces = true
+		right_wall.mesh.orientation = PlaneMesh.FACE_X
+	else:
+		right_wall = CSGBox3D.new()
+		right_wall.size = Vector3(wall_thickness, size.y, size.z)
+		right_wall.position = Vector3(max(size.x / 2, (size.x + wall_thickness) / 2.5) , size.y / 2, 0)
+		
 	right_wall.name = "RightWall"
-	right_wall.size = Vector3(wall_thickness, size.y, size.z)
-	right_wall.position = Vector3(max(size.x / 2, (size.x + wall_thickness) / 2.5) , size.y / 2, 0)
-	
+		
 	add_child(right_wall)
 	NodeTraversal.set_owner_to_edited_scene_root(right_wall)
 
 
 func create_left_wall(size: Vector3 = room_size) -> void:
-	left_wall = CSGBox3D.new()
+	if wall_thickness == 0:
+		left_wall = CSGMesh3D.new()
+		left_wall.mesh = PlaneMesh.new()
+		left_wall.mesh.size = Vector2(size.z, size.y)
+		left_wall.position = Vector3(min(-size.x / 2, -size.x / 2.5), size.y / 2, 0)
+		left_wall.flip_faces = false
+		left_wall.mesh.orientation = PlaneMesh.FACE_X
+	else:
+		left_wall = CSGBox3D.new()
+		left_wall.size = Vector3(wall_thickness, size.y, size.z)
+		left_wall.position = Vector3(min(-size.x / 2, (-size.x + wall_thickness) / 2.5) , size.y / 2, 0)
+	
 	left_wall.name = "LeftWall"
-	left_wall.size = Vector3(wall_thickness, size.y, size.z)
-	left_wall.position = Vector3(min(-size.x / 2, (-size.x + wall_thickness) / 2.5) , size.y / 2, 0)
 	
 	add_child(left_wall)
 	NodeTraversal.set_owner_to_edited_scene_root(left_wall)

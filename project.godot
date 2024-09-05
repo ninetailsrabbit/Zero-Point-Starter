@@ -47,6 +47,10 @@ window/size/viewport_height=720
 window/size/window_width_override=1280
 window/size/window_height_override=720
 
+[dotnet]
+
+project/assembly_name="Zero-Point-Starter"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/room_creator/plugin.cfg")
@@ -54,6 +58,7 @@ enabled=PackedStringArray("res://addons/room_creator/plugin.cfg")
 [file_customization]
 
 folder_colors={
+"res://addons/": "gray",
 "res://assets/": "pink",
 "res://autoload/": "yellow",
 "res://components/": "red",
