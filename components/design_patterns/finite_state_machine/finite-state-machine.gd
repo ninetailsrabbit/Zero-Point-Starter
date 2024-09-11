@@ -85,7 +85,6 @@ func run_transition(from: MachineState, to: MachineState, parameters: Dictionary
 		current_state = to
 		
 		state_changed.emit(from, to)
-		enter_state(to)
 		
 		return
 	
