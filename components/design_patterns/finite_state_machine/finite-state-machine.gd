@@ -43,13 +43,12 @@ func _process(delta):
 	current_state.update(delta)
 
 
-func change_state_to(next_state, parameters: Dictionary = {}):
+func change_state_to(next_state: Variant, parameters: Dictionary = {}):
 	if not is_transitioning:
-		if typeof(next_state) == TYPE_STRING:
-			
+		if typeof(next_state) == TYPE_STRING:			
 			if current_state_is_by_name(next_state):
 				return
-				
+			
 			if states.has(next_state):
 				run_transition(current_state, states[next_state], parameters)
 			else:
@@ -67,7 +66,7 @@ func change_state_to(next_state, parameters: Dictionary = {}):
 
 func run_transition(from: MachineState, to: MachineState, parameters: Dictionary = {}):
 	is_transitioning = true
-	
+
 	var transition_name = _build_transition_name(from, to)
 
 	if not transitions.has(transition_name):
@@ -78,12 +77,8 @@ func run_transition(from: MachineState, to: MachineState, parameters: Dictionary
 	transition.to_state = to
 	transition.parameters = parameters
 	
-	if transition.should_transition():
+	if transition.should_transition():		
 		transition.on_transition()
-		push_state_to_stack(from)
-		exit_state(from, to)
-		current_state = to
-		
 		state_changed.emit(from, to)
 		
 		return
@@ -94,15 +89,17 @@ func run_transition(from: MachineState, to: MachineState, parameters: Dictionary
 func register_transition(transition: MachineTransition):
 	transitions[transition.get_script().get_global_name()] = transition
 
+
 func register_transitions(new_transitions: Array[MachineTransition]):
 	for transition in new_transitions:
 		register_transition(transition)
 	
 
 func enter_state(state: MachineState):
+	is_transitioning = false
 	state.entered.emit()
 	state.enter()
-	
+		
 
 func exit_state(state: MachineState, _next_state: MachineState):
 	state.finished.emit(_next_state)
@@ -184,11 +181,9 @@ func on_state_changed(from: MachineState, to: MachineState):
 	push_state_to_stack(from)
 	exit_state(from, to)
 	enter_state(to)
-	
+
 	current_state = to
-	is_transitioning = false
 
 
 func on_state_change_failed(_from: MachineState, _to: MachineState):
 	is_transitioning = false
-	
