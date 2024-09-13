@@ -2,7 +2,7 @@ class_name NodeTraversal
 
 
 static func set_owner_to_edited_scene_root(node: Node) -> void:
-	if Engine.is_editor_hint():
+	if Engine.is_editor_hint() and node.get_tree():
 		node.owner = node.get_tree().edited_scene_root
 	
 	
