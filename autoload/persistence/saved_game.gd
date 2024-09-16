@@ -14,7 +14,7 @@ static var default_path := OS.get_user_data_dir()
 func update_last_datetime():
 	## Example { "year": 2024, "month": 1, "day": 25, "weekday": 4, "hour": 13, "minute": 34, "second": 18, "dst": false }
 	var datetime = Time.get_datetime_dict_from_system()
-	last_datetime = "%s/%s/%s %s:%s " % [str(datetime.day).pad_zeros(2), str(datetime.month).pad_zeros(2), datetime.year, str(datetime.hour).pad_zeros(2), str(datetime.minute).pad_zeros(2)]
+	last_datetime = "%s/%s/%s %s:%s" % [str(datetime.day).pad_zeros(2), str(datetime.month).pad_zeros(2), datetime.year, str(datetime.hour).pad_zeros(2), str(datetime.minute).pad_zeros(2)]
 	timestamp = Time.get_unix_time_from_system()
 
 
