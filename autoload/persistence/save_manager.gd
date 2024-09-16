@@ -10,8 +10,14 @@ signal error_writing_current_savegame(filename: String, error: Error)
 signal error_removing_savegame(filename: String, error: Error)
 
 ## Dictionary<string, SavedGame>
-@export var list_of_saved_games := {}
-@export var current_saved_game: SavedGame
+@export var list_of_saved_games: Dictionary = {} # Dictionary[filename: String, SavedGameResource]
+@export var current_saved_game: SavedGame:
+	set(value):
+		if value != current_saved_game:
+			current_saved_game = value
+			
+			if current_saved_game:
+				loaded_savegame.emit(current_saved_game.filename)
 
 
 func _ready() -> void:
@@ -28,6 +34,7 @@ func create_new_save(filename: String):
 	
 	if error == Error.OK:
 		created_savegame.emit(filename)
+		list_of_saved_games[filename] = new_saved_game
 	else:
 		error_creating_savegame.emit(filename, error)
 
@@ -35,9 +42,7 @@ func create_new_save(filename: String):
 func load_savegame(filename: String) -> SavedGame:
 	if SavedGame.save_exists(filename):
 		current_saved_game = ResourceLoader.load(SavedGame.get_save_path(filename), "", ResourceLoader.CACHE_MODE_IGNORE) as SavedGame
-		
-		loaded_savegame.emit(current_saved_game)
-		
+
 		return current_saved_game
 		
 	error_loading_savegame.emit(filename, ERR_DOES_NOT_EXIST)
@@ -83,3 +88,20 @@ func read_user_saved_games() -> Dictionary:
 		dir.list_dir_end()
 		
 	return saved_games
+	
+	
+func savegame_exists(saved_game: SavedGame) -> bool:
+	if list_of_saved_games.is_empty():
+		return true
+
+	
+	return list_of_saved_games.values().has(saved_game)
+	
+
+func save_filename_exists(filename: String) -> bool:
+	if list_of_saved_games.is_empty():
+		return true
+		
+	var name_to_check: String = StringHelper.clean(filename.get_basename().to_lower().strip_edges())
+	
+	return list_of_saved_games.keys().has(name_to_check)

@@ -1,13 +1,14 @@
 class_name SavedGame extends Resource
 
-static var default_path := OS.get_user_data_dir()
+static var default_path: String = OS.get_user_data_dir()
 
 @export var filename: String
+@export var display_name: String
 @export var version_control: String = ProjectSettings.get_setting("application/config/version", "1.0.0")
 @export var engine_version: String = "Godot %s" % Engine.get_version_info().string
-@export var device := HardwareDetector.distribution_name
-@export var platform := HardwareDetector.platform
-@export var last_datetime := ""
+@export var device: String = HardwareDetector.distribution_name
+@export var platform: String = HardwareDetector.platform
+@export var last_datetime: String = ""
 @export var timestamp: float
 
 
@@ -18,14 +19,14 @@ func update_last_datetime():
 	timestamp = Time.get_unix_time_from_system()
 
 
-
 func write_savegame(new_filename: String = filename) -> Error:	
 	if filename.is_empty():
 		if new_filename.is_empty() or new_filename == null:
 			push_error("SavedGame: To write this resource for the first time needs a valid filename [%s], the write operation was aborted" % new_filename)
 			return ERR_CANT_CREATE
-			
-		filename = new_filename.get_basename()
+		
+		display_name = new_filename
+		filename = StringHelper.clean(new_filename.get_basename().to_lower().strip_edges())
 		
 	update_last_datetime()
 	
