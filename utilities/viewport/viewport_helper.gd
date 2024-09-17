@@ -6,6 +6,12 @@ const Resolution16_9: String = "16:9";
 const Resolution16_10: String = "16:10";
 const Resolution21_9: String = "21:9";
 
+const AspectRatio4_3: Vector2i = Vector2i(4, 3)
+const AspectRatio16_9: Vector2i = Vector2i(16,9)
+const AspectRatio16_10: Vector2i = Vector2i(16, 10)
+const AspectRatio21_9: Vector2i = Vector2i(21, 9)
+
+
 
 static var resolutions: Dictionary = {
 	Resolution_Mobile: [

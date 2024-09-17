@@ -320,7 +320,6 @@ static func average(numbers: Array = []) -> float:
 	return numbers.reduce(func(accum, element): return accum + element, 0.0) / numbers.size()
 
 
-
 static func spread(scale: float = 1.0) -> float:
 	return (randf() - 0.5) * 2.0 * scale
 
@@ -355,3 +354,11 @@ static func random_byte() -> int:
 	randomize()
 
 	return randi() % 256
+
+
+static func logbi(x: int, base: int = 10) -> int:
+	return int(log(float(x)) / log(float(base)))
+	
+	
+static func logb(x: float, base: float = 10.0) -> float:
+	return log(x) / log(base)
