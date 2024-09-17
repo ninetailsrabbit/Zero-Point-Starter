@@ -43,7 +43,7 @@ static func get_files_recursive(path: String, regex: RegEx = null) -> Array:
 			
 		return files
 	else:
-		push_error("FileWizard->get_files_recursive: An error %s occured when trying to open directory: %s" % [DirAccess.get_open_error(), path])
+		push_error("FileHelper->get_files_recursive: An error %s occured when trying to open directory: %s" % [DirAccess.get_open_error(), path])
 		
 		return []
 
@@ -70,7 +70,7 @@ static func remove_files_recursive(path: String, regex: RegEx = null) -> void:
 		
 		directory.remove(path)
 	else:
-		push_error("FileWizard->remove_recursive: An error %s happened open directory: %s " % [DirAccess.get_open_error(), path])
+		push_error("FileHelper->remove_recursive: An error %s happened open directory: %s " % [DirAccess.get_open_error(), path])
 
 
 static func get_pck_files(path: String) -> Array:
@@ -85,7 +85,7 @@ static func load_csv(path: String, as_dictionary := true):
 	var file_exists := FileAccess.file_exists(path)
 
 	if not filepath_is_valid(path) or not file_exists:
-		push_error("FileWizard: Failed to load CSV because file doesn't exist or is corrupted. Path: %s", path)
+		push_error("FileHelper: Failed to load CSV because file doesn't exist or is corrupted. Path: %s", path)
 		return ERR_PARSE_ERROR
 		
 	var delimiter = _detect_limiter_from_file(path)
@@ -95,7 +95,7 @@ static func load_csv(path: String, as_dictionary := true):
 	var open_error := FileAccess.get_open_error()
 	
 	if open_error != Error.OK:
-		push_error("FileWizard: ERROR_CODE[%s] Error opening file %s" % [open_error,path])
+		push_error("FileHelper: ERROR_CODE[%s] Error opening file %s" % [open_error,path])
 		return ERR_PARSE_ERROR
 
 	while not file.eof_reached():
@@ -132,7 +132,7 @@ static func load_csv(path: String, as_dictionary := true):
 			var current_fields = lines[i]
 			
 			if current_fields.size() > column_headers.size():
-				push_error("FileWizard: Reading the file %s it was detected a line that has more fields than column headers [] < []" % [path, column_headers.join(","), current_fields.join(",")])
+				push_error("FileHelper: Reading the file %s it was detected a line that has more fields than column headers [] < []" % [path, column_headers.join(","), current_fields.join(",")])
 				return ERR_PARSE_ERROR
 			
 			for header_index in column_headers.size():

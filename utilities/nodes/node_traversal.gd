@@ -65,7 +65,7 @@ static func find_nodes_of_type(node: Node, type_to_find: Node) -> Array:
 
 
 ## Only works for native Godot Classes like Area3D, Camera2D, etc.
-## Example NodeWizard.first_node_of_type(self, Control.new())
+## Example NodeTraversal.first_node_of_type(self, Control.new())
 static func first_node_of_type(node: Node, type_to_find: Node):
 	if node.get_child_count() == 0:
 		return null
@@ -80,7 +80,7 @@ static func first_node_of_type(node: Node, type_to_find: Node):
 	return null
 	
 ## Only works for native custom class not for GDScriptNativeClass
-## Example NodeWizard.first_node_of_custom_class(self, MachineState)
+## Example NodeTraversal.first_node_of_custom_class(self, MachineState)
 static func first_node_of_custom_class(node: Node, class_to_find: GDScript):
 	if node.get_child_count() == 0:
 		return null
