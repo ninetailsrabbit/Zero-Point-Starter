@@ -22,6 +22,7 @@ enum Transitions {
 }
 
 var next_scene_path: String
+var previous_animations := []
 var remaining_animations := []
 
 
@@ -43,14 +44,17 @@ func transition_to_scene(
 	out_transition: Transitions = Transitions.FadeToBlack,
 	in_transition: Transitions =  Transitions.FadeFromBlack, 
 ):
+	if not loading_screen:
+		previous_animations.clear()
+		
 	_prepare_transition_animations(loading_screen, out_transition, in_transition)
 	next_scene_path = scene.resource_path if scene is PackedScene else scene
 	
-	transition_requested.emit(next_scene_path, loading_screen)
+	transition_requested.emit(next_scene_path)
 	
 	if typeof(scene) == TYPE_STRING and _is_valid_scene_path(scene):
 		if not remaining_animations.is_empty():
-			await trigger_transition(remaining_animations.pop_back())	
+			await trigger_transition(remaining_animations.pop_back())
 			
 		_transition_to_scene_file(scene, loading_screen)
 	
@@ -66,6 +70,7 @@ func _prepare_transition_animations(loading_screen: bool, out_transition: Transi
 	
 	if loading_screen:
 		remaining_animations.append(out_transition)
+		previous_animations.append_array([in_transition, out_transition])
 	else:
 		remaining_animations.append_array([in_transition, out_transition])
 		

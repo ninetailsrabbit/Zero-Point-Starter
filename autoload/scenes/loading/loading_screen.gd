@@ -62,10 +62,15 @@ func _reset():
 	
 	
 func on_finished():
-	_reset()
+	SceneTransitionManager.transition_to_scene(
+		ResourceLoader.load_threaded_get(next_scene_path), 
+		false,
+		SceneTransitionManager.previous_animations[1],
+		SceneTransitionManager.previous_animations[0],
+	)
 	SceneTransitionManager.next_scene_path = ""
-	SceneTransitionManager.transition_to_scene(ResourceLoader.load_threaded_get(next_scene_path))
-		
+	
+	_reset()
 
 func on_failed(status: ResourceLoader.ThreadLoadStatus):
 	_reset()
