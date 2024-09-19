@@ -11,9 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://dtxe218lym3vf" path="res://assets/crosshair/crosshair_dot.png" id="4_b8kh6"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/mechanics/swing_head/swing_head.gd" id="5_2n18i"]
 [ext_resource type="Script" path="res://components/camera/3D/shake/shake_camera_3d.gd" id="5_q3whp"]
+[ext_resource type="Script" path="res://components/interaction/3D/grabbable_raycast_interactor_3d.gd" id="6_iqasx"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/states/ground/walk.gd" id="7_fpqxx"]
-[ext_resource type="Script" path="res://components/interaction/3D/throwables/telekinesis_3d.gd" id="7_ohxrx"]
-[ext_resource type="Script" path="res://components/interaction/3D/throwable_raycast_interactor_3d.gd" id="8_pnxbg"]
+[ext_resource type="Script" path="res://components/interaction/3D/throwables/new_telekinesis.gd" id="8_qmjuq"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/states/ground/run.gd" id="9_ywsop"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/states/ground/crouch.gd" id="11_f7wtq"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/states/ground/crawl.gd" id="12_x80eo"]
@@ -139,7 +139,7 @@ script = ExtResource("5_q3whp")
 
 [node name="ThrowableRayCastInteractor" type="RayCast3D" parent="Head/Eyes"]
 target_position = Vector3(0, 0, -1.5)
-script = ExtResource("8_pnxbg")
+script = ExtResource("6_iqasx")
 
 [node name="RayCastInteractor3D" type="RayCast3D" parent="Head/Eyes"]
 target_position = Vector3(0, 0, -1.5)
@@ -149,13 +149,11 @@ script = ExtResource("3_gxrim")
 [node name="Hands" type="Node3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.252887, -0.235752)
 
-[node name="Telekinesis3D" type="Node3D" parent="Head" node_paths=PackedStringArray("actor", "throwable_interactor", "available_slots")]
+[node name="Telekinesis3D" type="Node3D" parent="Head" node_paths=PackedStringArray("available_slots", "grabbable_interactor")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.549982, 0)
-script = ExtResource("7_ohxrx")
-actor = NodePath("../..")
-throwable_interactor = NodePath("../Eyes/ThrowableRayCastInteractor")
-throwable_interactor_distance = 3.5
+script = ExtResource("8_qmjuq")
 available_slots = [NodePath("Marker3D")]
+grabbable_interactor = NodePath("../Eyes/ThrowableRayCastInteractor")
 
 [node name="Marker3D" type="Marker3D" parent="Head/Telekinesis3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.355963, 0.380309, -0.914505)

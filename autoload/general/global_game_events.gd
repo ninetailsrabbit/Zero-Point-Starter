@@ -14,6 +14,8 @@ signal canceled_interactable_scan(interactable: Interactable3D);
 #region Throwables
 signal throwable_focused(throwable: Throwable3D);
 signal throwable_unfocused(throwable: Throwable3D);
+signal grabbable_focused(grabbable: Grabbable3D);
+signal grabbable_unfocused(grabbable: Grabbable3D);
 #endregion
 
 #region Controllers

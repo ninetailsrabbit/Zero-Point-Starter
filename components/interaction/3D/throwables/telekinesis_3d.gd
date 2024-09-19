@@ -5,14 +5,14 @@ signal pulled_throwable(body: Throwable3D)
 signal throwed_throwable(body: Throwable3D)
 
 @export var actor: CharacterBody3D
-@export var pull_input_action := "pull"
-@export var drop_input_action := "drop"
-@export var throw_input_action := "throw"
-@export var pull_area_input_action := "pull_area"
-@export var push_wave_input_action := "push_wave"
-@export var pull_individual_ability := true
-@export var pull_area_ability := true
-@export var push_wave_ability := true
+@export var pull_input_action: String = "pull"
+@export var drop_input_action: String = "drop"
+@export var throw_input_action: String = "throw"
+@export var pull_area_input_action: String = "pull_area"
+@export var push_wave_input_action: String = "push_wave"
+@export var pull_individual_ability: bool = true
+@export var pull_area_ability: bool = true
+@export var push_wave_ability: bool = true
 ## The raycast that interacts with throwables to detect them
 @export var throwable_interactor: ThrowableRayCastInteractor
 ## The current distance applied to the interactor instead of manually change it on raycast properties

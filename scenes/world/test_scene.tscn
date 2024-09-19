@@ -1,0 +1,114 @@
+[gd_scene load_steps=19 format=3 uid="uid://bib6w72wb06ua"]
+
+[ext_resource type="PackedScene" uid="uid://dd0blwa1hawbl" path="res://components/motion/3D/first-person/first_person_controller.tscn" id="1_n8t8g"]
+[ext_resource type="Script" path="res://components/interaction/3D/throwables/grabbable.gd" id="2_cvkhu"]
+[ext_resource type="Shader" path="res://shaders/color/pixel_perfect_outline.gdshader" id="3_br22l"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_asn67"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_u0rqf"]
+sky_material = SubResource("ProceduralSkyMaterial_asn67")
+
+[sub_resource type="Environment" id="Environment_q6mcj"]
+background_mode = 2
+sky = SubResource("Sky_u0rqf")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e7y5m"]
+albedo_color = Color(0.0846899, 0.0846899, 0.0846899, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vwpdj"]
+material = SubResource("StandardMaterial3D_e7y5m")
+size = Vector3(25, 0.2, 25)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_8lnfg"]
+points = PackedVector3Array(-12.5, -0.1, -12.5, -12.5, 0.1, -12.5, 12.5, -0.1, -12.5, -12.5, -0.1, 12.5, -12.5, 0.1, 12.5, 12.5, 0.1, -12.5, 12.5, -0.1, 12.5, 12.5, 0.1, 12.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ulb85"]
+albedo_color = Color(0.147672, 0.147672, 0.147672, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7lx4h"]
+material = SubResource("StandardMaterial3D_ulb85")
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a1hem"]
+size = Vector3(0.52, 0.52, 0.52)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3dr8j"]
+albedo_color = Color(1, 0.843137, 0.521569, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_57u4a"]
+material = SubResource("StandardMaterial3D_3dr8j")
+size = Vector3(0.4, 0.4, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kghrf"]
+size = Vector3(0.52, 0.52, 0.52)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bhc4y"]
+albedo_color = Color(1, 0.301961, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_e03ry"]
+material = SubResource("StandardMaterial3D_bhc4y")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q8bx2"]
+size = Vector3(0.52, 0.52, 0.52)
+
+[node name="TestScene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_q6mcj")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_vwpdj")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_8lnfg")
+
+[node name="FirstPersonController" parent="." instance=ExtResource("1_n8t8g")]
+
+[node name="Grabbable3D" type="RigidBody3D" parent="." node_paths=PackedStringArray("mesh_instance")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.724877, -2.92824)
+script = ExtResource("2_cvkhu")
+mesh_instance = NodePath("MeshInstance3D")
+outline_shader = ExtResource("3_br22l")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Grabbable3D"]
+mesh = SubResource("BoxMesh_7lx4h")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Grabbable3D"]
+shape = SubResource("BoxShape3D_a1hem")
+
+[node name="Grabbable3D3" type="RigidBody3D" parent="." node_paths=PackedStringArray("mesh_instance")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.36939, -3.08264)
+script = ExtResource("2_cvkhu")
+mesh_instance = NodePath("MeshInstance3D")
+angular_power = 0.5
+outline_shader = ExtResource("3_br22l")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Grabbable3D3"]
+mesh = SubResource("BoxMesh_57u4a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Grabbable3D3"]
+shape = SubResource("BoxShape3D_kghrf")
+
+[node name="Grabbable3D2" type="RigidBody3D" parent="." node_paths=PackedStringArray("mesh_instance")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.42095, 0.724877, -2.92824)
+script = ExtResource("2_cvkhu")
+mesh_instance = NodePath("MeshInstance3D")
+angular_power = 0.7
+outline_shader = ExtResource("3_br22l")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Grabbable3D2"]
+mesh = SubResource("SphereMesh_e03ry")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Grabbable3D2"]
+shape = SubResource("BoxShape3D_q8bx2")

@@ -11,6 +11,9 @@ const maximum_transparency_on_pull: int = 255
 
 @export var grab_mode := GrabMode.Dynamic
 @export_range(0, maximum_transparency_on_pull, 1) var transparency_on_pull: int = maximum_transparency_on_pull
+@export var adjust_rotation_on_pull: bool = false
+@export var target_rotation: Vector3 = Vector3.ZERO
+@export var lerp_adjust_speed: float = 7.0
 @export_group("Information")
 @export var title: String = ""
 @export var description: String = ""
@@ -48,11 +51,12 @@ var locked := false
 
 
 func _ready():
+	set_physics_process(adjust_rotation_on_pull)
+	
 	original_parent = get_parent()
 	collision_layer = original_collision_layer
 	collision_mask = original_collision_mask
 	
-
 	var mesh = NodeTraversal.first_node_of_type(self, MeshInstance3D.new())
 	
 	if mesh:
@@ -64,6 +68,13 @@ func _ready():
 	unfocused.connect(on_unfocused)
 			
 	
+func _physics_process(_delta: float) -> void:
+	if state_is_pull() and adjust_rotation_on_pull:
+		rotation = rotation.move_toward(target_rotation, get_physics_process_delta_time() * lerp_adjust_speed)
+		
+		if rotation.is_equal_approx(target_rotation):
+			set_physics_process(false)
+		
 	
 func _integrate_forces(state):
 	if state_is_pull():
@@ -72,7 +83,8 @@ func _integrate_forces(state):
 	if state_is_throw() and state.linear_velocity.is_zero_approx():
 		current_state = State.Neutral
 	
-		
+
+
 func update_linear_velocity(_linear_velocity: Vector3):
 	current_linear_velocity = _linear_velocity
 	
@@ -94,6 +106,7 @@ func pull(_grabber: Node3D):
 	current_state = State.Pull
 	
 	pulled.emit()
+	set_physics_process(true)
 		
 
 func throw(impulse: Vector3):
