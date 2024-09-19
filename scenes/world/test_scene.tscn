@@ -36,11 +36,11 @@ size = Vector3(0.5, 0.5, 0.4)
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_6oljj"]
 points = PackedVector3Array(0.25, 0.25, 0.2, 0.25, 0.25, -0.2, -0.25, 0.25, 0.2, 0.25, -0.25, 0.2, 0.25, -0.25, -0.2, -0.25, 0.25, -0.2, -0.25, -0.25, 0.2, -0.25, -0.25, -0.2)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e2kdt"]
-albedo_color = Color(1, 1, 0.25098, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tbkbq"]
+albedo_color = Color(1, 1, 0.372549, 1)
 
 [sub_resource type="PrismMesh" id="PrismMesh_teuja"]
-material = SubResource("StandardMaterial3D_e2kdt")
+material = SubResource("StandardMaterial3D_tbkbq")
 size = Vector3(0.4, 0.3, 0.4)
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_8v2nm"]
@@ -80,6 +80,8 @@ shape = SubResource("ConvexPolygonShape3D_8lnfg")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.953101, -4.97185)
 script = ExtResource("2_cvkhu")
 mesh_instance = NodePath("MeshInstance3D")
+outline_color = Color(1, 0.45098, 1, 1)
+outline_width = 3.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Grabbable3D"]
 mesh = SubResource("BoxMesh_024cs")
@@ -92,6 +94,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.13481, 0.669956, -4.83142)
 script = ExtResource("2_cvkhu")
 mesh_instance = NodePath("MeshInstance3D")
 outline_color = Color(1, 1, 0.47451, 1)
+outline_width = 4.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Grabbable3D2"]
 mesh = SubResource("PrismMesh_teuja")
@@ -102,6 +105,8 @@ shape = SubResource("ConvexPolygonShape3D_8v2nm")
 [node name="Grabbable3D3" type="RigidBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.441584, 0.617347, -3.891)
 script = ExtResource("2_cvkhu")
+outline_color = Color(0.180392, 1, 0.223529, 1)
+outline_width = 3.5
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Grabbable3D3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.360425, 0, 0)

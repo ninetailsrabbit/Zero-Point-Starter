@@ -30,13 +30,13 @@ signal unfocused
 @export var outline_on_focus: bool = true
 @export var outline_color: Color = Color.WHITE
 @export var outline_width: float = 2.0
-@export var outline_shader: Shader = preload("res://shaders/color/outline.gdshader")
-
+@export var outline_shader: Shader = preload("res://shaders/color/pixel_perfect_outline.gdshader")
 
 var original_collision_layer :=  GameGlobals.throwables_collision_layer
 var original_collision_mask := GameGlobals.world_collision_layer | GameGlobals.player_collision_layer | GameGlobals.enemies_collision_layer | GameGlobals.throwables_collision_layer
 var original_gravity_scale: float  = gravity_scale
 var original_transparency: int = MaximumTransparency
+var outline_material: ShaderMaterial
 
 var current_state: GrabState = GrabState.Neutral
 var current_grabber: Node3D
@@ -180,13 +180,16 @@ func _recover_transparency():
 func _apply_outline_shader() -> void:
 	if outline_on_focus:
 		var material: StandardMaterial3D = mesh_instance.get_active_material(0)
-
+		
 		if material and not material.next_pass:
-			var outline_shader_material: ShaderMaterial = ShaderMaterial.new()
-			outline_shader_material.shader = outline_shader
-			outline_shader_material.set_shader_parameter("outline_color", outline_color)
-			outline_shader_material.set_shader_parameter("outline_width", outline_width)
-			material.next_pass = outline_shader_material
+			print("applying material")
+			if not outline_material:
+				outline_material = ShaderMaterial.new()
+				outline_material.shader = outline_shader
+				
+			outline_material.set_shader_parameter("outline_color", outline_color)
+			outline_material.set_shader_parameter("outline_width", outline_width)
+			material.next_pass = outline_material
 
 	
 func _remove_outline_shader() -> void:
