@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://dd0blwa1hawbl"]
+[gd_scene load_steps=31 format=3 uid="uid://dd0blwa1hawbl"]
 
 [ext_resource type="Script" path="res://components/motion/3D/first-person/first_person_controller.gd" id="1_siswl"]
 [ext_resource type="Script" path="res://components/motion/3D/first-person/mechanics/camera/first_person_camera_rotation_3d.gd" id="2_6vhab"]
@@ -92,6 +92,9 @@ height = 0.753003
 radius = 0.25
 height = 0.6
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_xse7x"]
+size = Vector3(2.59021, 1, 2.73018)
+
 [node name="FirstPersonController" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.879968, 0)
 collision_layer = 2
@@ -149,14 +152,23 @@ script = ExtResource("3_gxrim")
 [node name="Hands" type="Node3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.252887, -0.235752)
 
-[node name="Telekinesis3D" type="Node3D" parent="Head" node_paths=PackedStringArray("available_slots", "grabbable_interactor")]
+[node name="GrabbableAreaDetector" type="Area3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.549982, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/GrabbableAreaDetector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0984497, 0, -1.59836)
+shape = SubResource("BoxShape3D_xse7x")
+
+[node name="Telekinesis3D" type="Node3D" parent="Head" node_paths=PackedStringArray("grabbable_area_detector")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.549982, 0)
 script = ExtResource("8_qmjuq")
-available_slots = [NodePath("Marker3D")]
-grabbable_interactor = NodePath("../Eyes/ThrowableRayCastInteractor")
+grabbable_area_detector = NodePath("../GrabbableAreaDetector")
 
 [node name="Marker3D" type="Marker3D" parent="Head/Telekinesis3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.355963, 0.380309, -0.914505)
+
+[node name="Marker3D2" type="Marker3D" parent="Head/Telekinesis3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.147684, 0.380309, -0.914505)
 
 [node name="CameraMovement3D" type="Node3D" parent="." node_paths=PackedStringArray("actor", "head", "camera_pivot_point")]
 script = ExtResource("2_6vhab")

@@ -23,6 +23,9 @@ signal unfocused
 @export var throw_power := 10.0
 ## Rotation force to apply
 @export var angular_power = 0.0
+@export_group("Transparency")
+@export var transparency_on_pull: bool = false
+@export_range(0, 255, 1) var transparency_value_on_pull: int = MaximumTransparency
 @export_group("Outline")
 @export var outline_on_focus: bool = true
 @export var outline_color: Color = Color.WHITE
@@ -33,6 +36,7 @@ signal unfocused
 var original_collision_layer :=  GameGlobals.throwables_collision_layer
 var original_collision_mask := GameGlobals.world_collision_layer | GameGlobals.player_collision_layer | GameGlobals.enemies_collision_layer | GameGlobals.throwables_collision_layer
 var original_gravity_scale: float  = gravity_scale
+var original_transparency: int = MaximumTransparency
 
 var current_state: GrabState = GrabState.Neutral
 var current_grabber: Node3D
@@ -52,9 +56,9 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	if mesh_instance == null:
-		NodeTraversal.first_node_of_type(self, MeshInstance3D.new())
-	
-	
+		mesh_instance = NodeTraversal.first_node_of_type(self, MeshInstance3D.new())
+
+
 func _integrate_forces(state: PhysicsDirectBodyState3D):
 	if state_is_pull():
 		state.linear_velocity = current_linear_velocity
@@ -70,17 +74,42 @@ func pull(grabber: Node3D) -> void:
 		current_grabber = grabber
 		gravity_scale = 0.0
 		sleeping = false
+		
+		if transparency_on_pull:
+			_apply_transparency()
 
 		pulled.emit(grabber)
 
 
+func throw() -> void:
+	if state_is_pull():
+		gravity_scale = original_gravity_scale
+	
+		var impulse: Vector3 = Camera3DHelper.forward_direction(get_viewport().get_camera_3d()) * throw_power
+		apply_impulse(impulse)
+		
+		current_state = GrabState.Throw
+		current_grabber = null
+		
+		if transparency_on_pull:
+			_recover_transparency()
+			
+		throwed.emit()
+
+
 func drop() -> void:
 	if state_is_pull():
-		var impulse: Vector3 = Camera3DHelper.forward_direction(get_viewport().get_camera_3d()) * Vector3.ZERO
 		gravity_scale = original_gravity_scale
+		
+		var impulse: Vector3 = Camera3DHelper.forward_direction(get_viewport().get_camera_3d()) * Vector3.ZERO
 		apply_impulse(impulse)
+		
 		current_state = GrabState.Neutral
 		current_grabber = null
+		
+		if transparency_on_pull:
+			_recover_transparency()
+			
 		dropped.emit()
 
 	
@@ -91,8 +120,8 @@ func update_linear_velocity() -> void:
 
 func update_angular_velocity() -> void:
 	if current_grabber:
-		var q1 = global_basis.get_rotation_quaternion()
-		var q2 = current_grabber.global_basis.get_rotation_quaternion()
+		var q1: Quaternion = global_basis.get_rotation_quaternion()
+		var q2: Quaternion = current_grabber.global_basis.get_rotation_quaternion()
 
 		# Quaternion that transforms q1 into q2
 		var qt = q2 * q1.inverse()
@@ -107,7 +136,7 @@ func update_angular_velocity() -> void:
 			angle = TAU - angle
 
 		# Prevent divide by zero
-		if angle < 0.0001:
+		if angle < MathHelper.CommonEpsilon:
 			current_angular_velocity = Vector3.ZERO
 		else:
 			# Axis from quaternion
@@ -124,6 +153,28 @@ func state_is_neutral() -> bool:
 
 func state_is_pull() -> bool:
 	return current_state == GrabState.Pull
+
+
+func _apply_transparency():
+	if transparency_value_on_pull == MaximumTransparency:
+		return
+		
+	var material: StandardMaterial3D = mesh_instance.get_active_material(0)
+	
+	if material:
+		original_transparency = material.albedo_color.a8
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		material.albedo_color.a8 = transparency_value_on_pull
+
+
+func _recover_transparency():
+	if transparency_value_on_pull == 255:
+		return
+		
+	var material: StandardMaterial3D = mesh_instance.get_active_material(0)
+	
+	if material:
+		material.albedo_color.a8  = original_transparency
 
 	
 func _apply_outline_shader() -> void:
