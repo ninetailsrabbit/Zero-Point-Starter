@@ -20,7 +20,7 @@ func _enter_tree() -> void:
 func _physics_process(_delta):
 	var detected_grabbable = get_collider() if is_colliding() else null
 	
-	if detected_grabbable is Grabbable3D:
+	if detected_grabbable is Grabbable3D and detected_grabbable.state_is_neutral():
 		if current_grabbable == null and not focused:
 			focus(detected_grabbable)
 	else:

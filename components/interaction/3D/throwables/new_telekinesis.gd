@@ -53,7 +53,7 @@ func _input(_event: InputEvent) -> void:
 			if grabbable_interactor and grabbable_interactor.is_colliding():
 				var body = grabbable_interactor.get_collider() as Grabbable3D
 				
-				if body:
+				if body and body.state_is_neutral():
 					pull_body(body)
 	
 	if pull_area_ability and InputHelper.action_just_pressed_and_exists(pull_area_input_action) and slots_available():
@@ -76,7 +76,6 @@ func _input(_event: InputEvent) -> void:
 	
 
 func _enter_tree() -> void:
-	pulled_grabbable.connect(on_pulled_grabbable)
 	throwed_grabbable.connect(on_throwed_grabbable)
 	dropped_grabbable.connect(on_dropped_grabbable)
 
@@ -123,10 +122,10 @@ func drop_body(body: Grabbable3D) -> void:
 	
 
 func get_near_grabbables() -> Array:
-	if grabbable_area_detector:
+	if grabbable_area_detector and grabbable_area_detector.monitoring:
 		var bodies := grabbable_area_detector.get_overlapping_bodies().filter(func(body): return body is Grabbable3D)
 		bodies.sort_custom(func(a: Grabbable3D, b: Grabbable3D): return NodePositioner.global_distance_to_v3(a, self) <= NodePositioner.global_distance_to_v3(b, self))
-		return bodies.slice(0, min(available_slots.size() + 1, max_number_of_grabbables + 1))
+		return bodies.slice(0, max_number_of_grabbables)
 		
 	return []
 
@@ -174,23 +173,12 @@ func _prepare_grabbable_area_detector():
 
 
 #region Signal callbacks
-func on_pulled_grabbable(_grabbable: Grabbable3D) -> void:
-	if grabbable_interactor:
-		grabbable_interactor.collide_with_bodies = false
-	
-
 func on_dropped_grabbable(_grabbable: Grabbable3D) -> void:
-	if grabbable_interactor:
-		grabbable_interactor.collide_with_bodies = true
-	
 	if grabbable_area_detector:
 		grabbable_area_detector.monitoring = true
 
 
 func on_throwed_grabbable(_grabbable: Grabbable3D) -> void:
-	if grabbable_interactor:
-		grabbable_interactor.collide_with_bodies = true
-	
 	if grabbable_area_detector:
 		grabbable_area_detector.monitoring = true
 #endregion

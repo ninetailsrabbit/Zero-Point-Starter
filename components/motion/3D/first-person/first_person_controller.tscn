@@ -159,9 +159,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.804471, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0984497, 0, -1.59836)
 shape = SubResource("BoxShape3D_xse7x")
 
-[node name="Telekinesis3D" type="Node3D" parent="Head" node_paths=PackedStringArray("grabbable_area_detector")]
+[node name="Telekinesis3D" type="Node3D" parent="Head" node_paths=PackedStringArray("grabbable_interactor", "grabbable_area_detector")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.549982, 0)
 script = ExtResource("8_qmjuq")
+grabbable_interactor = NodePath("../Eyes/ThrowableRayCastInteractor")
 grabbable_area_detector = NodePath("../GrabbableAreaDetector")
 max_number_of_grabbables = 3
 
