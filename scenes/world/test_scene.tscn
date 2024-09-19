@@ -87,9 +87,10 @@ mesh = SubResource("BoxMesh_024cs")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Grabbable3D"]
 shape = SubResource("ConvexPolygonShape3D_6oljj")
 
-[node name="Grabbable3D2" type="RigidBody3D" parent="."]
+[node name="Grabbable3D2" type="RigidBody3D" parent="." node_paths=PackedStringArray("mesh_instance")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.13481, 0.669956, -4.83142)
 script = ExtResource("2_cvkhu")
+mesh_instance = NodePath("MeshInstance3D")
 outline_color = Color(1, 1, 0.47451, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Grabbable3D2"]

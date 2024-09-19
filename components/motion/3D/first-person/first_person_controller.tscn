@@ -153,7 +153,7 @@ script = ExtResource("3_gxrim")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.252887, -0.235752)
 
 [node name="GrabbableAreaDetector" type="Area3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.549982, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.804471, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Head/GrabbableAreaDetector"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0984497, 0, -1.59836)
@@ -163,9 +163,13 @@ shape = SubResource("BoxShape3D_xse7x")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.549982, 0)
 script = ExtResource("8_qmjuq")
 grabbable_area_detector = NodePath("../GrabbableAreaDetector")
+max_number_of_grabbables = 3
 
 [node name="Marker3D" type="Marker3D" parent="Head/Telekinesis3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.355963, 0.380309, -0.914505)
+
+[node name="Marker3D3" type="Marker3D" parent="Head/Telekinesis3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0698221, 0.280516, -1.31172)
 
 [node name="Marker3D2" type="Marker3D" parent="Head/Telekinesis3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.147684, 0.380309, -0.914505)

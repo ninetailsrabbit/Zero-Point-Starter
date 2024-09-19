@@ -56,9 +56,9 @@ func _input(_event: InputEvent) -> void:
 				if body:
 					pull_body(body)
 	
-	if pull_area_ability and InputHelper.action_just_pressed_and_exists(pull_area_input_action) and slots_available() and available_slots.size() < max_number_of_grabbables:
+	if pull_area_ability and InputHelper.action_just_pressed_and_exists(pull_area_input_action) and slots_available():
 		var grabbables := get_near_grabbables()
-		
+
 		for body: Grabbable3D in grabbables:
 			pull_body(body)
 			
@@ -87,7 +87,6 @@ func _ready() -> void:
 	
 
 func _physics_process(_delta: float):
-	print(active_grabbables)
 	for active_grabbable: ActiveGrabbable in active_grabbables:
 		pull_force(active_grabbable.body)
 		
@@ -111,6 +110,7 @@ func throw_body(body: Grabbable3D) -> void:
 	active_grabbables = active_grabbables.filter(func(active_grabbable: ActiveGrabbable): return active_grabbable.body != body)
 	body.throw()
 	throwed_grabbable.emit(body)
+	
 	set_physics_process(active_grabbables.size() > 0)
 	
 	
@@ -126,7 +126,7 @@ func get_near_grabbables() -> Array:
 	if grabbable_area_detector:
 		var bodies := grabbable_area_detector.get_overlapping_bodies().filter(func(body): return body is Grabbable3D)
 		bodies.sort_custom(func(a: Grabbable3D, b: Grabbable3D): return NodePositioner.global_distance_to_v3(a, self) <= NodePositioner.global_distance_to_v3(b, self))
-		return bodies
+		return bodies.slice(0, min(available_slots.size() + 1, max_number_of_grabbables + 1))
 		
 	return []
 
@@ -174,12 +174,12 @@ func _prepare_grabbable_area_detector():
 
 
 #region Signal callbacks
-func on_pulled_grabbable(grabbable: Grabbable3D) -> void:
+func on_pulled_grabbable(_grabbable: Grabbable3D) -> void:
 	if grabbable_interactor:
 		grabbable_interactor.collide_with_bodies = false
 	
 
-func on_dropped_grabbable(grabbable: Grabbable3D) -> void:
+func on_dropped_grabbable(_grabbable: Grabbable3D) -> void:
 	if grabbable_interactor:
 		grabbable_interactor.collide_with_bodies = true
 	
@@ -187,7 +187,7 @@ func on_dropped_grabbable(grabbable: Grabbable3D) -> void:
 		grabbable_area_detector.monitoring = true
 
 
-func on_throwed_grabbable(grabbable: Grabbable3D) -> void:
+func on_throwed_grabbable(_grabbable: Grabbable3D) -> void:
 	if grabbable_interactor:
 		grabbable_interactor.collide_with_bodies = true
 	
