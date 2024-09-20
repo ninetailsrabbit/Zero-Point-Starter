@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bib6w72wb06ua"]
+[gd_scene load_steps=17 format=3 uid="uid://bib6w72wb06ua"]
 
 [ext_resource type="PackedScene" uid="uid://dd0blwa1hawbl" path="res://components/motion/3D/first-person/first_person_controller.tscn" id="1_n8t8g"]
 [ext_resource type="Script" path="res://components/interaction/3D/picking/grabbable.gd" id="2_cvkhu"]
@@ -26,11 +26,7 @@ size = Vector3(25, 0.2, 25)
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_8lnfg"]
 points = PackedVector3Array(-12.5, -0.1, -12.5, -12.5, 0.1, -12.5, 12.5, -0.1, -12.5, -12.5, -0.1, 12.5, -12.5, 0.1, 12.5, 12.5, 0.1, -12.5, 12.5, -0.1, 12.5, 12.5, 0.1, 12.5)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ce05g"]
-albedo_color = Color(0.541176, 1, 1, 1)
-
 [sub_resource type="BoxMesh" id="BoxMesh_024cs"]
-material = SubResource("StandardMaterial3D_ce05g")
 size = Vector3(0.5, 0.5, 0.4)
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_6oljj"]
@@ -80,8 +76,9 @@ shape = SubResource("ConvexPolygonShape3D_8lnfg")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.953101, -4.97185)
 script = ExtResource("2_cvkhu")
 mesh_instance = NodePath("MeshInstance3D")
-outline_color = Color(1, 0.45098, 1, 1)
+outline_mode = 1
 outline_width = 3.0
+outline_hull_color = Color(1, 1, 0.403922, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Grabbable3D"]
 mesh = SubResource("BoxMesh_024cs")
@@ -94,7 +91,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.13481, 0.669956, -4.83142)
 script = ExtResource("2_cvkhu")
 mesh_instance = NodePath("MeshInstance3D")
 adjust_rotation_on_pull = true
-outline_color = Color(1, 1, 0.47451, 1)
 outline_width = 4.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Grabbable3D2"]
@@ -106,7 +102,6 @@ shape = SubResource("ConvexPolygonShape3D_8v2nm")
 [node name="Grabbable3D3" type="RigidBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.441584, 0.617347, -3.891)
 script = ExtResource("2_cvkhu")
-outline_color = Color(0.180392, 1, 0.223529, 1)
 outline_width = 3.5
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Grabbable3D3"]

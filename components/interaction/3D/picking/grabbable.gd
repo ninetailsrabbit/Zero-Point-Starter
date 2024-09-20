@@ -24,6 +24,11 @@ enum GrabState {
 	Throw
 }
 
+enum OutlineMode {
+	EdgeShader,
+	InvertedHull
+}
+
 signal pulled(grabber: Node3D)
 signal throwed
 signal dropped
@@ -46,10 +51,15 @@ signal unfocused
 @export var target_rotation: Vector3 = Vector3.ZERO
 @export var lerp_adjust_speed: float = 7.0
 @export_group("Outline")
+@export var outline_mode: OutlineMode = OutlineMode.EdgeShader
 @export var outline_on_focus: bool = true
-@export var outline_color: Color = Color.WHITE
+@export_category("Edge shader") # https://www.videopoetics.com/tutorials/pixel-perfect-outline-shaders-unity/
+@export var outline_shader_color: Color = Color.WHITE
 @export var outline_width: float = 2.0
 @export var outline_shader: Shader = preload("res://shaders/color/pixel_perfect_outline.gdshader")
+@export_category("Inverted hull")
+@export var outline_hull_color: Color = Color.WHITE
+@export_range(0, 16, 0.01) var outline_grow_amount: float = 0.02
 @export_group("Information")
 @export var title: String = ""
 @export var description: String = ""
@@ -65,7 +75,9 @@ var original_collision_layer :=  GameGlobals.grabbables_collision_layer
 var original_collision_mask := GameGlobals.world_collision_layer | GameGlobals.player_collision_layer | GameGlobals.enemies_collision_layer | GameGlobals.grabbables_collision_layer
 var original_gravity_scale: float  = gravity_scale
 var original_transparency: int = MaximumTransparency
-var outline_material: ShaderMaterial
+
+var outline_material: StandardMaterial3D
+var outline_shader_material: ShaderMaterial
 
 var current_state: GrabState = GrabState.Neutral
 var current_grabber: Node3D
@@ -213,22 +225,41 @@ func _apply_outline_shader() -> void:
 	if outline_on_focus:
 		var material: StandardMaterial3D = mesh_instance.get_active_material(0)
 		
-		if material and not material.next_pass:
-			if not outline_material:
-				outline_material = ShaderMaterial.new()
-				outline_material.shader = outline_shader
+		match outline_mode:
+			OutlineMode.EdgeShader:
+				if material and not material.next_pass:
 				
-			outline_material.set_shader_parameter("outline_color", outline_color)
-			outline_material.set_shader_parameter("outline_width", outline_width)
-			material.next_pass = outline_material
+					if not outline_shader_material:
+						outline_shader_material = ShaderMaterial.new()
+						outline_shader_material.shader = outline_shader
+						
+					outline_shader_material.set_shader_parameter("outline_color", outline_shader_color)
+					outline_shader_material.set_shader_parameter("outline_width", outline_width)
+					material.next_pass = outline_shader_material
+					
+			OutlineMode.InvertedHull:
+				if not outline_material:
+					outline_material = StandardMaterial3D.new()
+					outline_material.grow = true
+					outline_material.blend_mode = BaseMaterial3D.BLEND_MODE_PREMULT_ALPHA
+					outline_material.cull_mode = BaseMaterial3D.CULL_FRONT
+					outline_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+				
+				outline_material.albedo_color = outline_hull_color
+				outline_material.grow_amount = outline_grow_amount
+				mesh_instance.material_overlay = outline_material
 
 	
 func _remove_outline_shader() -> void:
 	if outline_on_focus:
 		var material: StandardMaterial3D = mesh_instance.get_active_material(0)
 		
-		if material:
-			material.next_pass = null
+		match outline_mode:
+			OutlineMode.EdgeShader:
+				if material:
+					material.next_pass = null
+			OutlineMode.InvertedHull:
+				mesh_instance.material_overlay = null
 			
 
 #region Signal callbacks
