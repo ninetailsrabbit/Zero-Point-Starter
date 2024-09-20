@@ -12,7 +12,7 @@ var current_grabbable: Grabbable3D
 func _enter_tree() -> void:
 	enabled = true
 	exclude_parent = true
-	collision_mask = GameGlobals.world_collision_layer | GameGlobals.enemies_collision_layer | GameGlobals.throwables_collision_layer
+	collision_mask = GameGlobals.world_collision_layer | GameGlobals.enemies_collision_layer | GameGlobals.grabbables_collision_layer
 	collide_with_areas = false
 	collide_with_bodies = true
 

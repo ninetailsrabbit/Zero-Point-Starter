@@ -1,4 +1,5 @@
-class_name NewTelekinesis extends Node3D
+@icon("res://components/interaction/3D/picking/telekinesis.svg")
+class_name Telekinesis3D extends Node3D
 
 class ActiveGrabbable extends RefCounted:
 	func _init(_grabbable: Grabbable3D, _slot: Node3D):
@@ -21,10 +22,11 @@ signal dropped_grabbable(body: Grabbable3D)
 @export var pull_area_input_action: String = "pull_area"
 @export var drop_input_action: String = "drop"
 @export var throw_input_action: String = "throw"
+@export var push_wave_input_action: String = "push_wave"
 @export_group("Abilities")
 @export var pull_individual_ability: bool = true
-@export var pull_area_ability: bool = true
-@export var push_wave_ability: bool = true
+@export var pull_area_ability: bool = false
+@export var push_wave_ability: bool = false
 @export_group("Interactor")
 ## The raycast that interacts with grabbables to detect them
 @export var grabbable_interactor: GrabbableRayCastInteractor
@@ -32,9 +34,9 @@ signal dropped_grabbable(body: Grabbable3D)
 @export_range(0.1, 100.0, 0.01) var grabbable_interactor_distance = 6.0:
 	set(value):
 		if grabbable_interactor is GrabbableRayCastInteractor and grabbable_interactor_distance != value:
-			_prepare_grabbable_interactor(value)
+			grabbable_interactor_distance = clamp(value, 0.1, 100.0)
+			_prepare_grabbable_interactor(grabbable_interactor_distance)
 			
-		grabbable_interactor_distance = clamp(value, 0.1, 100.0)
 @export_group("Area detector")
 @export var grabbable_area_detector: Area3D:
 	set(value):
@@ -48,12 +50,15 @@ var active_grabbables: Array[ActiveGrabbable] = []
 
 
 func _input(_event: InputEvent) -> void:
+	if push_wave_ability and active_grabbables.is_empty() and InputHelper.action_just_pressed_and_exists(push_wave_input_action):
+		push_wave()
+		
 	if pull_individual_ability and InputHelper.action_just_pressed_and_exists(pull_input_action):
 		if slots_available():
 			if grabbable_interactor and grabbable_interactor.is_colliding():
 				var body = grabbable_interactor.get_collider() as Grabbable3D
 				
-				if body and body.state_is_neutral():
+				if body and not body.state_is_pull():
 					pull_body(body)
 	
 	if pull_area_ability and InputHelper.action_just_pressed_and_exists(pull_area_input_action) and slots_available():
@@ -121,6 +126,13 @@ func drop_body(body: Grabbable3D) -> void:
 	set_physics_process(active_grabbables.size() > 0)
 	
 
+func push_wave():
+	if push_wave_ability:
+		var wave = PushWaveArea.new(Camera3DHelper.forward_direction(get_viewport().get_camera_3d()))
+		add_child(wave)
+		wave.activate()
+	
+
 func get_near_grabbables() -> Array:
 	if grabbable_area_detector and grabbable_area_detector.monitoring:
 		var bodies := grabbable_area_detector.get_overlapping_bodies().filter(func(body): return body is Grabbable3D)
@@ -169,7 +181,7 @@ func _prepare_grabbable_area_detector():
 		grabbable_area_detector.monitoring = true
 		grabbable_area_detector.priority = 2
 		grabbable_area_detector.collision_layer = 0
-		grabbable_area_detector.collision_mask = GameGlobals.throwables_collision_layer
+		grabbable_area_detector.collision_mask = GameGlobals.grabbables_collision_layer
 
 
 #region Signal callbacks

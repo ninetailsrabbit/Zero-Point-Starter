@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnloimbd551yi"
-path="res://.godot/imported/telekinesis.svg-a3ad7242a31cb24961e24c44626da936.ctex"
+uid="uid://dbeafskm4uhdg"
+path="res://.godot/imported/grabbable.svg-9c7bf3734db9f53b6a65f58277fbf211.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://components/interaction/3D/throwables/telekinesis.svg"
-dest_files=["res://.godot/imported/telekinesis.svg-a3ad7242a31cb24961e24c44626da936.ctex"]
+source_file="res://components/interaction/3D/picking/grabbable.svg"
+dest_files=["res://.godot/imported/grabbable.svg-9c7bf3734db9f53b6a65f58277fbf211.ctex"]
 
 [params]
 

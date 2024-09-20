@@ -17,8 +17,8 @@ func _ready():
 	GlobalGameEvents.interactable_focused.connect(on_interactable_focused)
 	GlobalGameEvents.interactable_unfocused.connect(on_interactable_unfocused)
 	
-	GlobalGameEvents.throwable_focused.connect(on_throwable_focused)
-	GlobalGameEvents.throwable_unfocused.connect(on_throwable_unfocused)
+	GlobalGameEvents.grabbable_focused.connect(on_grabbable_focused)
+	GlobalGameEvents.grabbable_unfocused.connect(on_grabbable_unfocused)
 
 
 func on_interactable_focused(interactable: Interactable3D) -> void:
@@ -31,12 +31,12 @@ func on_interactable_unfocused(interactable: Interactable3D) -> void:
 		current_pointer.texture = default_pointer_texture
 
 
-func on_throwable_focused(throwable: Throwable3D) -> void:
-	if throwable.focus_screen_pointer:
-		current_pointer.texture = throwable.focus_screen_pointer
+func on_grabbable_focused(grabbable: Grabbable3D) -> void:
+	if grabbable.focus_screen_pointer:
+		current_pointer.texture = grabbable.focus_screen_pointer
 		
 		
-func on_throwable_unfocused(throwable: Throwable3D) -> void:
-	if throwable.focus_screen_pointer:
+func on_grabbable_unfocused(grabbable: Grabbable3D) -> void:
+	if grabbable.focus_screen_pointer:
 		current_pointer.texture = default_pointer_texture
 		
