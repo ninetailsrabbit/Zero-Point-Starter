@@ -24,7 +24,7 @@ func _ready() -> void:
 	list_of_saved_games.merge(read_user_saved_games(), true)
 
 
-func create_new_save(filename: String):
+func create_new_save(filename: String, make_current: bool = false):
 	if SavedGame.save_exists(filename):
 		error_creating_savegame.emit(filename, ERR_ALREADY_EXISTS)
 		return
@@ -35,15 +35,16 @@ func create_new_save(filename: String):
 	if error == Error.OK:
 		created_savegame.emit(filename)
 		list_of_saved_games[filename] = new_saved_game
+		
+		if make_current:
+			current_saved_game = new_saved_game
 	else:
 		error_creating_savegame.emit(filename, error)
 
 
 func load_savegame(filename: String) -> SavedGame:
 	if SavedGame.save_exists(filename):
-		current_saved_game = ResourceLoader.load(SavedGame.get_save_path(filename), "", ResourceLoader.CACHE_MODE_IGNORE) as SavedGame
-
-		return current_saved_game
+		return ResourceLoader.load(SavedGame.get_save_path(filename), "", ResourceLoader.CACHE_MODE_IGNORE) as SavedGame
 		
 	error_loading_savegame.emit(filename, ERR_DOES_NOT_EXIST)
 	
@@ -105,3 +106,4 @@ func save_filename_exists(filename: String) -> bool:
 	var name_to_check: String = StringHelper.clean(filename.get_basename().to_lower().strip_edges())
 	
 	return list_of_saved_games.keys().has(name_to_check)
+	

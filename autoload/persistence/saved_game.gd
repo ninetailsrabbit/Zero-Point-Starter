@@ -1,14 +1,14 @@
 class_name SavedGame extends Resource
 
-static var default_path: String = OS.get_user_data_dir()
+static var default_path := OS.get_user_data_dir()
 
 @export var filename: String
 @export var display_name: String
 @export var version_control: String = ProjectSettings.get_setting("application/config/version", "1.0.0")
 @export var engine_version: String = "Godot %s" % Engine.get_version_info().string
-@export var device: String = HardwareDetector.distribution_name
-@export var platform: String = HardwareDetector.platform
-@export var last_datetime: String = ""
+@export var device := HardwareDetector.distribution_name
+@export var platform := HardwareDetector.platform
+@export var last_datetime := ""
 @export var timestamp: float
 
 
@@ -17,6 +17,7 @@ func update_last_datetime():
 	var datetime = Time.get_datetime_dict_from_system()
 	last_datetime = "%s/%s/%s %s:%s" % [str(datetime.day).pad_zeros(2), str(datetime.month).pad_zeros(2), datetime.year, str(datetime.hour).pad_zeros(2), str(datetime.minute).pad_zeros(2)]
 	timestamp = Time.get_unix_time_from_system()
+
 
 
 func write_savegame(new_filename: String = filename) -> Error:	

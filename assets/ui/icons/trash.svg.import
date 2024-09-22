@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4hlj37hyktvu"
-path="res://.godot/imported/plugin.svg-a668e41659fa5f1a433b97298d5c90aa.ctex"
+uid="uid://c334fckw6yqed"
+path="res://.godot/imported/trash.svg-4acf788749c7d0afe532c42758709ba2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/room_creator/plugin.svg"
-dest_files=["res://.godot/imported/plugin.svg-a668e41659fa5f1a433b97298d5c90aa.ctex"]
+source_file="res://assets/ui/icons/trash.svg"
+dest_files=["res://.godot/imported/trash.svg-4acf788749c7d0afe532c42758709ba2.ctex"]
 
 [params]
 
