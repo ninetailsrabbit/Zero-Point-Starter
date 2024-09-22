@@ -25,3 +25,22 @@ const TypeDialogRetro6: AudioStreamWAV = preload("res://assets/sounds/dialog-tex
 #region Interactables
 const ScanViewport3DScene: PackedScene = preload("res://ui/screen_information/scan/3D/scan_viewport_3d.tscn")
 #endregion
+
+
+#region Match3
+const BoardScene = preload("res://components/kits/match3/board_ui.tscn")
+
+const debug_odd_cell_texture: Texture2D = preload("res://components/kits/match3/debug_ui/preview_cells/odd.png")
+const debug_even_cell_texture: Texture2D = preload("res://components/kits/match3/debug_ui/preview_cells/even.png")
+const debug_highlight_cell_texture: Texture2D =  preload("res://components/kits/match3/debug_ui/preview_cells/highlighted.png")
+const debug_blue_gem: Texture2D = preload("res://components/kits/match3/debug_ui/preview_pieces/blue_gem.png")
+const debug_green_gem: Texture2D = preload("res://components/kits/match3/debug_ui/preview_pieces/green_gem.png")
+const debug_purple_gem: Texture2D = preload("res://components/kits/match3/debug_ui/preview_pieces/purple_gem.png")
+const debug_yellow_gem: Texture2D = preload("res://components/kits/match3/debug_ui/preview_pieces/yellow_gem.png")
+
+
+const SwapPieceScene = preload("res://components/kits/match3/components/pieces/swap_mode/swap_piece.tscn")
+const CrossPieceScene = preload("res://components/kits/match3/components/pieces/swap_mode/cross_piece.tscn")
+const LineConnectorPieceScene = preload("res://components/kits/match3/components/pieces/swap_mode/line_connector_piece.tscn")
+
+#endregion

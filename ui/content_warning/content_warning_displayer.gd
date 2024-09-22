@@ -1,7 +1,6 @@
 @icon("res://ui/content_warning/content_warning.svg")
 class_name ContentWarnings extends Control
 
-
 signal content_warning_displayed(content_warning: ContentWarning)
 signal all_content_warnings_displayed
 
