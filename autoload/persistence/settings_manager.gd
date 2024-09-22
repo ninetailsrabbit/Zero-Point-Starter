@@ -4,22 +4,22 @@ signal reset_to_default_settings
 signal created_settings
 signal loaded_settings
 
-const KeybindingsSection := "keybindings"
-const GraphicsSection := "graphics"
-const AudioSection := "audio"
-const ControlsSection := "controls"
+const KeybindingsSection: String = "keybindings"
+const GraphicsSection: String = "graphics"
+const AudioSection: String = "audio"
+const ControlsSection: String = "controls"
 const AccessibilitySection = "accessibility"
 const LocalizationSection = "localization"
 const AnalyticsSection = "analytics"
 
-const KeybindingSeparator := "|"
-const InputEventSeparator := ":"
-const FileFormat := "ini" #  ini or cfg
+const KeybindingSeparator: String = "|"
+const InputEventSeparator: String = ":"
+const FileFormat: String = "ini" #  ini or cfg
 
-var settings_file_path := OS.get_user_data_dir() + "/settings.%s" % FileFormat
-var config_file_api := ConfigFile.new()
-var include_ui_keybindings := false
-var automatic = true
+var settings_file_path: String = OS.get_user_data_dir() + "/settings.%s" % FileFormat
+var config_file_api: ConfigFile = ConfigFile.new()
+var include_ui_keybindings: bool = false
+var automatic: bool = true
 
 
 func _ready() -> void:
@@ -42,6 +42,7 @@ func reset_to_factory_settings(path: String = settings_file_path) -> void:
 	
 	reset_to_default_settings.emit()
 
+
 func prepare_settings() -> void:
 	if(FileAccess.file_exists(settings_file_path)):
 		load_settings()
@@ -53,7 +54,7 @@ func load_settings(path: String = settings_file_path) -> void:
 	var error = config_file_api.load(path)
 	
 	if error != OK:
-		push_error("SettingsHandler: An error %d ocurred trying to load the settings from path %s " % [error, path])
+		push_error("SettingsManager: An error %d ocurred trying to load the settings from path %s " % [error, path])
 
 	load_audio()
 	load_graphics()

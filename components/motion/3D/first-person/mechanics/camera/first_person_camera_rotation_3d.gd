@@ -39,7 +39,7 @@ func _input(event: InputEvent) -> void:
 func _ready() -> void:
 	current_horizontal_limit = camera_horizontal_limit
 	current_vertical_limit = camera_vertical_limit
-	mouse_sensitivity = SettingsHandler.get_accessibility_section("mouse_sensitivity")
+	mouse_sensitivity = SettingsManager.get_accessibility_section("mouse_sensitivity")
 	
 	GlobalGameEvents.mouse_sensitivity_changed.connect(on_mouse_sensitivity_changed)
 

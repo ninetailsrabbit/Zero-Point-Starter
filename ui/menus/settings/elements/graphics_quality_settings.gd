@@ -33,7 +33,7 @@ func create_graphic_quality_preset_buttons() -> void:
 		button.button_group = quality_preset_button_group
 		button.toggle_mode = true
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.button_pressed = int(quality_preset) == int(SettingsHandler.get_graphics_section("quality_preset"))
+		button.button_pressed = int(quality_preset) == int(SettingsManager.get_graphics_section("quality_preset"))
 		
 		quality_preset_buttons[quality_preset] = button
 		
@@ -41,5 +41,5 @@ func create_graphic_quality_preset_buttons() -> void:
 		
 
 func on_quality_button_pressed(quality_preset_button: BaseButton) -> void:
-	SettingsHandler.update_graphics_section("quality_preset", quality_preset_button.get_meta("quality_preset"))
-	SettingsHandler.save_settings()
+	SettingsManager.update_graphics_section("quality_preset", quality_preset_button.get_meta("quality_preset"))
+	SettingsManager.save_settings()

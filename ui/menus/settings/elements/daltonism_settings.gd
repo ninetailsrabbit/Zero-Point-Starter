@@ -25,7 +25,7 @@ func create_daltonism_buttons() -> void:
 		button.button_group = daltonism_button_group
 		button.toggle_mode = true
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.button_pressed = int(daltonism) == int(SettingsHandler.get_accessibility_section("daltonism"))
+		button.button_pressed = int(daltonism) == int(SettingsManager.get_accessibility_section("daltonism"))
 		
 		daltonism_buttons[daltonism] = button
 		
@@ -33,5 +33,5 @@ func create_daltonism_buttons() -> void:
 		
 
 func on_daltonism_button_pressed(daltonism_button: BaseButton) -> void:
-	SettingsHandler.update_accessibility_section("daltonism", daltonism_button.get_meta("daltonism"))
-	SettingsHandler.save_settings()
+	SettingsManager.update_accessibility_section("daltonism", daltonism_button.get_meta("daltonism"))
+	SettingsManager.save_settings()

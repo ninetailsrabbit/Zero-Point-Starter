@@ -40,5 +40,5 @@ func on_screen_mode_selected(idx) -> void:
 		DisplayServer.window_set_mode(get_item_id(idx))
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
 		
-	SettingsHandler.update_graphics_section("display", DisplayServer.window_get_mode())
-	SettingsHandler.save_settings()
+	SettingsManager.update_graphics_section("display", DisplayServer.window_get_mode())
+	SettingsManager.save_settings()

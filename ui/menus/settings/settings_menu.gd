@@ -44,7 +44,7 @@ func on_mute_audio_buses_pressed(mute_pressed: bool) -> void:
 	else:
 		AudioManager.unmute_all_buses()
 		
-	SettingsHandler.update_audio_section("muted", true)
+	SettingsManager.update_audio_section("muted", true)
 
 
 func on_back_button_pressed() -> void:

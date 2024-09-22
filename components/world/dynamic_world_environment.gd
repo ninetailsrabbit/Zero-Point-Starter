@@ -12,7 +12,7 @@ func on_updated_graphic_settings() -> void:
 
 
 func update_world_graphic_settings() -> void:
-	var quality_preset = SettingsHandler.get_graphics_section("quality_preset")
+	var quality_preset = SettingsManager.get_graphics_section("quality_preset")
 	var viewport: Viewport = get_viewport()
 	
 	for preset in HardwareDetector.graphics_quality_presets[quality_preset]:

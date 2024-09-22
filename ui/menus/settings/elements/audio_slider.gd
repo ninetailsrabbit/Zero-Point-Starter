@@ -18,5 +18,5 @@ func audio_slider_drag_ended(volume_changed: bool):
 		if(target_bus == "SFX"):
 			AudioManager.change_volume("EchoSFX", value)
 		AudioManager.change_volume(target_bus, value)
-		SettingsHandler.update_audio_section(target_bus, AudioManager.get_actual_volume_db_from_bus(target_bus))
-		SettingsHandler.save_settings()
+		SettingsManager.update_audio_section(target_bus, AudioManager.get_actual_volume_db_from_bus(target_bus))
+		SettingsManager.save_settings()

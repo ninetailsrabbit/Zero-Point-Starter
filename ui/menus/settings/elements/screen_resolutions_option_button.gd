@@ -17,7 +17,7 @@ func _ready() -> void:
 	
 
 func _fill_available_resolutions() -> void:
-	var current_window_size: Vector2i =  DisplayServer.window_get_size() if DisplayServer.window_get_mode() == DisplayServer.WindowMode.WINDOW_MODE_WINDOWED else SettingsHandler.get_graphics_section("resolution")
+	var current_window_size: Vector2i =  DisplayServer.window_get_size() if DisplayServer.window_get_mode() == DisplayServer.WindowMode.WINDOW_MODE_WINDOWED else SettingsManager.get_graphics_section("resolution")
 	
 	for display_resolution in ViewportHelper.resolutions:
 		if _resolution_is_included(display_resolution):
@@ -61,5 +61,5 @@ func on_resolution_selected(idx) -> void:
 	
 	DisplayServer.window_set_size(screen_size)
 	
-	SettingsHandler.update_graphics_section("resolution", screen_size)
-	SettingsHandler.save_settings()
+	SettingsManager.update_graphics_section("resolution", screen_size)
+	SettingsManager.save_settings()

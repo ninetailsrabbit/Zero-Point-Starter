@@ -28,5 +28,5 @@ func on_fps_limit_button_pressed(fps_limit_button: BaseButton) -> void:
 	var limit = fps_limit_button.name.to_int()
 	Engine.max_fps = limit
 	
-	SettingsHandler.update_graphics_section("max_fps", limit)
-	SettingsHandler.save_settings()
+	SettingsManager.update_graphics_section("max_fps", limit)
+	SettingsManager.save_settings()

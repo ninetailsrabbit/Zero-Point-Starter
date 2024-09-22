@@ -16,5 +16,5 @@ func _ready() -> void:
 func on_vsync_changed(vsync_enabled: bool) -> void:
 	DisplayServer.window_set_vsync_mode(int(vsync_enabled))
 	
-	SettingsHandler.update_graphics_section("vsync", DisplayServer.window_get_vsync_mode())
-	SettingsHandler.save_settings()
+	SettingsManager.update_graphics_section("vsync", DisplayServer.window_get_vsync_mode())
+	SettingsManager.save_settings()
