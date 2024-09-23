@@ -29,7 +29,7 @@ static func get_files_recursive(path: String, regex: RegEx = null) -> Array:
 		
 		while file != "":
 			if directory.current_is_dir():
-				files += get_files_recursive(directory.get_current_directory().path_join(file), regex)
+				files += get_files_recursive(directory.get_current_dir().path_join(file), regex)
 			else:
 				var file_path = directory.get_current_dir().path_join(file)
 				
@@ -51,14 +51,14 @@ static func get_files_recursive(path: String, regex: RegEx = null) -> Array:
 static func remove_files_recursive(path: String, regex: RegEx = null) -> void:
 	var directory = DirAccess.open(path)
 	
-	if directory == OK:
+	if DirAccess.get_open_error() == OK:
 		directory.list_dir_begin()
 		
 		var file_name = directory.get_next()
 		
 		while file_name != "":
 			if directory.current_is_dir():
-				remove_files_recursive(directory.get_current_directory().path_join(file_name), regex)
+				remove_files_recursive(directory.get_current_dir().path_join(file_name), regex)
 			else:
 				if regex != null:
 					if regex.search(file_name):

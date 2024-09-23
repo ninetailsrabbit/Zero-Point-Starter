@@ -65,3 +65,19 @@ static func intersects(a: Array, b: Array) -> bool:
 			return true
 			
 	return false
+
+
+static func chunk(array: Array, size: int):
+	var result = []
+	var i = 0
+	var j = -1
+	
+	for element in array:
+		if i % size == 0:
+			result.push_back([])
+			j += 1
+			
+		result[j].push_back(element)
+		i += 1
+		
+	return result
