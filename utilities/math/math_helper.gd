@@ -362,3 +362,13 @@ static func logbi(x: int, base: int = 10) -> int:
 	
 static func logb(x: float, base: float = 10.0) -> float:
 	return log(x) / log(base)
+
+
+static func generate_random_seed(seed_range: int = 10) -> String:
+	randomize()
+	var rnd_seed : String = ""
+	
+	for index in range(seed_range):
+		rnd_seed += char(int(randi_range(40,127)))
+		
+	return(rnd_seed)
