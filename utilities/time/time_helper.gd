@@ -66,4 +66,5 @@ static func format_seconds(time: float, use_milliseconds: bool = false) -> Strin
 	if(use_milliseconds):
 		result += ":%02d" % milliseconds
 		
+		
 	return result

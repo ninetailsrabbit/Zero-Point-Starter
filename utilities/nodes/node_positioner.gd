@@ -71,8 +71,6 @@ static func align_nodes_v3(from: Node3D, to: Node3D, align_position: bool = true
 	from.reparent(original_parent)
 
 
-
-
 static func get_nearest_node_by_distance(from: Vector2, nodes: Array = [], min_distance: float = 0.0, max_range: float = 9999) -> Dictionary:
 	var result := {"target": null, "distance": null}
 	

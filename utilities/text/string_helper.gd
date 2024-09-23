@@ -9,7 +9,7 @@ const AsciiHexdigits = "0123456789ABCDEF"
 const AsciiPunctuation =  "!\"#$%&'()*+, -./:;<=>?@[\\]^_`{|}~"
 const bar = "█"
 
-static var random_number_generator := RandomNumberGenerator.new()
+static var random_number_generator: RandomNumberGenerator = RandomNumberGenerator.new()
 
 
 static func generate_random_string(length: int = 25, characters: String = AsciiAlphanumeric) -> String:
@@ -63,9 +63,9 @@ static func wrap_text(text: String = "", max_line_length: int = 120):
 	if text.is_empty() or text.length() <= max_line_length:
 		return text
 	else:
-		var final_text := ""
-		var words := text.split(" ")
-		var current_line := ""
+		var final_text: String = ""
+		var words: PackedStringArray = text.split(" ")
+		var current_line: String = ""
 		
 		for word: String in words:
 			if current_line != "":

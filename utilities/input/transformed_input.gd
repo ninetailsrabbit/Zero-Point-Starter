@@ -1,12 +1,12 @@
 class_name TransformedInput
 
-var move_right_action := "move_right"
-var move_left_action := "move_left"
-var move_forward_action := "move_forward"
-var move_back_action := "move_back"
+var move_right_action: String = "move_right"
+var move_left_action: String = "move_left"
+var move_forward_action: String = "move_forward"
+var move_back_action: String = "move_back"
 
 var actor: Node
-var deadzone := 0.5:
+var deadzone: float = 0.5:
 	set(value):
 		deadzone = clamp(value, 0.0, 1.0)
 

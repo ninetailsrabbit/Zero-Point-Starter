@@ -1,6 +1,6 @@
 class BezierCurve:
-	static var maximum_control_points := 18
 	
+	static var maximum_control_points: int = 18
 	static var factorial: Array[float] = MathHelper.factorials_from(maximum_control_points)
 	
 	static func change_maximum_control_points(points: int) -> void:
