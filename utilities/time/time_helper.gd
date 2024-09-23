@@ -1,10 +1,41 @@
 class_name TimeHelper
 
-const meridians := ["AM", "PM"]
-const months_abbreviation := {1:"JAN", 2:"FEB", 3:"MAR", 4:"APR", 5:"MAY", 6:"JUN", 7:"JUL", 8:"AUG", 9:"SEP", 10:"OCT", 11:"NOV", 12:"DEC"}
-const month_names := {1:"january", 2:"february", 3:"march", 4:"april", 5:"may", 6:"june", 7:"july", 8:"august", 9:"september", 10:"october", 11:"november", 12:"december"}
-const day_names := {1:"monday", 2:"tuesday", 3:"wednesday", 4:"thursday", 5:"friday", 6:"saturday", 7:"sunday"}
+enum TimeUnit {
+	SECONDS,
+	MILLISECONDS,
+	MICROSECONDS
+}
 
+static var conversions_to_seconds: Dictionary = {
+	TimeUnit.SECONDS: 1.0,
+	TimeUnit.MILLISECONDS: 1_000.0,
+	TimeUnit.MICROSECONDS: 1_000_000.0,
+}
+
+# Returns the amount of time passed since the engine started
+static func get_ticks(time_unit: TimeUnit = TimeUnit.SECONDS) -> float:
+	match time_unit:
+		TimeUnit.MICROSECONDS:
+			return Time.get_ticks_usec()
+		TimeUnit.MILLISECONDS:
+			return Time.get_ticks_msec()
+		TimeUnit.SECONDS:
+			return get_ticks_seconds()
+		_:
+			return get_ticks_seconds()
+
+
+## Returns the conversion of [method Time.get_ticks_usec] to seconds.
+static func get_ticks_seconds() -> float:
+	return Time.get_ticks_usec() / conversions_to_seconds[TimeUnit.MICROSECONDS]
+
+
+static func convert_to_seconds(time: float, origin_unit: TimeUnit) -> float:
+	return time / conversions_to_seconds[origin_unit]
+
+
+static func convert_to(time: float, origin_unit: TimeUnit, target_unit: TimeUnit) -> float:
+	return convert_to_seconds(time, origin_unit) * conversions_to_seconds[target_unit]
 
 """
 Formats a time value into a string representation of minutes, seconds, and optionally milliseconds.
@@ -28,10 +59,11 @@ Example:
 static func format_seconds(time: float, use_milliseconds: bool = false) -> String:
 	var minutes := floori(time / 60)
 	var seconds := fmod(time, 60)
-	
-	if(not use_milliseconds):
-		return "%02d:%02d" % [minutes, seconds]
-		
 	var milliseconds := fmod(time, 1) * 100
+
+	var result: String = "%02d:%02d" % [minutes, seconds]
 	
-	return "%02d:%02d:%02d" % [minutes, seconds, milliseconds]
+	if(use_milliseconds):
+		result += ":%02d" % milliseconds
+		
+	return result
