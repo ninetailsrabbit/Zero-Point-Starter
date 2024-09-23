@@ -97,12 +97,12 @@ func create_graphics_section() -> void:
 	
 
 func create_accessibility_section() -> void:
-	update_accessibility_section("mouse_sensitivity", 3.0);
-	update_accessibility_section("controller_vibration", true);
-	update_accessibility_section("screen_brightness", 1.0);
-	update_accessibility_section("photosensitive", false);
-	update_accessibility_section("screenshake", true);
-	update_accessibility_section("daltonism", ViewportHelper.DaltonismTypes.No);
+	update_accessibility_section("mouse_sensitivity", 3.0)
+	update_accessibility_section("controller_vibration", true)
+	update_accessibility_section("screen_brightness", 1.0)
+	update_accessibility_section("photosensitive", false)
+	update_accessibility_section("screenshake", true)
+	update_accessibility_section("daltonism", WindowManager.DaltonismTypes.No)
 
 
 func create_localization_section() -> void:
@@ -292,7 +292,7 @@ func update_accessibility_section(key: String, value: Variant) -> void:
 	config_file_api.set_value(AccessibilitySection, key, value)
 	
 	if key == "daltonism":
-		RenderingServer.global_shader_parameter_set("daltonism", value);
+		RenderingServer.global_shader_parameter_set("daltonism", value)
 
 
 func update_controls_section(key: String, value: Variant) -> void:

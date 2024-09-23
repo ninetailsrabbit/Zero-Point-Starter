@@ -27,7 +27,7 @@ var remaining_animations := []
 
 
 func _ready():
-	color_rect.z_index = 100;
+	color_rect.z_index = 100
 	
 	transition_requested.connect(on_transition_requested)
 	transition_finished.connect(on_transition_finished)

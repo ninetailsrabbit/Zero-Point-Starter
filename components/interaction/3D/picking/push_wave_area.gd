@@ -48,8 +48,8 @@ func _ready():
 
 
 func _physics_process(_delta):
-	global_position += wave_speed * direction;
-	push_bodies_on_range();
+	global_position += wave_speed * direction
+	push_bodies_on_range()
 	
 	
 func activate():

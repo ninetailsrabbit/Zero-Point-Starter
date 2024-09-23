@@ -48,7 +48,7 @@ func enter():
 
 
 func exit(next_state: MachineState) -> void:
-	slide_timer.stop();
+	slide_timer.stop()
 	decrease_rate = slide_time
 	
 	if actor.camera.rotation.z != original_camera_rotation.z:

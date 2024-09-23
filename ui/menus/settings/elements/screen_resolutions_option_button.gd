@@ -19,11 +19,11 @@ func _ready() -> void:
 func _fill_available_resolutions() -> void:
 	var current_window_size: Vector2i =  DisplayServer.window_get_size() if DisplayServer.window_get_mode() == DisplayServer.WindowMode.WINDOW_MODE_WINDOWED else SettingsManager.get_graphics_section("resolution")
 	
-	for display_resolution in ViewportHelper.resolutions:
+	for display_resolution in WindowManager.resolutions:
 		if _resolution_is_included(display_resolution):
 			add_separator(display_resolution)
 			
-			var allowed_resolutions =  ViewportHelper.resolutions[display_resolution].filter(func(screen_size): return screen_size <= HardwareDetector.computer_screen_size) if use_computer_screen_resolution_limit else ViewportHelper.resolutions[display_resolution] 
+			var allowed_resolutions =  WindowManager.resolutions[display_resolution].filter(func(screen_size): return screen_size <= HardwareDetector.computer_screen_size) if use_computer_screen_resolution_limit else WindowManager.resolutions[display_resolution] 
 			
 			for screen_size: Vector2i in allowed_resolutions:
 				add_item("%dx%d" % [screen_size.x, screen_size.y])
@@ -47,11 +47,11 @@ func resolutions_based_on_hardware() -> void:
 		
 
 func _resolution_is_included(resolution: String) -> bool:
-	return resolution == ViewportHelper.Resolution4_3 && display4_3 \
-		or resolution == ViewportHelper.Resolution16_9 && display16_9 \
-		or resolution == ViewportHelper.Resolution16_10 && display16_10 \
-		or resolution == ViewportHelper.Resolution21_9 && display21_9 \
-		or resolution == ViewportHelper.Resolution_Mobile && display_mobile
+	return resolution == WindowManager.Resolution4_3 && display4_3 \
+		or resolution == WindowManager.Resolution16_9 && display16_9 \
+		or resolution == WindowManager.Resolution16_10 && display16_10 \
+		or resolution == WindowManager.Resolution21_9 && display21_9 \
+		or resolution == WindowManager.Resolution_Mobile && display_mobile
 
 
 func on_resolution_selected(idx) -> void:

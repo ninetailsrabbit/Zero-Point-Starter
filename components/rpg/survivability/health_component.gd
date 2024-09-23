@@ -47,7 +47,7 @@ var max_health_overflow: int:
 
 func _ready():
 	enable_health_regen(health_regen)
-	enable_invulnerability(is_invulnerable, invulnerability_time);
+	enable_invulnerability(is_invulnerable, invulnerability_time)
 	
 	health_changed.connect(on_health_changed)
 	died.connect(on_died)
@@ -92,10 +92,10 @@ func get_health_percent() -> Dictionary:
 	
 
 func enable_invulnerability(enable: bool, time: float = invulnerability_time):
-	is_invulnerable = enable;
-	invulnerability_time = time;
+	is_invulnerable = enable
+	invulnerability_time = time
 
-	_create_invulnerability_timer(invulnerability_time);
+	_create_invulnerability_timer(invulnerability_time)
 
 	if is_invulnerable:
 		if invulnerability_time > 0:
@@ -106,7 +106,7 @@ func enable_invulnerability(enable: bool, time: float = invulnerability_time):
 
 func enable_health_regen(amount: int = health_regen, time: float = health_regen_tick_time):
 	health_regen = amount
-	health_regen_tick_time = time;
+	health_regen_tick_time = time
 	
 	_create_health_regen_timer(health_regen_tick_time)
 	
@@ -117,8 +117,8 @@ func enable_health_regen(amount: int = health_regen, time: float = health_regen_
 		
 		if health_regen > 0:
 			if time != health_regen_timer.wait_time:
-				health_regen_timer.stop();
-				health_regen_timer.wait_time = time;
+				health_regen_timer.stop()
+				health_regen_timer.wait_time = time
 			
 			if not health_regen_timer.time_left > 0 or health_regen_timer.is_stopped():
 				health_regen_timer.start()

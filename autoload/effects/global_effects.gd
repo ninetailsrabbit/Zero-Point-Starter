@@ -22,7 +22,7 @@ var is_fading := false
 func _ready() -> void:
 	fade_background.modulate.a = 0
 	
-	mouse_filter = MouseFilter.MOUSE_FILTER_IGNORE;
+	mouse_filter = MouseFilter.MOUSE_FILTER_IGNORE
 	
 
 #region Fade effects
