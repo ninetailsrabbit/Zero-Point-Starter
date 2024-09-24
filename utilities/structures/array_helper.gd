@@ -2,7 +2,7 @@ class_name ArrayHelper
 
 	
 ## Flatten any array with n dimensions recursively
-static func flatten(array: Array):
+static func flatten(array: Array[Variant]):
 	var result := []
 	
 	for i in array.size():
@@ -14,7 +14,7 @@ static func flatten(array: Array):
 	return result
 
 
-static func pick_random_values(array: Array, items_to_pick: int = 1, duplicates: bool = true) -> Array:
+static func pick_random_values(array: Array[Variant], items_to_pick: int = 1, duplicates: bool = true) -> Array[Variant]:
 	var result := []
 	var target = flatten(array.duplicate())
 	target.shuffle()
@@ -31,7 +31,7 @@ static func pick_random_values(array: Array, items_to_pick: int = 1, duplicates:
 	return result
 	
 
-static func remove_duplicates(array: Array) -> Array:
+static func remove_duplicates(array: Array[Variant]) -> Array[Variant]:
 	var cleaned_array := []
 	
 	for element in array:
@@ -41,7 +41,7 @@ static func remove_duplicates(array: Array) -> Array:
 	return cleaned_array
 	
 	
-static func remove_falsy_values(array: Array) -> Array:
+static func remove_falsy_values(array: Array[Variant]) -> Array[Variant]:
 	var cleaned_array := []
 	
 	for element in array:
@@ -51,7 +51,7 @@ static func remove_falsy_values(array: Array) -> Array:
 	return cleaned_array
 	
 	
-static func middle_element(array: Array):
+static func middle_element(array: Array[Variant]):
 	if array.size() > 2:
 		return array[floor(array.size() / 2.0)]
 		
@@ -59,7 +59,7 @@ static func middle_element(array: Array):
 	
 
 ## To detect if a contains elements of b
-static func intersects(a: Array, b: Array) -> bool:
+static func intersects(a: Array[Variant], b: Array[Variant]) -> bool:
 	for e: Variant in a:
 		if b.has(e):
 			return true
@@ -68,16 +68,16 @@ static func intersects(a: Array, b: Array) -> bool:
 
 
 static func merge_unique(first: Array[Variant], second: Array[Variant]) -> Array[Variant]:
-	var merged_array: Array[Variant] = first.duplicate()
+	var merged_array: Array[Variant] = remove_duplicates(first)
 
-	for element in second:
+	for element in remove_duplicates(second):
 		if not merged_array.has(element):
 			merged_array.append(element)
 			
 	return merged_array
 
 
-static func chunk(array: Array, size: int):
+static func chunk(array: Array[Variant], size: int):
 	var result = []
 	var i = 0
 	var j = -1
