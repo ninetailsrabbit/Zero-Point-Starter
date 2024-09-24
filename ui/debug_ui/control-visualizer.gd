@@ -1,6 +1,6 @@
 # This script it's to use on existing control nodes to debug them
 @tool
-@icon("res://ui/debug/control_visualizer.svg")
+@icon("res://assets/node_icons/control_visualizer.svg")
 extends Control
 
 @export_category("Visualize")

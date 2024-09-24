@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://c8k32nxb50dmd"]
 
 [ext_resource type="Script" path="res://ui/screen_information/scan/3D/scan_viewport_3d.gd" id="1_wkrwm"]
-[ext_resource type="Script" path="res://components/motion/3D/rotation/mouse_rotator_component_3d.gd" id="2_k7rko"]
+[ext_resource type="Script" path="res://components/3D/motion/rotation/mouse_rotator_component_3d.gd" id="2_k7rko"]
 
 [node name="ScanViewport3D" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -13.1451, 0)

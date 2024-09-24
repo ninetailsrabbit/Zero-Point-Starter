@@ -1,4 +1,4 @@
-@icon("res://ui/menus/settings/settings.svg")
+@icon("res://assets/node_icons/settings.svg")
 extends Control
 
 

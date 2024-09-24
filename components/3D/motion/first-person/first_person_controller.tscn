@@ -1,0 +1,250 @@
+[gd_scene load_steps=31 format=3 uid="uid://dd0blwa1hawbl"]
+
+[ext_resource type="Script" path="res://components/3D/motion/first-person/first_person_controller.gd" id="1_siswl"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/mechanics/camera/first_person_camera_rotation_3d.gd" id="2_6vhab"]
+[ext_resource type="Script" path="res://components/design_patterns/finite_state_machine/finite-state-machine.gd" id="2_l5dql"]
+[ext_resource type="PackedScene" uid="uid://bcj2w63oj13e5" path="res://components/3D/motion/first-person/debug_ui/first_person_debug_ui.tscn" id="2_q86iu"]
+[ext_resource type="Script" path="res://components/3D/interaction/interactable/raycast_interactor_3d.gd" id="3_gxrim"]
+[ext_resource type="PackedScene" uid="uid://bht2ebp61vh22" path="res://ui/screen_information/pointer/interaction_pointer.tscn" id="3_p2bi0"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/states/ground/idle.gd" id="3_rs4o2"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/mechanics/headbob/headbob.gd" id="4_43lpf"]
+[ext_resource type="Texture2D" uid="uid://dtxe218lym3vf" path="res://assets/crosshair/crosshair_dot.png" id="4_b8kh6"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/mechanics/swing_head/swing_head.gd" id="5_2n18i"]
+[ext_resource type="Script" path="res://components/3D/camera/shake/shake_camera_3d.gd" id="5_q3whp"]
+[ext_resource type="Script" path="res://components/3D/interaction/picking/grabbable_raycast_interactor_3d.gd" id="6_iqasx"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/states/ground/walk.gd" id="7_fpqxx"]
+[ext_resource type="Script" path="res://components/3D/interaction/picking/telekinesis_3d.gd" id="8_qmjuq"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/states/ground/run.gd" id="9_ywsop"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/states/ground/crouch.gd" id="11_f7wtq"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/states/ground/crawl.gd" id="12_x80eo"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/states/ground/slide.gd" id="13_glomj"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/states/air/fall.gd" id="14_rrabi"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/states/air/jump.gd" id="15_3f402"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/states/special/swim.gd" id="16_q5wft"]
+
+[sub_resource type="Animation" id="Animation_c5r52"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.549982, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_3jj4s"]
+resource_name = "crawl"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, -0.039, 0), Vector3(0, -0.553, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_wv8v6"]
+resource_name = "crouch"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.549982, 0), Vector3(0, -0.039, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_57itv"]
+_data = {
+"RESET": SubResource("Animation_c5r52"),
+"crawl": SubResource("Animation_3jj4s"),
+"crouch": SubResource("Animation_wv8v6")
+}
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vvb10"]
+radius = 0.3
+height = 1.75
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_wxhee"]
+radius = 0.3
+height = 1.26123
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oebev"]
+radius = 0.3
+height = 0.753003
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1y566"]
+radius = 0.25
+height = 0.6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xse7x"]
+size = Vector3(2.59021, 1, 2.73018)
+
+[node name="FirstPersonController" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.879968, 0)
+collision_layer = 2
+collision_mask = 21
+script = ExtResource("1_siswl")
+crawl = true
+
+[node name="DebugUI" parent="." node_paths=PackedStringArray("actor", "finite_state_machine") instance=ExtResource("2_q86iu")]
+actor = NodePath("..")
+finite_state_machine = NodePath("../FiniteStateMachine")
+
+[node name="ScreenPointer" type="CanvasLayer" parent="."]
+
+[node name="InteractionPointer" parent="ScreenPointer" instance=ExtResource("3_p2bi0")]
+default_pointer_texture = ExtResource("4_b8kh6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_57itv")
+}
+
+[node name="StandCollisionShape" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_vvb10")
+
+[node name="CrouchCollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.247109, 0)
+shape = SubResource("CapsuleShape3D_wxhee")
+
+[node name="CrawlCollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.51001, 0)
+shape = SubResource("CapsuleShape3D_oebev")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.549982, 0)
+
+[node name="CeilShapeCast" type="ShapeCast3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.17412, 0.026655)
+shape = SubResource("CapsuleShape3D_1y566")
+
+[node name="Eyes" type="Node3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.178689)
+
+[node name="Camera3D" type="Camera3D" parent="Head/Eyes"]
+script = ExtResource("5_q3whp")
+
+[node name="ThrowableRayCastInteractor" type="RayCast3D" parent="Head/Eyes"]
+target_position = Vector3(0, 0, -1.5)
+script = ExtResource("6_iqasx")
+
+[node name="RayCastInteractor3D" type="RayCast3D" parent="Head/Eyes"]
+target_position = Vector3(0, 0, -1.5)
+debug_shape_custom_color = Color(0.992157, 0.870588, 0, 0.298039)
+script = ExtResource("3_gxrim")
+
+[node name="Hands" type="Node3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.252887, -0.235752)
+
+[node name="GrabbableAreaDetector" type="Area3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.804471, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/GrabbableAreaDetector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0984497, 0, -1.59836)
+shape = SubResource("BoxShape3D_xse7x")
+
+[node name="Telekinesis3D" type="Node3D" parent="Head" node_paths=PackedStringArray("grabbable_interactor", "grabbable_area_detector")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.549982, 0)
+script = ExtResource("8_qmjuq")
+grabbable_interactor = NodePath("../Eyes/ThrowableRayCastInteractor")
+grabbable_area_detector = NodePath("../GrabbableAreaDetector")
+max_number_of_grabbables = 3
+
+[node name="Marker3D" type="Marker3D" parent="Head/Telekinesis3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.355963, 0.380309, -0.914505)
+
+[node name="Marker3D3" type="Marker3D" parent="Head/Telekinesis3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0698221, 0.280516, -1.31172)
+
+[node name="Marker3D2" type="Marker3D" parent="Head/Telekinesis3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.147684, 0.380309, -0.914505)
+
+[node name="CameraMovement3D" type="Node3D" parent="." node_paths=PackedStringArray("actor", "head", "camera_pivot_point")]
+script = ExtResource("2_6vhab")
+actor = NodePath("..")
+head = NodePath("../Head")
+camera_pivot_point = NodePath("../Head/Eyes")
+
+[node name="HeadBob" type="Node3D" parent="." node_paths=PackedStringArray("actor", "head")]
+script = ExtResource("4_43lpf")
+actor = NodePath("..")
+head = NodePath("../Head/Eyes")
+
+[node name="SwingHead" type="Node3D" parent="." node_paths=PackedStringArray("actor", "head")]
+script = ExtResource("5_2n18i")
+actor = NodePath("..")
+head = NodePath("../Head")
+
+[node name="FiniteStateMachine" type="Node" parent="." node_paths=PackedStringArray("current_state")]
+script = ExtResource("2_l5dql")
+current_state = NodePath("Ground/Idle")
+
+[node name="Ground" type="Node" parent="FiniteStateMachine"]
+
+[node name="Idle" type="Node" parent="FiniteStateMachine/Ground" node_paths=PackedStringArray("actor")]
+script = ExtResource("3_rs4o2")
+actor = NodePath("../../..")
+
+[node name="Walk" type="Node" parent="FiniteStateMachine/Ground" node_paths=PackedStringArray("actor")]
+script = ExtResource("7_fpqxx")
+actor = NodePath("../../..")
+
+[node name="Run" type="Node" parent="FiniteStateMachine/Ground" node_paths=PackedStringArray("actor")]
+script = ExtResource("9_ywsop")
+actor = NodePath("../../..")
+speed = 6.0
+side_speed = 5.5
+acceleration = 15.0
+friction = 20.0
+
+[node name="Crawl" type="Node" parent="FiniteStateMachine/Ground" node_paths=PackedStringArray("actor")]
+script = ExtResource("12_x80eo")
+actor = NodePath("../../..")
+speed = 1.0
+side_speed = 1.1
+
+[node name="Crouch" type="Node" parent="FiniteStateMachine/Ground" node_paths=PackedStringArray("actor")]
+script = ExtResource("11_f7wtq")
+actor = NodePath("../../..")
+speed = 1.5
+side_speed = 1.4
+
+[node name="Slide" type="Node" parent="FiniteStateMachine/Ground" node_paths=PackedStringArray("actor")]
+script = ExtResource("13_glomj")
+actor = NodePath("../../..")
+
+[node name="Air" type="Node" parent="FiniteStateMachine"]
+
+[node name="Fall" type="Node" parent="FiniteStateMachine/Air" node_paths=PackedStringArray("actor")]
+script = ExtResource("14_rrabi")
+actor = NodePath("../../..")
+
+[node name="Jump" type="Node" parent="FiniteStateMachine/Air" node_paths=PackedStringArray("actor")]
+script = ExtResource("15_3f402")
+actor = NodePath("../../..")
+
+[node name="Special" type="Node" parent="FiniteStateMachine"]
+
+[node name="Swim" type="Node" parent="FiniteStateMachine/Special" node_paths=PackedStringArray("eyes", "actor")]
+script = ExtResource("16_q5wft")
+eyes = NodePath("../../../Head/Eyes")
+actor = NodePath("../../..")
+gravity_force = 0.1
+acceleration = 0.0
+friction = 0.0

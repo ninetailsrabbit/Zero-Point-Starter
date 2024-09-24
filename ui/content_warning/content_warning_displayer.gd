@@ -1,4 +1,4 @@
-@icon("res://ui/content_warning/content_warning.svg")
+@icon("res://assets/node_icons/content_warning.svg")
 class_name ContentWarnings extends Control
 
 signal content_warning_displayed(content_warning: ContentWarning)

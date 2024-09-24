@@ -1,5 +1,5 @@
 @tool
-@icon("res://ui/narrative/text/label/auto_resize_label.svg")
+@icon("res://assets/node_icons/auto_resize_label.svg")
 class_name AutoResizeLabel extends Label
 
 

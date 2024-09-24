@@ -1,5 +1,5 @@
 @tool
-@icon("res://ui/debug/PixelViewportDrawing.svg")
+@icon("res://assets/node_icons/pixe_viewport_drawing.svg")
 class_name PixelViewportDrawing extends Node2D
 
 @export var width := 640:

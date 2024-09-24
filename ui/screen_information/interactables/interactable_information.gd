@@ -1,4 +1,4 @@
-@icon("res://ui/screen_information/interactables/interactable_information.svg")
+@icon("res://assets/node_icons/interactable_information.svg")
 extends Control
 
 @onready var information_label: Label = $InformationLabel

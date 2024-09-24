@@ -1,4 +1,4 @@
-@icon("res://components/rpg/survivability/health.svg")
+@icon("res://assets/node_icons/health.svg")
 class_name HealthComponent extends Node
 
 signal health_changed(amount: int, type: Types)

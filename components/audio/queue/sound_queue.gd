@@ -1,5 +1,5 @@
 @tool
-@icon("res://components/audio/queue/sound_queue.svg")
+@icon("res://assets/node_icons/sound_queue.svg")
 class_name SoundQueue extends Node
 
 @export var queue_count := 2:
