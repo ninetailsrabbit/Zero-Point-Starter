@@ -67,6 +67,16 @@ static func intersects(a: Array, b: Array) -> bool:
 	return false
 
 
+static func merge_unique(first: Array[Variant], second: Array[Variant]) -> Array[Variant]:
+	var merged_array: Array[Variant] = first.duplicate()
+
+	for element in second:
+		if not merged_array.has(element):
+			merged_array.append(element)
+			
+	return merged_array
+
+
 static func chunk(array: Array, size: int):
 	var result = []
 	var i = 0

@@ -1,4 +1,17 @@
-class_name LinkHelper
+class_name NetworkHelper
+
+
+static func get_local_ip(ip_type: IP.Type = IP.Type.TYPE_IPV4) -> String:
+	if HardwareDetector.is_windows() and OS.has_environment("COMPUTERNAME"):
+		return IP.resolve_hostname(str(OS.get_environment("COMPUTERNAME")), ip_type)
+		
+	elif (HardwareDetector.is_linux() or HardwareDetector.is_mac()) and OS.has_environment("HOSTNAME"):
+		return IP.resolve_hostname(str(OS.get_environment("HOSTNAME")), ip_type)
+		
+	elif HardwareDetector.is_mac() and OS.has_environment("HOSTNAME"):
+		return IP.resolve_hostname(str(OS.get_environment("HOSTNAME")), ip_type)
+			
+	return ""
 
 
 static func is_valid_url(url: String) -> bool:
@@ -8,9 +21,9 @@ static func is_valid_url(url: String) -> bool:
 	
 	return regex.search(url) != null
 
-	
+
 func open_external_link(url: String) -> void:
-	if LinkHelper.is_valid_url(url) and OS.has_method("shell_open"):
+	if is_valid_url(url) and OS.has_method("shell_open"):
 		if OS.get_name() == "Web":
 			url = url.uri_encode()
 			
