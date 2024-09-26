@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://oyoxt2tvh50i"]
+
+[ext_resource type="Material" uid="uid://f0eaerhamka7" path="res://components/3D/motion/first-person/shooter/muzzle/muzzle_flash.tres" id="1_cmm8l"]
+[ext_resource type="Material" uid="uid://cc01hw84lc8gg" path="res://components/3D/motion/first-person/shooter/muzzle/muzzle_flash_base_material.tres" id="2_45uex"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/shooter/muzzle/muzzle_flash.gd" id="3_nqvbf"]
+
+[sub_resource type="QuadMesh" id="1"]
+material = ExtResource("2_45uex")
+size = Vector2(0.05, 0.05)
+
+[node name="MuzzleFlash" type="GPUParticles3D"]
+layers = 2
+cast_shadow = 0
+emitting = false
+amount = 2
+one_shot = true
+local_coords = true
+process_material = ExtResource("1_cmm8l")
+draw_pass_1 = SubResource("1")
+script = ExtResource("3_nqvbf")
+
+[node name="Timer" type="Timer" parent="."]
