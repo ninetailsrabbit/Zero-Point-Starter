@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dtxe218lym3vf" path="res://assets/crosshair/crosshair_dot.png" id="4_b8kh6"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/mechanics/swing_head/swing_head.gd" id="5_2n18i"]
 [ext_resource type="Script" path="res://components/3D/camera/shake/shake_camera_3d.gd" id="5_q3whp"]
-[ext_resource type="Script" path="res://components/3D/motion/first-person/shooter/weapon_holder.gd" id="5_v4phg"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/shooter/firearm_weapon.gd" id="5_v4phg"]
 [ext_resource type="Script" path="res://components/3D/interaction/picking/grabbable_raycast_interactor_3d.gd" id="6_iqasx"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/states/ground/walk.gd" id="7_fpqxx"]
 [ext_resource type="Script" path="res://components/3D/interaction/picking/telekinesis_3d.gd" id="8_qmjuq"]
@@ -138,10 +138,9 @@ shape = SubResource("CapsuleShape3D_1y566")
 [node name="Eyes" type="Node3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.178689)
 
-[node name="FireArmWeaponHolder" type="Node3D" parent="Head/Eyes" node_paths=PackedStringArray("camera")]
+[node name="FireArmWeaponHolder" type="Node3D" parent="Head/Eyes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.272078, -0.250249, -0.195619)
 script = ExtResource("5_v4phg")
-camera = NodePath("../Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="Head/Eyes"]
 script = ExtResource("5_q3whp")

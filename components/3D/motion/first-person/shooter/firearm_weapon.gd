@@ -1,5 +1,5 @@
 @icon("res://assets/node_icons/weapon.svg")
-class_name FireArmWeaponHolder extends Node3D
+class_name FireArmWeapon extends Node3D
 
 @export var camera: CameraShake3D
 @export_group("Weapon")
