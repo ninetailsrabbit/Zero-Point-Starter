@@ -328,10 +328,10 @@ static func get_percentage(max_value: int, value: int) -> int:
 	return roundi((float(value) / float(max_value)) * 100)
 
 
-static func chance(probability_chance: float = 0.5) -> bool:
+static func chance(probability_chance: float = 0.5, less_than: bool = true) -> bool:
 	probability_chance = clamp(probability_chance, 0.0, 1.0)
 	
-	return randf() < probability_chance
+	return randf() < probability_chance if less_than else randf() > probability_chance
 
 
 static func big_round(num: int) -> int:
