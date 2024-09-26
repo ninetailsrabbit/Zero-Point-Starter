@@ -10,7 +10,7 @@ class_name WeaponHolder extends Node3D
 @export var enable_bob: bool = true
 @export var bob_amount: float = 0.02
 @export var bob_freq : float = 0.01
-@export var bob_lerp_speed: float = 8.0
+@export var bob_lerp_speed: float = 12.0
 
 var original_position: Vector3
 
@@ -30,10 +30,9 @@ func _physics_process(delta: float) -> void:
 	
 func apply_bob(delta: float) -> void:
 	if enable_bob:
-		if not first_person_controller.finite_state_machine.current_state is Idle and first_person_controller.is_grounded:
+		if not first_person_controller.velocity.length() <= 0.1 and first_person_controller.is_grounded:
 			position.y = lerp(position.y, original_position.y + sin(Time.get_ticks_msec() * bob_freq) * bob_amount, bob_lerp_speed * delta)
 			position.x = lerp(position.x, original_position.x + sin(Time.get_ticks_msec() * bob_freq * 0.5) * bob_amount, bob_lerp_speed * delta)
-			
 		else:
 			position.y = lerp(position.y, original_position.y, bob_lerp_speed * delta)
 			position.x = lerp(position.x, original_position.x, bob_lerp_speed * delta)

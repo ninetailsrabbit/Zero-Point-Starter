@@ -53,12 +53,12 @@ func _physics_process(delta: float) -> void:
 		recoil_target_position.z = weapon_resource.recoil_position_z.sample(current_recoil_time) * weapon_resource.recoil_amplitude.z
 		
 		if InputMap.has_action("aim") and not Input.is_action_pressed("aim"): ## TODO SUPER TEMPORARY
-			position = position.move_toward(original_weapon_position, delta)
-			rotation = rotation.move_toward(original_weapon_rotation, delta)
+			position = position.slerp(original_weapon_position, 10 * delta)
+			rotation = rotation.slerp(original_weapon_rotation, 10 * delta)
 
 
 func apply_recoil():
-	if weapon_resource.recoil_enabled:
+	if weapon_resource and weapon_resource.recoil_enabled:
 		weapon_resource.recoil_amplitude.y *= -1 if MathHelper.chance(0.5) else 1
 		recoil_target_rotation.z = weapon_resource.recoil_rotation_z.sample(0) * weapon_resource.recoil_amplitude.y
 		recoil_target_rotation.x = weapon_resource.recoil_rotation_x.sample(0) * -weapon_resource.recoil_amplitude.x

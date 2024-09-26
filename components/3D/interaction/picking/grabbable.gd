@@ -102,7 +102,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if state_is_pull() and adjust_rotation_on_pull:
-		rotation = rotation.move_toward(target_rotation, delta * lerp_adjust_speed)
+		rotation = rotation.lerp(target_rotation, delta * lerp_adjust_speed)
 		
 		if rotation.is_equal_approx(target_rotation):
 			set_physics_process(false)
