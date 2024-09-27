@@ -1,6 +1,10 @@
 @icon("res://assets/node_icons/weapon.svg")
 class_name FireArmWeapon extends Node3D
 
+signal fired
+signal reloaded
+
+
 @export var camera: CameraShake3D
 @export_group("Weapon")
 @export var weapon_resource: WeaponResource
@@ -18,6 +22,15 @@ var recoil_target_rotation: Vector3
 var recoil_target_position: Vector3
 var current_recoil_time: float = 1.0
 
+var active: bool = true:
+	set(value):
+		if value != active:
+			active = value
+			
+			set_physics_process(active)
+
+var current_ammunition: int = 0
+
 
 func _ready() -> void:
 	original_weapon_position = position
@@ -25,7 +38,8 @@ func _ready() -> void:
 	recoil_target_rotation.y = rotation.y
 	
 	current_recoil_time = 1.0
-
+	current_ammunition = weapon_resource.initial_ammunition
+	
 
 func _physics_process(delta: float) -> void:
 	if InputMap.has_action("aim") and Input.is_action_pressed("aim"): ## TODO SUPER TEMPORARY, FIND A BETTER WAY TO CONFIGURE AIMING FOR EACH WEAPON
@@ -33,13 +47,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		position = position.slerp(Vector3.ZERO, 10 * delta)
 	
-	
+	## TODO - MANAGE THE SHOOT INPUT BASED ON WEAPON BURST TYPE
 	if InputMap.has_action("shoot") and Input.is_action_pressed("shoot"):
-		if camera:
-			camera.trauma(weapon_resource.camera_shake_time, weapon_resource.camera_shake_magnitude)
-		
-		apply_recoil()
-		muzzle_effect()
+		shoot()
 		
 	if current_recoil_time < 1:
 		current_recoil_time += delta * weapon_resource.recoil_speed
@@ -55,6 +65,17 @@ func _physics_process(delta: float) -> void:
 		if InputMap.has_action("aim") and not Input.is_action_pressed("aim"): ## TODO SUPER TEMPORARY
 			position = position.slerp(original_weapon_position, 10 * delta)
 			rotation = rotation.slerp(original_weapon_rotation, 10 * delta)
+
+
+## TODO - WORK IN PROGRESS TO ATTACH MORE COMPLEX BEHAVIORS
+func shoot() -> void:
+	if active and current_ammunition > 0:
+		if camera:
+			camera.trauma(weapon_resource.camera_shake_time, weapon_resource.camera_shake_magnitude)
+		
+		apply_recoil()
+		muzzle_effect()
+		fired.emit()
 
 
 func hitscan() -> Dictionary:
