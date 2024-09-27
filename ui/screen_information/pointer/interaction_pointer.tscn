@@ -30,7 +30,6 @@ texture = ExtResource("2_4un1s")
 layout_mode = 2
 script = ExtResource("3_s8fh6")
 use_dynamic_pointer = true
-reticle_scale = 2.0
 
 [node name="TopReticle" type="Line2D" parent="CenterContainer/DynamicScreenPointer"]
 points = PackedVector2Array(0, -5, 0, -15)

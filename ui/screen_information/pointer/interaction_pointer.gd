@@ -7,11 +7,11 @@ class_name InteractionPointer extends Control
 		if value != default_pointer_texture:
 			default_pointer_texture = value
 			
-			if default_pointer_texture:
+			if default_pointer_texture and current_pointer:
 				current_pointer.texture = default_pointer_texture
-			current_pointer.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			current_pointer.custom_minimum_size = minimum_size
-			
+				current_pointer.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+				current_pointer.custom_minimum_size = minimum_size
+				
 @onready var current_pointer: TextureRect = %Pointer
 
 
