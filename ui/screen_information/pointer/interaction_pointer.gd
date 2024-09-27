@@ -2,8 +2,16 @@ class_name InteractionPointer extends Control
 
 
 @export var minimum_size := Vector2(64, 64)
-@export var default_pointer_texture: Texture2D
-
+@export var default_pointer_texture: Texture2D:
+	set(value):
+		if value != default_pointer_texture:
+			default_pointer_texture = value
+			
+			if default_pointer_texture:
+				current_pointer.texture = default_pointer_texture
+			current_pointer.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			current_pointer.custom_minimum_size = minimum_size
+			
 @onready var current_pointer: TextureRect = %Pointer
 
 
@@ -16,9 +24,9 @@ func _ready():
 	
 	GlobalGameEvents.interactable_focused.connect(on_interactable_focused)
 	GlobalGameEvents.interactable_unfocused.connect(on_interactable_unfocused)
-	
 	GlobalGameEvents.grabbable_focused.connect(on_grabbable_focused)
 	GlobalGameEvents.grabbable_unfocused.connect(on_grabbable_unfocused)
+
 
 
 func on_interactable_focused(interactable: Interactable3D) -> void:
