@@ -57,6 +57,26 @@ func _physics_process(delta: float) -> void:
 			rotation = rotation.slerp(original_weapon_rotation, 10 * delta)
 
 
+func hitscan() -> Dictionary:
+	if camera:
+		var screen_center: Vector2i = WindowManager.screen_center()
+		var origin = camera.project_ray_origin(screen_center)
+		var to: Vector3 = origin + camera.project_ray_normal(screen_center) * weapon_resource.fire_range
+		
+		var hitscan_ray_query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(
+			origin, 
+			to, 
+			GameGlobals.world_collision_layer | GameGlobals.enemies_collision_layer | GameGlobals.interactables_collision_layer | GameGlobals.grabbables_collision_layer
+		)
+		
+		hitscan_ray_query.collide_with_areas = false ## TODO - MAYBE WE NEED TO HIT AREAS IN THE FUTURE ALSO
+		hitscan_ray_query.collide_with_bodies = true
+		
+		return get_world_3d().direct_space_state.intersect_ray(hitscan_ray_query)
+		
+	return {}
+	
+	
 func apply_recoil():
 	if weapon_resource and weapon_resource.recoil_enabled:
 		weapon_resource.recoil_amplitude.y *= -1 if MathHelper.chance(0.5) else 1

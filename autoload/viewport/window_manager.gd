@@ -124,6 +124,10 @@ func center_window_position(viewport: Viewport = get_viewport()) -> void:
 	viewport.get_window().position = center_of_screen - windowSize / 2
 
 
+func screen_center() -> Vector2i:
+	return get_viewport().get_visible_rect().size / 2
+
+
 func get_camera2d_frame(viewport: Viewport = get_viewport()) -> Rect2:
 	var camera_frame: Rect2 = viewport.get_visible_rect()
 	var camera: Camera2D = viewport.get_camera_2d()

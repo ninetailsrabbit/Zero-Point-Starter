@@ -111,10 +111,10 @@ func expand_reticles(distance: float = 5.0, time: float = 0.15) -> void:
 func rotate_reticles(angle_in_degrees: float = 45, time: float = 0.15) -> void:
 	var tween: Tween = create_tween().set_parallel(true).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
 	
-	tween.tween_property(top_reticle, "rotation", deg_to_rad(angle_in_degrees), time)
-	tween.tween_property(bottom_reticle, "rotation", deg_to_rad(angle_in_degrees), time)
-	tween.tween_property(right_reticle, "rotation", deg_to_rad(angle_in_degrees), time)
-	tween.tween_property(left_reticle, "rotation", deg_to_rad(angle_in_degrees), time)
+	tween.tween_property(top_reticle, "rotation", top_reticle.rotation + deg_to_rad(angle_in_degrees), time)
+	tween.tween_property(bottom_reticle, "rotation", bottom_reticle.rotation + deg_to_rad(angle_in_degrees), time)
+	tween.tween_property(right_reticle, "rotation", right_reticle.rotation + deg_to_rad(angle_in_degrees), time)
+	tween.tween_property(left_reticle, "rotation", left_reticle.rotation + deg_to_rad(angle_in_degrees), time)
 
 	await tween.finished
 	
