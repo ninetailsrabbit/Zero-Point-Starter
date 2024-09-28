@@ -7,17 +7,17 @@ signal fade_finished
 
 @export_group("Fade")
 @export var default_fade_color: Color = Color("040404")
-@export var default_fade_duration := 1.0
-
+@export var default_fade_duration: float = 1.0
 @export_group("Frame freeze")
-@export var default_frame_freeze_duration := 1.0
-@export var default_frame_freeze_time_scale := 0.25
-@export var default_scale_audio := true
+@export var default_frame_freeze_duration: float = 1.0
+@export var default_frame_freeze_time_scale: float = 0.25
+@export var default_scale_audio: bool = true
 
 @onready var fade_background: ColorRect = $FadeBackground
 
 
-var is_fading := false
+var is_frame_freezing: bool = false
+var is_fading: bool = false
 
 func _ready() -> void:
 	fade_background.modulate.a = 0
@@ -65,10 +65,14 @@ func frame_freeze(
 	duration: float = default_frame_freeze_duration, 
 	scale_audio: bool = default_scale_audio
 ) -> void:
+	if is_frame_freezing:
+		return
+		
 	frame_freezed_started.emit()
-
-	var original_time_scale_value := Engine.time_scale
-	var original_playback_speed_scale = AudioServer.playback_speed_scale
+	is_frame_freezing = true
+	
+	var original_time_scale_value: float = Engine.time_scale
+	var original_playback_speed_scale: float = AudioServer.playback_speed_scale
 	
 	Engine.time_scale = time_scale
 	
@@ -81,4 +85,6 @@ func frame_freeze(
 	AudioServer.playback_speed_scale = original_playback_speed_scale
 	
 	frame_freezed_finished.emit()
+	
+	is_frame_freezing = false
 #endregion

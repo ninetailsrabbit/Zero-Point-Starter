@@ -118,14 +118,17 @@ func _filter_by_screen_size_limit(screen_size: Vector2i):
 
 
 func center_window_position(viewport: Viewport = get_viewport()) -> void:
-	var center_of_screen: Vector2i = DisplayServer.screen_get_position() + DisplayServer.screen_get_size() / 2
 	var windowSize: Vector2i = viewport.get_window().get_size_with_decorations()
 	
-	viewport.get_window().position = center_of_screen - windowSize / 2
+	viewport.get_window().position = monitor_screen_center() - windowSize / 2
 
-
+## Current screen center of the viewport in the world
 func screen_center() -> Vector2i:
 	return get_viewport().get_visible_rect().size / 2
+
+## Center of the pc screen monitor used for play
+func monitor_screen_center() -> Vector2i:
+	return DisplayServer.screen_get_position() + DisplayServer.screen_get_size() / 2
 
 
 func get_camera2d_frame(viewport: Viewport = get_viewport()) -> Rect2:
