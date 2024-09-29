@@ -41,7 +41,7 @@ var last_mouse_input: Vector2
 var mouse_sensitivity: float = 3.0
 var locked: bool = false
 
-var original_rotation: Vector3
+var original_camera_rotation: Vector3
 var original_head_bob_position: Vector3 = Vector3.ZERO
 
 var bob_index: float = 0.0
@@ -58,9 +58,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 func _ready() -> void:
 	assert(actor is FirstPersonController, "CameraController: This node needs a FirstPersonController node referenced to apply the camera movement")
+	
 	current_horizontal_limit = camera_horizontal_limit
 	current_vertical_limit = camera_vertical_limit
-	original_rotation = rotation
+	original_camera_rotation = camera.rotation
 	original_head_bob_position = bob_head.position
 	
 	mouse_sensitivity = SettingsManager.get_accessibility_section("mouse_sensitivity")
@@ -83,16 +84,26 @@ func rotate_camera(motion: InputEventMouseMotion) -> void:
 	
 	actor.rotate_y(mouse_rotation.y)
 	rotate_x(mouse_rotation.x)
-	rotate_z(mouse_rotation.z)
 	
-	if current_horizontal_limit > 0:
-		actor.rotation_degrees.y = clamp(actor.rotation_degrees.y, -current_horizontal_limit, current_horizontal_limit)
-	
-	if current_vertical_limit > 0:
-		rotation_degrees.x = clamp(rotation_degrees.x, -current_vertical_limit, current_vertical_limit)
+	actor.rotation_degrees.y = limit_horizontal_rotation(actor.rotation_degrees.y)
+	rotation_degrees.x = limit_vertical_rotation(rotation_degrees.x)
 	
 	orthonormalize()
+
+
+func limit_vertical_rotation(angle: float) -> float:
+	if current_vertical_limit > 0:
+		return clamp(angle, -current_vertical_limit, current_vertical_limit)
 	
+	return angle
+
+
+func limit_horizontal_rotation(angle: float) -> float:
+	if current_horizontal_limit > 0:
+		return clamp(angle, -current_horizontal_limit, current_horizontal_limit)
+	
+	return angle
+
 
 func lock() -> void:
 	set_physics_process(false)
@@ -112,9 +123,9 @@ func swing_head(delta: float) -> void:
 		var direction = actor.motion_input.input_direction
 		
 		if direction in VectorHelper.horizontal_directions_v2:
-			rotation.z = lerp_angle(rotation.z, -sign(direction.x) * deg_to_rad(swing_rotation_degrees), swing_lerp_factor * delta)
+			camera.rotation.z = lerp_angle(camera.rotation.z, -sign(direction.x) * deg_to_rad(swing_rotation_degrees), swing_lerp_factor * delta)
 		else:
-			rotation.z = lerp_angle(rotation.z, original_rotation.z, swing_lerp_recovery_factor * delta)
+			camera.rotation.z = lerp_angle(camera.rotation.z, original_camera_rotation.z, swing_lerp_recovery_factor * delta)
 
 
 func headbob(delta: float) -> void:

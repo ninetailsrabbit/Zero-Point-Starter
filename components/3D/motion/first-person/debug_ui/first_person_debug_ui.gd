@@ -18,7 +18,7 @@ func _ready() -> void:
 		finite_state_machine.state_changed.connect(on_state_changed)
 		
 		state.text = "State: [%s]" % finite_state_machine.current_state.name
-		
+	
 	
 func _process(_delta: float) -> void:
 	var velocity = actor.get_real_velocity()

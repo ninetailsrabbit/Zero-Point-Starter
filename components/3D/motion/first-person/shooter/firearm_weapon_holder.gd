@@ -3,7 +3,7 @@ class_name WeaponHolder extends Node3D
 signal changed_weapon(from: FireArmWeapon, to: FireArmWeapon)
 
 @export var first_person_controller: FirstPersonController
-@export var camera_movement: FirstPersonCameraRotation3D
+@export var camera_controller: CameraController3D
 ## The node that contains the Camera3D so when the recoil it's applied, the screen center changes and
 ## the recoil effect can be achieved
 @export var recoil_node: Node3D
@@ -28,8 +28,9 @@ signal changed_weapon(from: FireArmWeapon, to: FireArmWeapon)
 			set_physics_process(current_weapon is FireArmWeapon)
 				
 var original_position: Vector3
+
 var recoil_target_rotation: Vector3
-var current_recoil_target_rotation: Vector3
+var current_recoil_rotation: Vector3
 var current_weapon_configuration: WeaponConfiguration
 
 
@@ -48,8 +49,8 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if current_weapon:
 		# Weapon sway
-		rotation.x = lerp_angle(rotation.x, camera_movement.last_mouse_input.y * deg_to_rad(current_weapon_configuration.weapon_sway_amount) * (-1 if current_weapon_configuration.invert_weapon_sway else 1), 10 * delta)
-		rotation.y = lerp_angle(rotation.y, camera_movement.last_mouse_input.x * deg_to_rad(current_weapon_configuration.weapon_sway_amount) * (-1 if current_weapon_configuration.invert_weapon_sway else 1), 10 * delta)
+		rotation.x = lerp_angle(rotation.x, camera_controller.last_mouse_input.y * deg_to_rad(current_weapon_configuration.weapon_sway_amount) * (-1 if current_weapon_configuration.invert_weapon_sway else 1), 10 * delta)
+		rotation.y = lerp_angle(rotation.y, camera_controller.last_mouse_input.x * deg_to_rad(current_weapon_configuration.weapon_sway_amount) * (-1 if current_weapon_configuration.invert_weapon_sway else 1), 10 * delta)
 		# Weapon tilt 
 		rotation.z = lerp_angle(rotation.z, -first_person_controller.motion_input.input_direction.x * deg_to_rad(current_weapon_configuration.weapon_rotation_amount),  10 * delta)
 		
@@ -72,9 +73,12 @@ func apply_bob(delta: float) -> void:
 func apply_recoil(delta: float) -> void:
 	if _recoil_can_be_applied():
 		recoil_target_rotation = lerp(recoil_target_rotation, Vector3.ZERO, current_weapon_configuration.recoil_lerp_speed * delta)
-		current_recoil_target_rotation = lerp(current_recoil_target_rotation, recoil_target_rotation, current_weapon_configuration.recoil_snap_amount * delta)
-		recoil_node.basis = Quaternion.from_euler(current_recoil_target_rotation)
-	
+		current_recoil_rotation = lerp(current_recoil_rotation, recoil_target_rotation, current_weapon_configuration.recoil_snap_amount * delta)
+		
+		recoil_node.basis = Quaternion.from_euler(current_recoil_rotation)
+		#recoil_node.rotation_degrees.x = camera_controller.limit_vertical_rotation(recoil_node.rotation_degrees.x)
+		#recoil_node.rotation_degrees.y = camera_controller.limit_horizontal_rotation(recoil_node.rotation_degrees.y)
+
 
 func add_recoil() -> void:
 	if _recoil_can_be_applied():

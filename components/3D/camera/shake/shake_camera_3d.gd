@@ -12,9 +12,9 @@ func trauma(_shake_time: float = shake_time, _magnitude: float = magnitude):
 	if not shaking:
 		var initial_transform = self.transform 
 		var elapsed_time = 0.0
+		shaking = true
 
 		while elapsed_time < _shake_time:
-			shaking = true
 			var offset = Vector3(
 				randf_range(-_magnitude, _magnitude),
 				randf_range(-_magnitude, _magnitude),

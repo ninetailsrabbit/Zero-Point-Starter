@@ -36,6 +36,7 @@ enum BurstTypes {
 @export_group("Sway")
 @export var weapon_sway_amount: float = 0.25
 @export var weapon_rotation_amount: float = 5.0
+@export var weapon_sway_lerp_speed: float = 8.0
 @export var invert_weapon_sway : bool = true
 @export_group("Bob")
 @export var enable_bob: bool = true

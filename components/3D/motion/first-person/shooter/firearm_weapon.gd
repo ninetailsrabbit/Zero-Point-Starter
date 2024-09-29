@@ -63,12 +63,10 @@ func _physics_process(delta: float) -> void:
 
 ## TODO - WORK IN PROGRESS TO ATTACH MORE COMPLEX BEHAVIORS
 func shoot() -> void:
-	print("shooting ", active, current_ammunition)
-	
 	if active and current_ammunition > 0:
 		if camera:
 			camera.trauma(weapon_configuration.camera_shake_time, weapon_configuration.camera_shake_magnitude)
-		print("shooting")
+		
 		muzzle_effect()
 		fired.emit()
 
