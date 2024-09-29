@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://oykkrugla2x"]
-
-[ext_resource type="PackedScene" uid="uid://bdpqpfwqrml7a" path="res://assets/ps1_style_ak-47/scene.gltf" id="1_ogxll"]
-
-[node name="Ak47" instance=ExtResource("1_ogxll")]
-transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
-
-[node name="MuzzleMarker" type="Marker3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3464, -14.4733)

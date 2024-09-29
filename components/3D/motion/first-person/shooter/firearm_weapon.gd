@@ -20,6 +20,8 @@ signal out_of_ammo
 @export var weapon_configuration: WeaponConfiguration
 @export var hitscan_only_on_shoot: bool = false
 @export var hitscan_always_active: bool = true
+@export var apply_viewmodel_fov: bool = true
+@export var viewmodel_fov: float = 75.0
 @export_group("Muzzle")
 @export var muzzle_marker: Marker3D
 @export var muzzle_scene: PackedScene = preload("res://components/3D/motion/first-person/shooter/muzzle/muzzle_flash.tscn")
@@ -29,7 +31,6 @@ signal out_of_ammo
 @export var muzzle_emit_on_ready: bool = true
 @export_group("Barrel")
 @export var barrel_marker: Marker3D ## TODO
-
 
 var original_weapon_position: Vector3
 var original_weapon_rotation: Vector3
@@ -47,6 +48,10 @@ var hitscan_result: Dictionary = {}
 
 
 func _ready() -> void:
+	
+	if weapon_scene and apply_viewmodel_fov:
+		setup_viewmodel_fov(viewmodel_fov)
+		
 	original_weapon_position = weapon_scene.position
 	original_weapon_rotation = weapon_scene.rotation
 
@@ -98,6 +103,7 @@ func hitscan() -> Dictionary:
 		hitscan_ray_query.collide_with_areas = false 
 		hitscan_ray_query.collide_with_bodies = true
 		
+
 		return get_world_3d().direct_space_state.intersect_ray(hitscan_ray_query)
 		
 	return {}
@@ -111,3 +117,12 @@ func muzzle_effect() -> void:
 		muzzle.max_size =  muzzle_max_size
 		muzzle.emit_on_ready = muzzle_emit_on_ready
 		muzzle_marker.add_child(muzzle)
+		
+		
+func setup_viewmodel_fov(fov_value: float = viewmodel_fov) -> void:
+	if weapon_scene:
+		for mesh_instance: MeshInstance3D in NodeTraversal.find_nodes_of_type(weapon_scene, MeshInstance3D.new()):
+			for surface in range(mesh_instance.mesh.get_surface_count()):
+				var material = mesh_instance.get_active_material(surface)
+				if material is ShaderMaterial:
+					material.set_shader_parameter("viewmodel_fov", fov_value)

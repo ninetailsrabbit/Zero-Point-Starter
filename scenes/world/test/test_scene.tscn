@@ -56,7 +56,8 @@ points = PackedVector3Array(1, 0.1, 1.5, 1, -0.1, 1.5, 1, 0.1, -1.5, -1, 0.1, 1.
 [node name="TestScene" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+transform = Transform3D(-0.8785, -0.234751, -0.416089, -0.477127, 0.386892, 0.789091, -0.0242585, 0.891743, -0.451891, 0, 4.67539, 0)
+light_energy = 2.185
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -99,3 +100,12 @@ mesh = SubResource("BoxMesh_5xf03")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D4/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_limct")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(0.187435, -0.605947, 0.773109, 0.142771, 0.795505, 0.588887, -0.971846, 0, 0.235617, 2.31545, 2.31482, 0)
+light_color = Color(1, 1, 0.356863, 1)
+light_energy = 7.637
+shadow_enabled = true
+spot_range = 8.706
+spot_attenuation = 0.7
+spot_angle = 49.0

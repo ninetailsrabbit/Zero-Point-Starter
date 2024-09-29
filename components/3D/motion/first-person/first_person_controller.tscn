@@ -208,7 +208,7 @@ bob_head = NodePath("Head")
 script = ExtResource("5_5meqq")
 
 [node name="WeaponHolder" type="Node3D" parent="CameraController/Head/CameraShake3D" node_paths=PackedStringArray("first_person_controller", "camera_controller", "recoil_node", "current_weapon")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.200677, -0.219603, -0.42455)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.149432, -0.0683794, -0.402436)
 script = ExtResource("5_oesfs")
 first_person_controller = NodePath("../../../..")
 camera_controller = NodePath("../../..")

@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://bsj5t8er4fl3s"]
+
+[ext_resource type="ArrayMesh" uid="uid://cvfj02mlfujta" path="res://assets/ps1_style_ak-47/ak47_mag.res" id="1_ygoob"]
+[ext_resource type="ArrayMesh" uid="uid://bl3newbus0hcr" path="res://assets/ps1_style_ak-47/ak47_trigger.res" id="2_fpx2m"]
+[ext_resource type="ArrayMesh" uid="uid://dwl35skprbdb0" path="res://assets/ps1_style_ak-47/ak47_gun.res" id="3_f5aqf"]
+
+[node name="Ak47" type="Node3D"]
+transform = Transform3D(0.01, 0, 0, 0, -0.01, -8.74228e-10, 0, 8.74228e-10, -0.01, 0, 0, 0)
+
+[node name="Mag" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 7.10543e-15, 0, -7.10543e-15, 1, 0, -1.91503e-06, 21.9054)
+mesh = ExtResource("1_ygoob")
+
+[node name="Trigger" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 7.10543e-15, 0, -7.10543e-15, 1, 0, -1.91503e-06, 21.9054)
+mesh = ExtResource("2_fpx2m")
+
+[node name="Gun" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 7.10543e-15, 0, -7.10543e-15, 1, 0, -1.91503e-06, 21.9054)
+mesh = ExtResource("3_f5aqf")

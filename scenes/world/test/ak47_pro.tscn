@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://components/3D/motion/first-person/shooter/firearm_weapon.gd" id="1_aoqvt"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/shooter/weapon_configuration.gd" id="2_qqpv5"]
-[ext_resource type="PackedScene" uid="uid://oykkrugla2x" path="res://assets/ps1_style_ak-47/ak_47.tscn" id="2_wffv0"]
+[ext_resource type="PackedScene" uid="uid://bsj5t8er4fl3s" path="res://scenes/world/test/ak47_mesh.tscn" id="3_4px0q"]
 
 [sub_resource type="Resource" id="Resource_ttumk"]
 script = ExtResource("2_qqpv5")
@@ -41,7 +41,7 @@ muzzle_marker = NodePath("MuzzleMarker")
 
 [node name="Recoil" type="Node3D" parent="."]
 
-[node name="Ak47" parent="Recoil" instance=ExtResource("2_wffv0")]
+[node name="Ak47" parent="Recoil" instance=ExtResource("3_4px0q")]
 
 [node name="MuzzleMarker" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125109, -0.742566)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0182323, 0.0105323, -0.514135)
