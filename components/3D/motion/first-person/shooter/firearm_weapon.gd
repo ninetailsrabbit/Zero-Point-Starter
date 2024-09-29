@@ -1,13 +1,18 @@
 @icon("res://assets/node_icons/weapon.svg")
 class_name FireArmWeapon extends Node3D
 
+signal stored
+signal equipped
 signal fired
 signal reloaded
+signal out_of_ammo
 
 
 @export var camera: CameraShake3D
 @export_group("Weapon")
 @export var weapon_configuration: WeaponConfiguration
+@export var hitscan_only_on_shoot: bool = false
+@export var hitscan_always_active: bool = true
 @export_group("Muzzle")
 @export var muzzle_marker: Marker3D
 @export var muzzle_scene: PackedScene = preload("res://components/3D/motion/first-person/shooter/muzzle/muzzle_flash.tscn")
@@ -27,6 +32,7 @@ var active: bool = true:
 			set_physics_process(active)
 
 var current_ammunition: int = 0
+var hitscan_result: Dictionary = {}
 
 
 func _ready() -> void:
@@ -35,24 +41,34 @@ func _ready() -> void:
 
 	current_ammunition = weapon_configuration.initial_ammunition
 	
+	set_physics_process(active)
+	
 
 func _physics_process(delta: float) -> void:
+	if hitscan_always_active and not hitscan_only_on_shoot:
+		hitscan_result = hitscan()
+	
 	if InputMap.has_action("aim") and Input.is_action_pressed("aim"): ## TODO SUPER TEMPORARY, FIND A BETTER WAY TO CONFIGURE AIMING FOR EACH WEAPON
 		position = position.slerp(Vector3(-get_parent().position.x, 0.1, position.z), 10 * delta)
 	else:
-		position = position.slerp(Vector3.ZERO, 10 * delta)
+		position = position.slerp(original_weapon_position, 10 * delta)
 	
 	## TODO - MANAGE THE SHOOT INPUT BASED ON WEAPON BURST TYPE
 	if InputMap.has_action("shoot") and Input.is_action_pressed("shoot"):
+		if not hitscan_always_active and hitscan_only_on_shoot:
+			hitscan_result = hitscan()
+			
 		shoot()
 		
 
 ## TODO - WORK IN PROGRESS TO ATTACH MORE COMPLEX BEHAVIORS
 func shoot() -> void:
+	print("shooting ", active, current_ammunition)
+	
 	if active and current_ammunition > 0:
 		if camera:
 			camera.trauma(weapon_configuration.camera_shake_time, weapon_configuration.camera_shake_magnitude)
-		
+		print("shooting")
 		muzzle_effect()
 		fired.emit()
 

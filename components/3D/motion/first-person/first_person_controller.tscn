@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://dd0blwa1hawbl"]
+[gd_scene load_steps=33 format=3 uid="uid://dd0blwa1hawbl"]
 
 [ext_resource type="Script" path="res://components/3D/motion/first-person/first_person_controller.gd" id="1_siswl"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/mechanics/camera/first_person_camera_rotation_3d.gd" id="2_6vhab"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://components/3D/motion/first-person/mechanics/swing_head/swing_head.gd" id="5_2n18i"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/shooter/firearm_weapon_holder.gd" id="5_oesfs"]
 [ext_resource type="Script" path="res://components/3D/camera/shake/shake_camera_3d.gd" id="5_q3whp"]
+[ext_resource type="PackedScene" uid="uid://oykkrugla2x" path="res://assets/ps1_style_ak-47/ak_47.tscn" id="6_cns3a"]
 [ext_resource type="Script" path="res://components/3D/interaction/picking/grabbable_raycast_interactor_3d.gd" id="6_iqasx"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/states/ground/walk.gd" id="7_fpqxx"]
 [ext_resource type="Script" path="res://components/3D/interaction/picking/telekinesis_3d.gd" id="8_qmjuq"]
@@ -138,15 +139,20 @@ shape = SubResource("CapsuleShape3D_1y566")
 [node name="Eyes" type="Node3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.178689)
 
-[node name="FireArmWeaponHolder" type="Node3D" parent="Head/Eyes" node_paths=PackedStringArray("first_person_controller", "camera_movement", "recoil_node")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.272078, -0.250249, -0.195619)
-script = ExtResource("5_oesfs")
-first_person_controller = NodePath("../../..")
-camera_movement = NodePath("../../../CameraMovement3D")
-recoil_node = NodePath("..")
-
 [node name="Camera3D" type="Camera3D" parent="Head/Eyes"]
 script = ExtResource("5_q3whp")
+
+[node name="FireArmWeaponHolder" type="Node3D" parent="Head/Eyes/Camera3D" node_paths=PackedStringArray("first_person_controller", "camera_movement", "recoil_node", "current_weapon")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.272078, -0.250249, -0.195619)
+script = ExtResource("5_oesfs")
+first_person_controller = NodePath("../../../..")
+camera_movement = NodePath("../../../../CameraMovement3D")
+recoil_node = NodePath("../..")
+current_weapon = NodePath("Ak47")
+
+[node name="Ak47" parent="Head/Eyes/Camera3D/FireArmWeaponHolder" node_paths=PackedStringArray("camera") instance=ExtResource("6_cns3a")]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0.043578, 0, -0.42187)
+camera = NodePath("../..")
 
 [node name="ThrowableRayCastInteractor" type="RayCast3D" parent="Head/Eyes"]
 target_position = Vector3(0, 0, -1.5)

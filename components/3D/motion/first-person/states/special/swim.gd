@@ -12,9 +12,6 @@ var water_height: float = 0.0
 var was_underwater: bool = false
 var is_underwater: bool = false
 
-func ready():
-	if eyes == null:
-		eyes = actor.eyes
 	
 func enter():
 	actor.velocity /= speed_reduction_on_water_entrance

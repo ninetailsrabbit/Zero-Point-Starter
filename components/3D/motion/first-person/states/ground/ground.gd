@@ -44,7 +44,7 @@ func apply_gravity(force: float = gravity_force, delta: float = get_physics_proc
 
 
 func accelerate(delta: float = get_physics_process_delta_time()) -> void:
-	var direction = actor.current_input_direction()
+	var direction = actor.motion_input.world_coordinate_space_direction
 	current_speed = get_speed()
 	
 	if acceleration > 0:
@@ -61,7 +61,7 @@ func decelerate(delta: float = get_physics_process_delta_time()) -> void:
 
 
 func get_speed() -> float:
-	return side_speed if actor.motion_input.input_direction in VectorHelper.horizontal_directions_v2 else speed
+	return side_speed if actor.motion_input.world_coordinate_space_direction in VectorHelper.horizontal_directions_v2 else speed
 
 
 func stair_step_up():
@@ -70,13 +70,13 @@ func stair_step_up():
 		
 	stair_stepping = false
 	
-	if actor.current_input_direction().is_zero_approx():
+	if actor.motion_input.world_coordinate_space_direction.is_zero_approx():
 		return
 	
 	var body_test_params := PhysicsTestMotionParameters3D.new()
 	var body_test_result := PhysicsTestMotionResult3D.new()
-	var test_transform = actor.global_transform	 ## Storing current global_transform for testing
-	var distance = actor.current_input_direction() * 0.1 ## Distance forward we want to check
+	var test_transform = actor.global_transform ## Storing current global_transform for testing
+	var distance = actor.motion_input.world_coordinate_space_direction * 0.1 ## Distance forward we want to check
 	
 	body_test_params.from =  actor.global_transform ## Self as origin point
 	body_test_params.motion = distance ## Go forward by current distance
@@ -111,8 +111,8 @@ func stair_step_up():
 
 		### Uh, there may be a better way to calculate this in Godot.
 		var wall_normal = body_test_result.get_collision_normal()
-		var dot_div_mag = actor.current_input_direction().dot(wall_normal) / (wall_normal * wall_normal).length()
-		var projected_vector = (actor.current_input_direction() - dot_div_mag * wall_normal).normalized()
+		var dot_div_mag = actor.motion_input.world_coordinate_space_direction.dot(wall_normal) / (wall_normal * wall_normal).length()
+		var projected_vector = (actor.motion_input.world_coordinate_space_direction - dot_div_mag * wall_normal).normalized()
 
 		body_test_params.from = test_transform
 		body_test_params.motion = remainder * projected_vector

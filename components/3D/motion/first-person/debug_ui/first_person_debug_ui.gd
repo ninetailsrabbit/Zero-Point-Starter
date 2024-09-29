@@ -6,15 +6,19 @@ extends CanvasLayer
 @onready var velocity_label: Label = %VelocityLabel
 @onready var speed_label: Label = %SpeedLabel
 @onready var state: Label = %State
+@onready var control: Control = $Control
 
 
 func _ready() -> void:
 	assert(actor is FirstPersonController, "FirstPersonControllerDebugUI: Needs a FirstPersonController to display the debug parameters")
 	
-	finite_state_machine.state_changed.connect(on_state_changed)
+	control.mouse_filter = Control.MOUSE_FILTER_PASS
 	
-	state.text = "State: [%s]" % finite_state_machine.current_state.name
-
+	if finite_state_machine:
+		finite_state_machine.state_changed.connect(on_state_changed)
+		
+		state.text = "State: [%s]" % finite_state_machine.current_state.name
+		
 	
 func _process(_delta: float) -> void:
 	var velocity = actor.get_real_velocity()

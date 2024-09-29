@@ -30,7 +30,7 @@ func air_move(delta: float = get_physics_process_delta_time()) -> void:
 
 
 func accelerate(delta: float = get_physics_process_delta_time()) -> void:
-	var direction = actor.current_input_direction()
+	var direction = actor.motion_input.world_coordinate_space_direction
 	
 	current_air_speed = get_speed()
 	

@@ -74,7 +74,7 @@ func apply_recoil(delta: float) -> void:
 		recoil_target_rotation = lerp(recoil_target_rotation, Vector3.ZERO, current_weapon_configuration.recoil_lerp_speed * delta)
 		current_recoil_target_rotation = lerp(current_recoil_target_rotation, recoil_target_rotation, current_weapon_configuration.recoil_snap_amount * delta)
 		recoil_node.basis = Quaternion.from_euler(current_recoil_target_rotation)
-
+	
 
 func add_recoil() -> void:
 	if _recoil_can_be_applied():
@@ -85,7 +85,7 @@ func add_recoil() -> void:
 			randf_range(-recoil_amount.y, recoil_amount.y),
 			randf_range(-recoil_amount.z, recoil_amount.z),
 		)
-
+		
 
 func _recoil_can_be_applied() -> bool:
 	return current_weapon and current_weapon.weapon_configuration.recoil_enabled and recoil_node
