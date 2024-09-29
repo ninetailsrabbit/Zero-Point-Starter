@@ -1,42 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://oykkrugla2x"]
+[gd_scene load_steps=2 format=3 uid="uid://oykkrugla2x"]
 
 [ext_resource type="PackedScene" uid="uid://bdpqpfwqrml7a" path="res://assets/ps1_style_ak-47/scene.gltf" id="1_ogxll"]
-[ext_resource type="Script" path="res://components/3D/motion/first-person/shooter/firearm_weapon.gd" id="2_0tqsv"]
-[ext_resource type="Script" path="res://components/3D/motion/first-person/shooter/weapon_configuration.gd" id="3_rwv56"]
 
-[sub_resource type="Resource" id="Resource_kvdsj"]
-script = ExtResource("3_rwv56")
-initial_ammunition = 1
-max_ammunition = 0
-ammunition_per_round = 0
-accuracy = 80.0
-reload_time = 2.0
-fire_range = 250.0
-burst_type = 0
-rounds_fired = 2
-camera_shake_enabled = true
-camera_shake_magnitude = 0.01
-camera_shake_time = 0.1
-zoom_level_on_aim = 65.0
-durability = 95.0
-recoil_enabled = true
-recoil_amount = Vector3(0.05, 0.04, 0.03)
-recoil_lerp_speed = 15.0
-recoil_snap_amount = 9.0
-weapon_sway_amount = 0.3
-weapon_rotation_amount = 7.5
-weapon_sway_lerp_speed = 8.0
-invert_weapon_sway = true
-enable_bob = true
-bob_amount = 0.02
-bob_freq = 0.01
-bob_lerp_speed = 12.0
-
-[node name="Ak47" node_paths=PackedStringArray("muzzle_marker") instance=ExtResource("1_ogxll")]
+[node name="Ak47" instance=ExtResource("1_ogxll")]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
-script = ExtResource("2_0tqsv")
-weapon_configuration = SubResource("Resource_kvdsj")
-muzzle_marker = NodePath("MuzzleMarker")
 
 [node name="MuzzleMarker" type="Marker3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3464, -14.4733)

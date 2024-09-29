@@ -21,6 +21,7 @@ signal changed_weapon(from: FireArmWeapon, to: FireArmWeapon)
 			current_weapon = value
 			
 			if current_weapon:
+				current_weapon.camera = camera_controller.camera
 				current_weapon_configuration = current_weapon.weapon_configuration
 				if not current_weapon.fired.is_connected(on_fired_weapon):
 					current_weapon.fired.connect(on_fired_weapon)
@@ -31,6 +32,9 @@ var original_position: Vector3
 
 var recoil_target_rotation: Vector3
 var current_recoil_rotation: Vector3
+var weapon_recoil_target_position: Vector3
+var current_weapon_recoil_position: Vector3
+
 var current_weapon_configuration: WeaponConfiguration
 
 
@@ -72,13 +76,16 @@ func apply_bob(delta: float) -> void:
 
 func apply_recoil(delta: float) -> void:
 	if _recoil_can_be_applied():
+		## Head recoil to affect on accuracy moving the viewport
 		recoil_target_rotation = lerp(recoil_target_rotation, Vector3.ZERO, current_weapon_configuration.recoil_lerp_speed * delta)
 		current_recoil_rotation = lerp(current_recoil_rotation, recoil_target_rotation, current_weapon_configuration.recoil_snap_amount * delta)
-		
 		recoil_node.basis = Quaternion.from_euler(current_recoil_rotation)
-		#recoil_node.rotation_degrees.x = camera_controller.limit_vertical_rotation(recoil_node.rotation_degrees.x)
-		#recoil_node.rotation_degrees.y = camera_controller.limit_horizontal_rotation(recoil_node.rotation_degrees.y)
-
+		
+		## Pure aesthetic recoil when shooting the weapon
+		weapon_recoil_target_position = lerp(weapon_recoil_target_position, Vector3.ZERO, current_weapon_configuration.recoil_lerp_speed * delta)
+		current_weapon_recoil_position = lerp(current_weapon_recoil_position, weapon_recoil_target_position, current_weapon_configuration.recoil_snap_amount * delta)
+		current_weapon.recoil_node.position = current_weapon_recoil_position
+		
 
 func add_recoil() -> void:
 	if _recoil_can_be_applied():
@@ -90,6 +97,8 @@ func add_recoil() -> void:
 			randf_range(-recoil_amount.z, recoil_amount.z),
 		)
 		
+		weapon_recoil_target_position += Vector3(0, 0, randf_range(-recoil_amount.z, recoil_amount.z))
+						
 
 func _recoil_can_be_applied() -> bool:
 	return current_weapon and current_weapon.weapon_configuration.recoil_enabled and recoil_node

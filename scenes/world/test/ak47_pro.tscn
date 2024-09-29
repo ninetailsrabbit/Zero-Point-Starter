@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://bmo5cunep3qmw"]
+
+[ext_resource type="Script" path="res://components/3D/motion/first-person/shooter/firearm_weapon.gd" id="1_aoqvt"]
+[ext_resource type="Script" path="res://components/3D/motion/first-person/shooter/weapon_configuration.gd" id="2_qqpv5"]
+[ext_resource type="PackedScene" uid="uid://oykkrugla2x" path="res://assets/ps1_style_ak-47/ak_47.tscn" id="2_wffv0"]
+
+[sub_resource type="Resource" id="Resource_ttumk"]
+script = ExtResource("2_qqpv5")
+initial_ammunition = 1
+max_ammunition = 0
+ammunition_per_round = 0
+accuracy = 80.0
+reload_time = 2.0
+fire_range = 250.0
+burst_type = 0
+rounds_fired = 2
+camera_shake_enabled = true
+camera_shake_magnitude = 0.01
+camera_shake_time = 0.1
+zoom_level_on_aim = 65.0
+durability = 95.0
+recoil_enabled = true
+recoil_amount = Vector3(0.02, 0.01, 0.03)
+recoil_lerp_speed = 12.0
+recoil_snap_amount = 9.0
+weapon_sway_amount = 0.25
+weapon_rotation_amount = 5.0
+weapon_sway_lerp_speed = 8.0
+invert_weapon_sway = true
+enable_bob = true
+bob_amount = 0.02
+bob_freq = 0.01
+bob_lerp_speed = 12.0
+
+[node name="Ak47Weapon" type="Node3D" node_paths=PackedStringArray("recoil_node", "weapon_scene", "muzzle_marker")]
+script = ExtResource("1_aoqvt")
+recoil_node = NodePath("Recoil")
+weapon_scene = NodePath("Recoil/Ak47")
+weapon_configuration = SubResource("Resource_ttumk")
+muzzle_marker = NodePath("MuzzleMarker")
+
+[node name="Recoil" type="Node3D" parent="."]
+
+[node name="Ak47" parent="Recoil" instance=ExtResource("2_wffv0")]
+
+[node name="MuzzleMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125109, -0.742566)

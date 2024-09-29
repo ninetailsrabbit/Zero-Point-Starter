@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://components/3D/camera/shake/shake_camera_3d.gd" id="5_5meqq"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/shooter/firearm_weapon_holder.gd" id="5_oesfs"]
 [ext_resource type="Script" path="res://components/design_patterns/finite_state_machine/finite-state-machine.gd" id="5_xm8yq"]
-[ext_resource type="PackedScene" uid="uid://oykkrugla2x" path="res://assets/ps1_style_ak-47/ak_47.tscn" id="6_cns3a"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/states/ground/idle.gd" id="6_lht5s"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/states/ground/walk.gd" id="7_52vlc"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/states/air/fall.gd" id="8_5oo54"]
@@ -16,6 +15,7 @@
 [ext_resource type="Script" path="res://components/3D/motion/first-person/states/air/jump.gd" id="10_ynwvi"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/states/ground/slide.gd" id="11_jpv7j"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/states/special/swim.gd" id="12_vyybp"]
+[ext_resource type="PackedScene" uid="uid://bmo5cunep3qmw" path="res://scenes/world/test/ak47_pro.tscn" id="16_u7pd2"]
 
 [sub_resource type="Animation" id="Animation_x0wk0"]
 length = 0.001
@@ -213,11 +213,9 @@ script = ExtResource("5_oesfs")
 first_person_controller = NodePath("../../../..")
 camera_controller = NodePath("../../..")
 recoil_node = NodePath("../..")
-current_weapon = NodePath("Ak47")
+current_weapon = NodePath("Ak47Weapon")
 
-[node name="Ak47" parent="CameraController/Head/CameraShake3D/WeaponHolder" node_paths=PackedStringArray("camera") instance=ExtResource("6_cns3a")]
-transform = Transform3D(0.04, 0, 0, 0, 0.04, 0, 0, 0, 0.04, 0, 0, 0)
-camera = NodePath("../..")
+[node name="Ak47Weapon" parent="CameraController/Head/CameraShake3D/WeaponHolder" instance=ExtResource("16_u7pd2")]
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="CameraController/Head/CameraShake3D"]
 update_mode = 1

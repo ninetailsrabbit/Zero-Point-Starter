@@ -1,3 +1,9 @@
+## HOW TO ADD NEW WEAPONS
+## Create a scene with this node, add a Node3D as a child to apply the Recoil
+## Add the weapon scene (preferably only the mesh) as a child of Recoil node
+## Assign them to the exported variables
+## Create a Marker3D to spawn muzzle in this weapon when shoot
+## Create a Marker3D to spawn bullets in this weapon when shoot
 @icon("res://assets/node_icons/weapon.svg")
 class_name FireArmWeapon extends Node3D
 
@@ -7,8 +13,9 @@ signal fired
 signal reloaded
 signal out_of_ammo
 
-
 @export var camera: CameraShake3D
+@export var recoil_node: Node3D
+@export var weapon_scene: Node3D
 @export_group("Weapon")
 @export var weapon_configuration: WeaponConfiguration
 @export var hitscan_only_on_shoot: bool = false
@@ -20,9 +27,13 @@ signal out_of_ammo
 @export var muzzle_min_size: Vector2 = Vector2(0.05, 0.05)
 @export var muzzle_max_size: Vector2 = Vector2(0.35, 0.35)
 @export var muzzle_emit_on_ready: bool = true
+@export_group("Barrel")
+@export var barrel_marker: Marker3D ## TODO
+
 
 var original_weapon_position: Vector3
 var original_weapon_rotation: Vector3
+
 
 var active: bool = true:
 	set(value):
@@ -36,8 +47,8 @@ var hitscan_result: Dictionary = {}
 
 
 func _ready() -> void:
-	original_weapon_position = position
-	original_weapon_rotation = rotation
+	original_weapon_position = weapon_scene.position
+	original_weapon_rotation = weapon_scene.rotation
 
 	current_ammunition = weapon_configuration.initial_ammunition
 	
@@ -64,7 +75,7 @@ func _physics_process(delta: float) -> void:
 ## TODO - WORK IN PROGRESS TO ATTACH MORE COMPLEX BEHAVIORS
 func shoot() -> void:
 	if active and current_ammunition > 0:
-		if camera:
+		if camera and weapon_configuration.camera_shake_enabled:
 			camera.trauma(weapon_configuration.camera_shake_time, weapon_configuration.camera_shake_magnitude)
 		
 		muzzle_effect()
@@ -93,7 +104,7 @@ func hitscan() -> Dictionary:
 	
 
 func muzzle_effect() -> void:
-	if muzzle_scene:
+	if muzzle_scene and muzzle_marker:
 		var muzzle = muzzle_scene.instantiate() as MuzzleFlash
 		muzzle.particle_lifetime =  muzzle_lifetime
 		muzzle.min_size =  muzzle_min_size
