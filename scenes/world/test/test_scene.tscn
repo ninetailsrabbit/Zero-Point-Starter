@@ -12,7 +12,8 @@ sky_material = SubResource("ProceduralSkyMaterial_16bol")
 [sub_resource type="Environment" id="Environment_we1vl"]
 background_mode = 2
 sky = SubResource("Sky_p0xl1")
-tonemap_mode = 2
+ambient_light_source = 3
+tonemap_mode = 3
 glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b8jhq"]
@@ -57,7 +58,6 @@ points = PackedVector3Array(1, 0.1, 1.5, 1, -0.1, 1.5, 1, 0.1, -1.5, -1, 0.1, 1.
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8785, -0.234751, -0.416089, -0.477127, 0.386892, 0.789091, -0.0242585, 0.891743, -0.451891, 0, 4.67539, 0)
-light_energy = 2.185
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

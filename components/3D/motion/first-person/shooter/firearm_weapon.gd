@@ -1,6 +1,6 @@
-## HOW TO ADD NEW WEAPONS
+## ******  HOW TO ADD NEW WEAPONS  ******
 ## Create a scene with this node, add a Node3D as a child to apply the Recoil
-## Add the weapon scene (preferably only the mesh) as a child of Recoil node
+## Add the weapon scene (the one that contain the model meshes) as a child of Recoil node
 ## Assign them to the exported variables
 ## Create a Marker3D to spawn muzzle in this weapon when shoot
 ## Create a Marker3D to spawn bullets in this weapon when shoot
@@ -31,6 +31,8 @@ signal out_of_ammo
 @export var muzzle_emit_on_ready: bool = true
 @export_group("Barrel")
 @export var barrel_marker: Marker3D ## TODO
+@export_group("Bullet decal")
+@export var bullet_decal_scene: PackedScene
 
 var original_weapon_position: Vector3
 var original_weapon_rotation: Vector3
@@ -73,7 +75,7 @@ func _physics_process(delta: float) -> void:
 	if InputMap.has_action("shoot") and Input.is_action_pressed("shoot"):
 		if not hitscan_always_active and hitscan_only_on_shoot:
 			hitscan_result = hitscan()
-			
+		
 		shoot()
 		
 
@@ -84,6 +86,8 @@ func shoot() -> void:
 			camera.trauma(weapon_configuration.camera_shake_time, weapon_configuration.camera_shake_magnitude)
 		
 		muzzle_effect()
+		bullet_decal(hitscan_result)
+		
 		fired.emit()
 
 
@@ -118,7 +122,17 @@ func muzzle_effect() -> void:
 		muzzle.emit_on_ready = muzzle_emit_on_ready
 		muzzle_marker.add_child(muzzle)
 		
+
+func bullet_decal(hitscan: Dictionary) -> void:
+	if not hitscan.is_empty() and bullet_decal_scene:
+		var bullet_hit_decal = bullet_decal_scene.instantiate() as SmartDecal
+		var normal: Vector3 = hitscan.get("normal") as Vector3
+		var collision_point: Vector3  = hitscan.get("position") as Vector3
+		get_tree().root.add_child(bullet_hit_decal)
+		bullet_hit_decal.global_position = collision_point
+		bullet_hit_decal.adjust_to_normal(normal)
 		
+	
 func setup_viewmodel_fov(fov_value: float = viewmodel_fov) -> void:
 	if weapon_scene:
 		for mesh_instance: MeshInstance3D in NodeTraversal.find_nodes_of_type(weapon_scene, MeshInstance3D.new()):
