@@ -18,15 +18,15 @@ uniform float normal_scale : hint_range(-16,16) = 0.5f;
 uniform vec3 uv1_scale = vec3(1.0f);
 uniform vec3 uv1_offset = vec3(0.0f);
 
-void vertex() {    
+void vertex() {
 	UV = UV * uv1_scale.xy + uv1_offset.xy;
-	
+
 	float scale = 1.0f / tan(0.5f * (viewmodel_fov * PI / 180.0f));
 	float aspect = VIEWPORT_SIZE.x / VIEWPORT_SIZE.y;
-	
+
 	PROJECTION_MATRIX[0][0] = scale / aspect;
 	PROJECTION_MATRIX[1][1] = -scale;
-	
+
 	// draws the viewmodel over everything (disable if you want dof near on viewmodel)
 	POSITION = PROJECTION_MATRIX * MODELVIEW_MATRIX * vec4(VERTEX.xyz, 1.0);
     POSITION.z = mix(POSITION.z, 0, -0.999); // To versions below 4.3, use +0.999
@@ -44,6 +44,6 @@ void fragment() {
 	ROUGHNESS = roughness_tex * roughness;
 	SPECULAR = specular;
 	NORMAL_MAP = texture(texture_normal,base_uv).rgb;
-	
+
 	NORMAL_MAP_DEPTH = normal_scale;
 }

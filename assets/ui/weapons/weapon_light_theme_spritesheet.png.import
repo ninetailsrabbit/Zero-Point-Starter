@@ -2,27 +2,26 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://buvjb2kfjix34"
-path.s3tc="res://.godot/imported/muzzle_flash_texture.png-893aaab2daeaca82fbba96ccb65b1663.s3tc.ctex"
+uid="uid://ckc5og2vr74dt"
+path="res://.godot/imported/weapon_light_theme_spritesheet.png-0e305bb9695aaec5258ab44bf9bdd9cd.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://components/3D/motion/first-person/shooter/muzzle/muzzle_flash_texture.png"
-dest_files=["res://.godot/imported/muzzle_flash_texture.png-893aaab2daeaca82fbba96ccb65b1663.s3tc.ctex"]
+source_file="res://assets/ui/weapons/weapon_light_theme_spritesheet.png"
+dest_files=["res://.godot/imported/weapon_light_theme_spritesheet.png-0e305bb9695aaec5258ab44bf9bdd9cd.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -32,4 +31,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1
