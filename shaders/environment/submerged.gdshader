@@ -10,7 +10,7 @@ void fragment() {
 	vec2 uv = SCREEN_UV;
 	uv.x += sin(SCREEN_UV.y * 10.0 + TIME * noise) * 0.01;
 	uv.y += sin(SCREEN_UV.x * 10.0 + TIME * noise) * 0.01;
-		
+
     vec4 pixelColor = texture(screen_texture, UV);
     vec4 blurColor = textureLod(screen_texture, uv, blur);
     blurColor.rgb = mix(blurColor.rgb, color, blend);
