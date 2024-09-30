@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bht2ebp61vh22"]
+[gd_scene load_steps=3 format=3 uid="uid://bht2ebp61vh22"]
 
 [ext_resource type="Script" path="res://ui/screen_information/pointer/interaction_pointer.gd" id="1_oabxy"]
 [ext_resource type="Texture2D" uid="uid://dtxe218lym3vf" path="res://assets/crosshair/crosshair_dot.png" id="2_4un1s"]
-[ext_resource type="Script" path="res://ui/screen_information/pointer/dynamic_screen_pointer.gd" id="3_s8fh6"]
 
 [node name="InteractionPointer" type="Control"]
 layout_mode = 3
@@ -25,24 +24,3 @@ grow_vertical = 2
 unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("2_4un1s")
-
-[node name="DynamicScreenPointer" type="Control" parent="CenterContainer"]
-layout_mode = 2
-script = ExtResource("3_s8fh6")
-use_dynamic_pointer = true
-
-[node name="TopReticle" type="Line2D" parent="CenterContainer/DynamicScreenPointer"]
-points = PackedVector2Array(0, -5, 0, -15)
-width = 2.0
-
-[node name="BottomReticle" type="Line2D" parent="CenterContainer/DynamicScreenPointer"]
-points = PackedVector2Array(0, 5, 0, 15)
-width = 2.0
-
-[node name="RightReticle" type="Line2D" parent="CenterContainer/DynamicScreenPointer"]
-points = PackedVector2Array(5, 0, 15, 0)
-width = 2.0
-
-[node name="LeftReticle" type="Line2D" parent="CenterContainer/DynamicScreenPointer"]
-points = PackedVector2Array(-5, 0, -15, 0)
-width = 2.0

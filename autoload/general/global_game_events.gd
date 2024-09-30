@@ -35,11 +35,6 @@ signal changed_subtitles_enabled(enabled: bool)
 signal updated_graphic_settings(quality_preset: int) # QualityPreset enum from HardwareDetector
 #endregion
 
-#region Dynamic crosshair
-signal requested_expand_dynamic_crosshair(distance: float)
-signal requested_rotate_dynamic_crosshair(angle_in_degreees: float)
-signal requested_reset_dynamic_crosshair()
-#endregion
 
 
 #region Narrative

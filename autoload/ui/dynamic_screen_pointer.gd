@@ -1,5 +1,5 @@
 @icon("res://assets/node_icons/dynamic_crosshair.svg")
-class_name DynamicScreenPointer extends Control
+extends Control
 
 ## It's enabled draw the dynamic pointer in the center of the screen
 @export var use_dynamic_pointer: bool = false:
@@ -69,13 +69,11 @@ func _ready() -> void:
 	
 	if use_dynamic_pointer:
 		queue_redraw()
+	else:
+		hide()
 		
 	prepare_reticles()
 	_save_reticle_original_values()
-	
-	GlobalGameEvents.requested_expand_dynamic_crosshair.connect(on_expanded_requested)
-	GlobalGameEvents.requested_rotate_dynamic_crosshair.connect(on_rotation_requested)
-	GlobalGameEvents.requested_reset_dynamic_crosshair.connect(on_reset_requested)
 
 
 func prepare_reticles() -> void:
