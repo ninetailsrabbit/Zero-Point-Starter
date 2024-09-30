@@ -15,7 +15,7 @@ signal out_of_ammo
 
 @export var camera: CameraShake3D
 @export var recoil_node: Node3D
-@export var weapon_scene: Node3D
+@export var current_weapon: FirearmWeaponMesh
 @export_group("Weapon")
 @export var weapon_configuration: WeaponConfiguration
 @export var hitscan_only_on_shoot: bool = false
@@ -23,14 +23,11 @@ signal out_of_ammo
 @export var apply_viewmodel_fov: bool = true
 @export var viewmodel_fov: float = 75.0
 @export_group("Muzzle")
-@export var muzzle_marker: Marker3D
 @export var muzzle_scene: PackedScene = preload("res://components/3D/motion/first-person/shooter/muzzle/muzzle_flash.tscn")
 @export var muzzle_lifetime: float = 0.03
 @export var muzzle_min_size: Vector2 = Vector2(0.05, 0.05)
 @export var muzzle_max_size: Vector2 = Vector2(0.35, 0.35)
 @export var muzzle_emit_on_ready: bool = true
-@export_group("Barrel")
-@export var barrel_marker: Marker3D ## TODO
 @export_group("Bullet decal")
 @export var bullet_decal_scene: PackedScene
 
@@ -51,11 +48,11 @@ var hitscan_result: Dictionary = {}
 
 func _ready() -> void:
 	
-	if weapon_scene and apply_viewmodel_fov:
+	if current_weapon and apply_viewmodel_fov:
 		setup_viewmodel_fov(viewmodel_fov)
 		
-	original_weapon_position = weapon_scene.position
-	original_weapon_rotation = weapon_scene.rotation
+	original_weapon_position = current_weapon.position
+	original_weapon_rotation = current_weapon.rotation
 
 	current_ammunition = weapon_configuration.initial_ammunition
 	
@@ -114,13 +111,13 @@ func hitscan() -> Dictionary:
 	
 
 func muzzle_effect() -> void:
-	if muzzle_scene and muzzle_marker:
+	if muzzle_scene and current_weapon.muzzle_marker:
 		var muzzle = muzzle_scene.instantiate() as MuzzleFlash
 		muzzle.particle_lifetime =  muzzle_lifetime
 		muzzle.min_size =  muzzle_min_size
 		muzzle.max_size =  muzzle_max_size
 		muzzle.emit_on_ready = muzzle_emit_on_ready
-		muzzle_marker.add_child(muzzle)
+		current_weapon.muzzle_marker.add_child(muzzle)
 		
 
 func bullet_decal(hitscan: Dictionary) -> void:
@@ -134,8 +131,8 @@ func bullet_decal(hitscan: Dictionary) -> void:
 		
 	
 func setup_viewmodel_fov(fov_value: float = viewmodel_fov) -> void:
-	if weapon_scene:
-		for mesh_instance: MeshInstance3D in NodeTraversal.find_nodes_of_type(weapon_scene, MeshInstance3D.new()):
+	if current_weapon:
+		for mesh_instance: MeshInstance3D in NodeTraversal.find_nodes_of_type(current_weapon, MeshInstance3D.new()):
 			for surface in range(mesh_instance.mesh.get_surface_count()):
 				var material = mesh_instance.get_active_material(surface)
 				if material is ShaderMaterial:

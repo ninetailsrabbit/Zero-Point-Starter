@@ -37,7 +37,16 @@ script = ExtResource("1_aoqvt")
 recoil_node = NodePath("Recoil")
 weapon_scene = NodePath("Recoil/Ak47")
 weapon_configuration = SubResource("Resource_ttumk")
+hitscan_only_on_shoot = null
+hitscan_always_active = null
+apply_viewmodel_fov = null
+viewmodel_fov = null
 muzzle_marker = NodePath("MuzzleMarker")
+muzzle_scene = null
+muzzle_lifetime = null
+muzzle_min_size = null
+muzzle_max_size = null
+muzzle_emit_on_ready = null
 
 [node name="Recoil" type="Node3D" parent="."]
 
