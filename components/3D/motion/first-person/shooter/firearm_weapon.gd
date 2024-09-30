@@ -20,6 +20,7 @@ signal out_of_ammo
 @export var weapon_configuration: WeaponConfiguration
 @export var hitscan_only_on_shoot: bool = false
 @export var hitscan_always_active: bool = true
+@export_group("Clipping")
 @export var apply_viewmodel_fov: bool = true
 @export var viewmodel_fov: float = 75.0
 @export_group("Muzzle")
@@ -120,11 +121,11 @@ func muzzle_effect() -> void:
 		current_weapon.muzzle_marker.add_child(muzzle)
 		
 
-func bullet_decal(hitscan: Dictionary) -> void:
-	if not hitscan.is_empty() and bullet_decal_scene:
+func bullet_decal(target_hitscan: Dictionary) -> void:
+	if not target_hitscan.is_empty() and bullet_decal_scene:
 		var bullet_hit_decal = bullet_decal_scene.instantiate() as SmartDecal
-		var normal: Vector3 = hitscan.get("normal") as Vector3
-		var collision_point: Vector3  = hitscan.get("position") as Vector3
+		var normal: Vector3 = target_hitscan.get("normal") as Vector3
+		var collision_point: Vector3  = target_hitscan.get("position") as Vector3
 		get_tree().root.add_child(bullet_hit_decal)
 		bullet_hit_decal.global_position = collision_point
 		bullet_hit_decal.adjust_to_normal(normal)

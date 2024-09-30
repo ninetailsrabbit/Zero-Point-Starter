@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bx3bh475g3jjf"]
+[gd_scene load_steps=24 format=3 uid="uid://bx3bh475g3jjf"]
 
 [ext_resource type="Script" path="res://components/3D/motion/first-person/first_person_controller.gd" id="1_v7v7g"]
 [ext_resource type="PackedScene" uid="uid://bcj2w63oj13e5" path="res://components/3D/motion/first-person/debug_ui/first_person_debug_ui.tscn" id="2_ml2dd"]
@@ -15,7 +15,6 @@
 [ext_resource type="Script" path="res://components/3D/motion/first-person/states/air/jump.gd" id="10_ynwvi"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/states/ground/slide.gd" id="11_jpv7j"]
 [ext_resource type="Script" path="res://components/3D/motion/first-person/states/special/swim.gd" id="12_vyybp"]
-[ext_resource type="PackedScene" uid="uid://bmo5cunep3qmw" path="res://scenes/world/test/ak47_pro.tscn" id="16_u7pd2"]
 
 [sub_resource type="Animation" id="Animation_x0wk0"]
 length = 0.001
@@ -213,9 +212,7 @@ script = ExtResource("5_oesfs")
 first_person_controller = NodePath("../../../..")
 camera_controller = NodePath("../../..")
 recoil_node = NodePath("../..")
-current_weapon = NodePath("Ak47Weapon")
-
-[node name="Ak47Weapon" parent="CameraController/Head/CameraShake3D/WeaponHolder" instance=ExtResource("16_u7pd2")]
+current_weapon = NodePath("")
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="CameraController/Head/CameraShake3D"]
 update_mode = 1
