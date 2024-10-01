@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4rtmuey7ux23"]
+
+[ext_resource type="Script" path="res://components/3D/motion/first-person/shooter/bullet_trails/bullet_trail.gd" id="1_suruq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_byxhg"]
+shading_mode = 0
+albedo_color = Color(1, 0.843137, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_u0asp"]
+material = SubResource("StandardMaterial3D_byxhg")
+radius = 0.03
+height = 1.0
+
+[node name="BulletTrail" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.497963)
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_u0asp")
+script = ExtResource("1_suruq")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+autostart = true

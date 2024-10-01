@@ -104,5 +104,5 @@ func _recoil_can_be_applied() -> bool:
 	return current_weapon and current_weapon.weapon_configuration.recoil_enabled and recoil_node
 
 
-func on_fired_weapon() -> void:
+func on_fired_weapon(target_hitscan: Dictionary) -> void:
 	add_recoil()

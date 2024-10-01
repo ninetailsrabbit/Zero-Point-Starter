@@ -9,7 +9,7 @@ class_name FireArmWeapon extends Node3D
 
 signal stored
 signal equipped
-signal fired
+signal fired(target_hitscan: Dictionary)
 signal reloaded
 signal out_of_ammo
 
@@ -29,8 +29,10 @@ signal out_of_ammo
 @export var muzzle_min_size: Vector2 = Vector2(0.05, 0.05)
 @export var muzzle_max_size: Vector2 = Vector2(0.35, 0.35)
 @export var muzzle_emit_on_ready: bool = true
-@export_group("Bullet decal")
+@export_group("Bullets")
 @export var bullet_decal_scene: PackedScene = Preloader.BulletDecalScene
+@export var bullet_trail_scene: PackedScene = Preloader.BulletTrailScene
+
 
 var original_weapon_position: Vector3
 var original_weapon_rotation: Vector3
@@ -74,19 +76,20 @@ func _physics_process(delta: float) -> void:
 		if not hitscan_always_active and hitscan_only_on_shoot:
 			hitscan_result = hitscan()
 		
-		shoot()
+		shoot(hitscan_result)
 		
 
 ## TODO - WORK IN PROGRESS TO ATTACH MORE COMPLEX BEHAVIORS
-func shoot() -> void:
+func shoot(target_hitscan: Dictionary) -> void:
 	if active and current_ammunition > 0:
 		if camera and weapon_configuration.camera_shake_enabled:
 			camera.trauma(weapon_configuration.camera_shake_time, weapon_configuration.camera_shake_magnitude)
 		
 		muzzle_effect()
 		bullet_decal(hitscan_result)
+		bullet_trail()
 		
-		fired.emit()
+		fired.emit(target_hitscan)
 
 
 func hitscan() -> Dictionary:
@@ -130,7 +133,13 @@ func bullet_decal(target_hitscan: Dictionary) -> void:
 		bullet_hit_decal.global_position = collision_point
 		bullet_hit_decal.adjust_to_normal(normal)
 		
+		
+func bullet_trail() -> void:
+	if bullet_trail_scene:
+		var bullet_trail: BulletTrail = bullet_trail_scene.instantiate() as BulletTrail
+		current_weapon.barrel_marker.add_child(bullet_trail)
 	
+
 func setup_viewmodel_fov(fov_value: float = viewmodel_fov) -> void:
 	if current_weapon:
 		for mesh_instance: MeshInstance3D in NodeTraversal.find_nodes_of_type(current_weapon, MeshInstance3D.new()):

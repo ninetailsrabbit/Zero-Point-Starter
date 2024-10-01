@@ -7,3 +7,4 @@
 size = Vector3(0.03, 0.03, 0.03)
 texture_albedo = ExtResource("1_up3qe")
 script = ExtResource("1_0n8nn")
+spin_randomization = true

@@ -27,38 +27,32 @@ class_name MuzzleFlash extends GPUParticles3D
 @export var texture: Texture2D = Preloader.MuzzleFlashTexture
 @export_group("Muzzle light")
 @export var spawn_light: bool = true
+@export var light_lifetime: float = 0.01
 @export_range(0, 16, 0.1) var min_light_energy: float = 1.0
 @export_range(0, 16, 0.1) var max_light_energy: float = 1.0
 @export var use_integers: bool = false
 @export var light_color: Color = Color("FFD700")
 
-@onready var timer: Timer = $Timer
+@onready var muzzle_timer: Timer = $MuzzleTimer
+@onready var light_timer: Timer = $LightTimer
 @onready var omni_light_3d: OmniLight3D = $OmniLight3D
-
 @onready var muzzle_material: StandardMaterial3D = (draw_pass_1 as QuadMesh).surface_get_material(0)
 
 
 func _ready() -> void:
-	timer.autostart = false
-	timer.one_shot = true
-	timer.wait_time = particle_lifetime
-	timer.timeout.connect(on_timeout)
+	muzzle_timer.autostart = false
+	muzzle_timer.one_shot = true
+	muzzle_timer.wait_time = particle_lifetime
+	muzzle_timer.timeout.connect(on_muzzle_timeout)
+	
+	light_timer.autostart = false
+	light_timer.one_shot = true
+	light_timer.wait_time = light_lifetime
+	light_timer.timeout.connect(on_light_timeout)
 	
 	if texture and muzzle_material:
 		muzzle_material.albedo_texture = texture
 	
-	if omni_light_3d:
-		if spawn_light:
-			omni_light_3d.light_energy = randf_range(min_light_energy, max_light_energy)
-			
-			if use_integers:
-				omni_light_3d.light_energy = ceil(omni_light_3d.light_energy)
-				
-			omni_light_3d.light_color = light_color
-			omni_light_3d.show()
-		else:
-			omni_light_3d.hide()
-			
 	if emit_on_ready:
 		emit()
 	
@@ -73,8 +67,28 @@ func emit(
 	one_shot = true
 	emitting = true
 	
-	timer.start(lifetime)
+	spawn_muzzle_light()
+	muzzle_timer.start(lifetime)
 
 
-func on_timeout() -> void:
+func spawn_muzzle_light() -> void:
+	if omni_light_3d:
+		if spawn_light:
+			omni_light_3d.light_energy = randf_range(min_light_energy, max_light_energy)
+			
+			if use_integers:
+				omni_light_3d.light_energy = ceil(omni_light_3d.light_energy)
+				
+			omni_light_3d.light_color = light_color
+			omni_light_3d.show()
+			light_timer.start()
+		else:
+			omni_light_3d.hide()
+
+
+func on_muzzle_timeout() -> void:
 	queue_free()
+	
+
+func on_light_timeout() -> void:
+	omni_light_3d.hide()

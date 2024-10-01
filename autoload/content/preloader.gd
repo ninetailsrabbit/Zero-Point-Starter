@@ -29,6 +29,7 @@ const ScanViewport3DScene: PackedScene = preload("res://ui/screen_information/sc
 #region Shooter
 const MuzzleFlashScene: PackedScene = preload("res://components/3D/motion/first-person/shooter/muzzle/muzzle_flash.tscn")
 const BulletDecalScene: PackedScene = preload("res://components/3D/motion/first-person/shooter/bullet_decals/bullet_decal.tscn")
+const BulletTrailScene = preload("res://components/3D/motion/first-person/shooter/bullet_trails/bullet_trail.tscn")
 
 const MuzzleBlastTexture: CompressedTexture2D = preload("res://assets/muzzle/muzzle_blast.png")
 const MuzzleFlashTexture: CompressedTexture2D = preload("res://assets/muzzle/muzzle_flash_texture.png")
