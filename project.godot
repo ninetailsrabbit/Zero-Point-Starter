@@ -36,6 +36,7 @@ SaveManager="*res://autoload/persistence/save_manager.gd"
 GlobalCameraShifter="*res://autoload/camera/global_camera_shifter.tscn"
 SettingsManager="*res://autoload/persistence/settings_manager.gd"
 DynamicScreenPointer="*res://autoload/ui/dynamic_screen_pointer.tscn"
+GlobalDayNightClock="*res://autoload/general/global_day_night_clock.tscn"
 
 [debug]
 
