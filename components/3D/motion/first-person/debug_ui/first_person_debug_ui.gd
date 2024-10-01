@@ -12,7 +12,7 @@ extends CanvasLayer
 func _ready() -> void:
 	assert(actor is FirstPersonController, "FirstPersonControllerDebugUI: Needs a FirstPersonController to display the debug parameters")
 	
-	control.mouse_filter = Control.MOUSE_FILTER_PASS
+	control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	if finite_state_machine:
 		finite_state_machine.state_changed.connect(on_state_changed)
