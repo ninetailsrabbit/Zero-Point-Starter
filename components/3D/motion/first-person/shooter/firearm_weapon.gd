@@ -16,10 +16,7 @@ signal out_of_ammo
 @export var camera: CameraShake3D
 @export var recoil_node: Node3D
 @export var current_weapon: FirearmWeaponMesh
-@export_group("Weapon")
 @export var weapon_configuration: WeaponConfiguration
-@export var hitscan_only_on_shoot: bool = false
-@export var hitscan_always_active: bool = true
 @export_group("Clipping")
 @export var apply_viewmodel_fov: bool = true
 @export var viewmodel_fov: float = 75.0
@@ -50,7 +47,6 @@ var hitscan_result: Dictionary = {}
 
 
 func _ready() -> void:
-	
 	if current_weapon and apply_viewmodel_fov:
 		setup_viewmodel_fov(viewmodel_fov)
 		
@@ -63,25 +59,40 @@ func _ready() -> void:
 	
 
 func _physics_process(delta: float) -> void:
-	if hitscan_always_active and not hitscan_only_on_shoot:
-		hitscan_result = hitscan()
+	hitscan_result = hitscan()
 	
 	if InputMap.has_action("aim") and Input.is_action_pressed("aim"): ## TODO SUPER TEMPORARY, FIND A BETTER WAY TO CONFIGURE AIMING FOR EACH WEAPON
-		position = position.slerp(Vector3(-get_parent().position.x, 0.1, position.z), 10 * delta)
+		position = position.lerp(Vector3(-get_parent().position.x, 0.1, position.z), 10 * delta)
 	else:
-		position = position.slerp(original_weapon_position, 10 * delta)
+		position = position.lerp(original_weapon_position, 10 * delta)
 	
-	## TODO - MANAGE THE SHOOT INPUT BASED ON WEAPON BURST TYPE
-	if InputMap.has_action("shoot") and Input.is_action_pressed("shoot"):
-		if not hitscan_always_active and hitscan_only_on_shoot:
-			hitscan_result = hitscan()
-		
-		shoot(hitscan_result)
+	match weapon_configuration.burst_type:
+		weapon_configuration.BurstTypes.Single:
+			if InputHelper.action_just_pressed_and_exists("shoot"):
+				await shoot(hitscan_result)
+		weapon_configuration.BurstTypes.BurstFire:
+			if InputHelper.action_just_pressed_and_exists("shoot"):
+				for i in range(weapon_configuration.number_of_shoots):
+					await shoot(hitscan_result)
+		weapon_configuration.BurstTypes.ThreeRoundBurst:
+			if InputHelper.action_just_pressed_and_exists("shoot"):
+				for i in range(3):
+					await shoot(hitscan_result)
+					
+		weapon_configuration.BurstTypes.FiveRoundBurst:
+			if InputHelper.action_just_pressed_and_exists("shoot"):
+				for i in range(5):
+					await shoot(hitscan_result)
+		[weapon_configuration.BurstTypes.Automatic,
+			weapon_configuration.BurstTypes.SemiAutomatic]:
+			if InputHelper.action_pressed_and_exists("shoot"):
+				await shoot(hitscan_result)
 		
 
 ## TODO - WORK IN PROGRESS TO ATTACH MORE COMPLEX BEHAVIORS
-func shoot(target_hitscan: Dictionary) -> void:
+func shoot(target_hitscan: Dictionary = hitscan_result) -> void:
 	if active and current_ammunition > 0:
+		
 		if camera and weapon_configuration.camera_shake_enabled:
 			camera.trauma(weapon_configuration.camera_shake_time, weapon_configuration.camera_shake_magnitude)
 		
@@ -90,7 +101,8 @@ func shoot(target_hitscan: Dictionary) -> void:
 		bullet_trail()
 		
 		fired.emit(target_hitscan)
-
+		await get_tree().create_timer(weapon_configuration.time_between_shoots).timeout
+		
 
 func hitscan() -> Dictionary:
 	if camera:

@@ -18,10 +18,12 @@ enum BurstTypes {
 @export var ammunition_per_round: int = 0
 @export_range(0, 100, 0.1) var accuracy: float = 80.0
 @export var reload_time: float = 2.0
+@export var time_between_shoots: float = 0.2
 @export var fire_range: float = 250
 @export var burst_type: BurstTypes = BurstTypes.Single
 ## Only applies on BurstTypes.BurstFire selected type
-@export var rounds_fired: int = 2
+@export var number_of_shoots: int = 1
+@export var rounds_fired_per_shoot: int = 1
 @export_group("Features")
 @export var camera_shake_enabled: bool = true
 @export var camera_shake_magnitude: float = 0.01

@@ -72,8 +72,8 @@ static func action_just_pressed_and_exists(action: String) -> bool:
 	return InputMap.has_action(action) and Input.is_action_just_pressed(action)
 
 
-static func action_pressed_and_exists(event: InputEvent, action: String) -> bool:
-	return InputMap.has_action(action) and event.is_action_pressed(action)
+static func action_pressed_and_exists(action: String, event: InputEvent = null) -> bool:
+	return InputMap.has_action(action) and event.is_action_pressed(action) if event else Input.is_action_pressed(action)
 
 
 static func action_just_released_and_exists(action: String) -> bool:
