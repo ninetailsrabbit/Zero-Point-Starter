@@ -25,3 +25,14 @@ const TypeDialogRetro6: AudioStreamWAV = preload("res://assets/sounds/dialog-tex
 #region Interactables
 const ScanViewport3DScene: PackedScene = preload("res://ui/screen_information/scan/3D/scan_viewport_3d.tscn")
 #endregion
+
+#region Shooter
+const MuzzleFlashScene: PackedScene = preload("res://components/3D/motion/first-person/shooter/muzzle/muzzle_flash.tscn")
+const BulletDecalScene: PackedScene = preload("res://components/3D/motion/first-person/shooter/bullet_decals/bullet_decal.tscn")
+
+const MuzzleBlastTexture: CompressedTexture2D = preload("res://assets/muzzle/muzzle_blast.png")
+const MuzzleFlashTexture: CompressedTexture2D = preload("res://assets/muzzle/muzzle_flash_texture.png")
+
+const BulletHoleDecalTexture: CompressedTexture2D = preload("res://assets/decals/bullets/bullet_hole.png")
+const BulletHoleMetalDecalTexture: CompressedTexture2D = preload("res://assets/decals/bullets/bullet_hole_metal.png")
+#endregion

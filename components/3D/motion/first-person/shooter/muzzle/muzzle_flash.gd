@@ -24,7 +24,7 @@ class_name MuzzleFlash extends GPUParticles3D
 @export var min_size: Vector2 = Vector2(0.05, 0.05)
 @export var max_size: Vector2 = Vector2(0.35, 0.35)
 @export var emit_on_ready: bool = true
-@export var texture: Texture2D = preload("res://assets/muzzle/muzzle_flash_texture.png")
+@export var texture: Texture2D = Preloader.MuzzleFlashTexture
 @export_group("Muzzle light")
 @export var spawn_light: bool = true
 @export_range(0, 16, 0.1) var min_light_energy: float = 1.0

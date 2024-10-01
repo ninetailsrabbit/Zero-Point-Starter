@@ -24,13 +24,13 @@ signal out_of_ammo
 @export var apply_viewmodel_fov: bool = true
 @export var viewmodel_fov: float = 75.0
 @export_group("Muzzle")
-@export var muzzle_scene: PackedScene = preload("res://components/3D/motion/first-person/shooter/muzzle/muzzle_flash.tscn")
+@export var muzzle_scene: PackedScene = Preloader.MuzzleFlashScene
 @export var muzzle_lifetime: float = 0.03
 @export var muzzle_min_size: Vector2 = Vector2(0.05, 0.05)
 @export var muzzle_max_size: Vector2 = Vector2(0.35, 0.35)
 @export var muzzle_emit_on_ready: bool = true
 @export_group("Bullet decal")
-@export var bullet_decal_scene: PackedScene
+@export var bullet_decal_scene: PackedScene = Preloader.BulletDecalScene
 
 var original_weapon_position: Vector3
 var original_weapon_rotation: Vector3

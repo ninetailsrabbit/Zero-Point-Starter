@@ -5,10 +5,9 @@ class_name SmartDecal extends Decal
 @export var fade_out_time: float = 1.5
 @export var spin_randomization: bool = false
 
-
 func _ready() -> void:
 	show()
-
+	
 
 func adjust_to_normal(normal: Vector3) -> void:
 	if not normal.is_equal_approx(Vector3.UP) and not normal.is_equal_approx(Vector3.DOWN):
