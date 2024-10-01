@@ -8,4 +8,4 @@
 
 ## Reporting a Vulnerability
 
-Please [raise an issue](https://github.com/[USER]/[REPOSITORY]/issues) in case you find a security issue.
+Please [raise an issue](https://github.com/ninetailsrabbit/zero-point-starter/issues) in case you find a security issue.
