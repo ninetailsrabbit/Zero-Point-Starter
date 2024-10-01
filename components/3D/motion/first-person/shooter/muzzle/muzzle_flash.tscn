@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://oyoxt2tvh50i"]
+[gd_scene load_steps=6 format=3 uid="uid://oyoxt2tvh50i"]
 
 [ext_resource type="Material" uid="uid://f0eaerhamka7" path="res://components/3D/motion/first-person/shooter/muzzle/muzzle_flash.tres" id="1_cmm8l"]
 [ext_resource type="Material" uid="uid://cc01hw84lc8gg" path="res://components/3D/motion/first-person/shooter/muzzle/muzzle_flash_base_material.tres" id="2_45uex"]
@@ -7,6 +7,8 @@
 [sub_resource type="QuadMesh" id="1"]
 material = ExtResource("2_45uex")
 size = Vector2(0.05, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kfcd4"]
 
 [node name="MuzzleFlash" type="GPUParticles3D"]
 layers = 2
@@ -20,3 +22,17 @@ draw_pass_1 = SubResource("1")
 script = ExtResource("3_nqvbf")
 
 [node name="Timer" type="Timer" parent="."]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(1, 0.843137, 0, 1)
+shadow_enabled = true
+distance_fade_enabled = true
+distance_fade_begin = 2.0
+distance_fade_shadow = 5.0
+omni_range = 0.787
+omni_attenuation = 1.2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.787889, 0, 0)
+top_level = true
+mesh = SubResource("BoxMesh_kfcd4")
