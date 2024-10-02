@@ -48,6 +48,48 @@ static func get_files_recursive(path: String, regex: RegEx = null) -> Array:
 		return []
 
 
+static func copy_directory_recursive(from_dir :String, to_dir :String) -> bool:
+	if not DirAccess.dir_exists_absolute(from_dir):
+		push_error("PluginUtilities->copy_directory_recursive: directory not found '%s'" % from_dir)
+		return false
+		
+	if not DirAccess.dir_exists_absolute(to_dir):
+		
+		var err := DirAccess.make_dir_recursive_absolute(to_dir)
+		if err != OK:
+			push_error("PluginUtilities->copy_directory_recursive: Can't create directory '%s'. Error: %s" % [to_dir, error_string(err)])
+			return false
+			
+	var source_dir := DirAccess.open(from_dir)
+	var dest_dir := DirAccess.open(to_dir)
+	
+	if source_dir != null:
+		source_dir.list_dir_begin()
+		var next := "."
+
+		while next != "":
+			next = source_dir.get_next()
+			if next == "" or next == "." or next == "..":
+				continue
+			var source := source_dir.get_current_dir() + "/" + next
+			var dest := dest_dir.get_current_dir() + "/" + next
+			
+			if source_dir.current_is_dir():
+				copy_directory_recursive(source + "/", dest)
+				continue
+				
+			var err := source_dir.copy(source, dest)
+			
+			if err != OK:
+				push_error("PluginUtilities->copy_directory_recursive: Error checked copy file '%s' to '%s'" % [source, dest])
+				return false
+				
+		return true
+	else:
+		push_error("PluginUtilities->copy_directory_recursive: Directory not found: " + from_dir)
+		return false
+
+
 static func remove_files_recursive(path: String, regex: RegEx = null) -> void:
 	var directory = DirAccess.open(path)
 	

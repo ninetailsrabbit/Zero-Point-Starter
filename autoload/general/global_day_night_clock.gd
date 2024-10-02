@@ -30,10 +30,8 @@ var current_minute: int = 0
 
 
 func _ready() -> void:
-	#set_process(false)
-	
-	start(3, 22, 15)
-	
+	set_process(false)
+		
 	
 func _process(delta: float) -> void:
 	time += delta * InGameToRealMinuteDuration * in_game_speed
@@ -88,4 +86,3 @@ func _recalculate_time() -> void:
 		current_period = "AM" if current_hour < 12 else "PM"
 		
 		time_tick.emit(current_day, current_hour, current_minute)
-		print(current_day, current_hour, current_minute)
