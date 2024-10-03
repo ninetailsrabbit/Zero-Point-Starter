@@ -1,11 +1,11 @@
-@icon("res://components/design_patterns/finite_state_machine/finite_state_machine.png")
 class_name FiniteStateMachine extends Node
 
+
+signal states_initialized(states: Dictionary)
 signal state_changed(from_state: MachineState, state: MachineState)
 signal state_change_failed(from: MachineState, to: MachineState)
 signal stack_pushed(new_state: MachineState, stack: Array[MachineState])
 signal stack_flushed(stack: Array[MachineState])
-signal states_initialized
 
 @export var current_state: MachineState
 @export var enable_stack := true
@@ -28,7 +28,7 @@ func _ready():
 	
 	_prepare_states()
 	enter_state(current_state)
-
+	states_initialized.emit(states)
 	
 
 func _unhandled_input(event):
@@ -45,7 +45,19 @@ func _process(delta):
 
 func change_state_to(next_state: Variant, parameters: Dictionary = {}):
 	if not is_transitioning:
-		if typeof(next_state) == TYPE_STRING:			
+		
+		if next_state is GDScript:
+			if current_state_is_by_class(next_state):
+				return
+				
+			var state_name: String = next_state.get_global_name()
+			
+			if states.has(state_name):
+				run_transition(current_state, states[state_name], parameters)
+			else:
+				push_error("FiniteStateMachine: The change of state cannot be done because %s does not exist in this Finite State Machine" % state_name)
+		
+		elif typeof(next_state) == TYPE_STRING:
 			if current_state_is_by_name(next_state):
 				return
 			
@@ -63,7 +75,7 @@ func change_state_to(next_state: Variant, parameters: Dictionary = {}):
 			else:
 				push_error("FiniteStateMachine: The change of state cannot be done because %s does not exist in this Finite State Machine" % next_state.name)
 		
-
+		
 func run_transition(from: MachineState, to: MachineState, parameters: Dictionary = {}):
 	is_transitioning = true
 
@@ -112,6 +124,10 @@ func current_state_is_by_name(state: String) -> bool:
 
 func current_state_is(state: MachineState) -> bool:
 	return current_state_is_by_name(state.name)
+
+
+func current_state_is_by_class(state: GDScript) -> bool:
+	return current_state.get_script() == state
 
 
 func current_state_is_not(_states: Array = []) -> bool:
@@ -164,6 +180,7 @@ func unlock_state_machine():
 func _prepare_states(node: Node = self):
 	for child in node.get_children(true):
 		if child is MachineState:
+			
 			_add_state_to_dictionary(child)
 		else:
 			if child.get_child_count() > 0:
